@@ -6,24 +6,39 @@
 
 @section('content')
 
-<div class="bg-white rounded-2xl overflow-hidden flex flex-col" style="box-shadow:0 4px 12px rgba(0,0,0,0.06); height:calc(100vh - 180px);">
+<div class="bg-white rounded-2xl overflow-hidden flex flex-col"
+     style="box-shadow:0 4px 12px rgba(0,0,0,0.06); height:calc(100vh - 180px);">
 
-    <!-- Header conversation -->
+    {{-- Header conversation --}}
     <div class="flex items-center gap-4 px-6 py-4 border-b border-gray-100">
         <a href="{{ route('messages.index') }}" class="text-gray-400 hover:text-black transition">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
             </svg>
         </a>
-        <div class="w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold text-black shrink-0" style="background:#FCB315;">
-            {{ strtoupper(substr($contact->name, 0, 1)) }}
-        </div>
-        <div>
+
+        <x-avatar :user="$contact" size="10" rounded="full"/>
+
+        <div class="flex-1">
             <p class="font-semibold text-black text-sm">{{ $contact->name }}</p>
             <p class="text-xs text-gray-400 capitalize">{{ $contact->role }}</p>
         </div>
+
+        {{-- Lien vers profil si professeur --}}
+        @if($contact->role === 'professeur' && $contact->teacherProfile)
+        <a href="{{ route('professeur.profil', $contact->teacherProfile->id) }}"
+           target="_blank"
+           class="text-xs px-3 py-1.5 rounded-xl font-medium flex items-center gap-1.5 transition hover:opacity-90"
+           style="background:#FCB315; color:#000;">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+            </svg>
+            Voir le profil
+        </a>
+        @endif
     </div>
 
+    {{-- Alerte message bloqué --}}
     @if(session('error'))
     <div class="px-6 py-3 text-sm font-medium text-red-700 bg-red-50 border-b border-red-100 flex items-center gap-2">
         <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -33,38 +48,80 @@
     </div>
     @endif
 
-    <!-- Messages -->
-    <div class="flex-1 overflow-y-auto px-6 py-4 space-y-4" id="messages-container">
+    {{-- Messages --}}
+    <div class="flex-1 overflow-y-auto px-6 py-4" id="messages-container">
 
         @if($messages->isEmpty())
         <div class="text-center py-10">
+            <div class="w-12 h-12 rounded-2xl flex items-center justify-center mx-auto mb-3 bg-gray-100">
+                <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+                </svg>
+            </div>
             <p class="text-gray-400 text-sm">Démarrez la conversation avec {{ $contact->name }}</p>
         </div>
         @else
+
+        {{-- Grouper les messages par date --}}
+        @php $lastDate = null; @endphp
         @foreach($messages as $message)
-        @php $isMine = $message->sender_id === auth()->id(); @endphp
-        <div class="flex {{ $isMine ? 'justify-end' : 'justify-start' }}">
+        @php
+            $isMine    = $message->sender_id === auth()->id();
+            $sender    = $isMine ? auth()->user() : $contact;
+            $msgDate   = \Carbon\Carbon::parse($message->created_at)->format('d/m/Y');
+        @endphp
+
+        {{-- Séparateur de date --}}
+        @if($msgDate !== $lastDate)
+        <div class="flex items-center gap-3 my-4">
+            <div class="flex-1 h-px bg-gray-100"></div>
+            <span class="text-xs text-gray-400 shrink-0">
+                {{ \Carbon\Carbon::parse($message->created_at)->isToday() ? "Aujourd'hui" :
+                   (\Carbon\Carbon::parse($message->created_at)->isYesterday() ? 'Hier' : $msgDate) }}
+            </span>
+            <div class="flex-1 h-px bg-gray-100"></div>
+        </div>
+        @php $lastDate = $msgDate; @endphp
+        @endif
+
+        {{-- Bulle message --}}
+        <div class="flex {{ $isMine ? 'justify-end' : 'justify-start' }} items-end gap-2 mb-3">
+
+            {{-- Avatar expéditeur (côté gauche si pas moi) --}}
+            @if(!$isMine)
+            <x-avatar :user="$sender" size="7" rounded="full"/>
+            @endif
+
             <div class="max-w-xs lg:max-w-md">
-                <!-- Bulle message -->
                 <div class="px-4 py-3 rounded-2xl text-sm leading-relaxed
-                    {{ $isMine ? 'text-black rounded-br-sm' : 'bg-gray-100 text-gray-800 rounded-bl-sm' }}"
+                    {{ $isMine ? 'rounded-br-sm text-black' : 'bg-gray-100 text-gray-800 rounded-bl-sm' }}"
                     style="{{ $isMine ? 'background:#FCB315;' : '' }}">
                     {{ $message->content }}
                 </div>
-                <!-- Heure -->
                 <p class="text-xs text-gray-400 mt-1 {{ $isMine ? 'text-right' : 'text-left' }}">
                     {{ \Carbon\Carbon::parse($message->created_at)->format('H:i') }}
                     @if($isMine)
-                    · {{ $message->is_read ? 'Lu' : 'Envoyé' }}
+                    ·
+                    @if($message->is_read)
+                    <span class="text-green-500">Lu</span>
+                    @else
+                    Envoyé
+                    @endif
                     @endif
                 </p>
             </div>
+
+            {{-- Avatar expéditeur (côté droit si moi) --}}
+            @if($isMine)
+            <x-avatar :user="$sender" size="7" rounded="full"/>
+            @endif
+
         </div>
         @endforeach
         @endif
     </div>
 
-    <!-- Formulaire envoi -->
+    {{-- Formulaire envoi --}}
     <div class="px-6 py-4 border-t border-gray-100">
         <form action="{{ route('messages.send', $contact->id) }}" method="POST"
               class="flex items-end gap-3">
@@ -86,7 +143,6 @@
 </div>
 
 <script>
-    // Scroll automatique en bas
     const container = document.getElementById('messages-container');
     container.scrollTop = container.scrollHeight;
 </script>

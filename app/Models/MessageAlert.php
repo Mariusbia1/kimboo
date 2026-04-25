@@ -2,16 +2,19 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Message extends Model
+class MessageAlert extends Model
 {
-    use HasFactory;
-
     protected $fillable = [
-        'sender_id', 'receiver_id', 'content', 'is_read', 'is_blocked'
+        'message_id', 'sender_id', 'receiver_id',
+        'alert_type', 'matched_content', 'status',
     ];
+
+    public function message()
+    {
+        return $this->belongsTo(Message::class);
+    }
 
     public function sender()
     {

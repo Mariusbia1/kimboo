@@ -22,6 +22,9 @@ class StoreCourseRequest extends FormRequest
             'price_per_hour' => ['required', 'numeric', 'min:0'],
             'is_group' => ['boolean'],
             'max_students' => ['nullable', 'integer', 'min:2', 'max:50'],
+            'lieu_cours' => ['nullable', 'array'],
+            'lieu_cours.*' => ['in:chez_prof,chez_eleve,webcam'],
+            'zone_deplacement' => ['nullable', 'string', 'max:100'],
         ];
     }
 

@@ -10,11 +10,17 @@ class Course extends Model
     use HasFactory;
 
     protected $fillable = [
-        'teacher_profile_id', 'title', 'description',
-        'category', 'level', 'format', 'price_per_hour', 'is_active',
-        'is_active', 'is_group', 'max_students'
-    ];
+    'teacher_profile_id', 'title', 'description',
+    'category', 'level', 'format', 'price_per_hour',
+    'is_active','is_active', 'is_group', 'max_students',
+    'lieu_cours', 'zone_deplacement', 'rejection_reason'
+];
 
+protected $casts = [
+    'lieu_cours' => 'array',
+    'is_active' => 'boolean',
+    'is_group' => 'boolean',
+];
     public function teacherProfile()
     {
         return $this->belongsTo(TeacherProfile::class);

@@ -8,6 +8,8 @@ use App\Http\Requests\UpdateTeacherProfileRequest;
 use App\Http\Requests\StoreCourseRequest;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
+use App\Models\Notification;
+use App\Models\User;
 
 class ProfesseurController extends Controller
 {
@@ -17,13 +19,49 @@ class ProfesseurController extends Controller
     $profile = $user->teacherProfile;
     $courses = $profile ? $profile->courses : collect();
 
-    $reservationsCount = $profile ? Booking::whereHas('course', function($q) use ($profile) {
+    $reservationsCount = $profile ? \App\Models\Booking::whereHas('course', function($q) use ($profile) {
         $q->where('teacher_profile_id', $profile->id);
     })->count() : 0;
 
-    return view('professeur.dashboard', compact('user', 'profile', 'courses', 'reservationsCount'));
-}
+    // Cagnotte mensuelle
+    $cagnotteMensuelle = $profile ? \App\Models\Booking::whereHas('course', function($q) use ($profile) {
+        $q->where('teacher_profile_id', $profile->id);
+    })->where('status', 'confirmé')
+      ->whereMonth('created_at', now()->month)
+      ->sum('total_price') : 0;
 
+    // Nombre d'élèves uniques
+    $nombreEleves = $profile ? \App\Models\Booking::whereHas('course', function($q) use ($profile) {
+        $q->where('teacher_profile_id', $profile->id);
+    })->distinct('user_id')->count('user_id') : 0;
+
+    // Total cours donnés
+    $totalCoursDonnes = $profile ? \App\Models\Booking::whereHas('course', function($q) use ($profile) {
+        $q->where('teacher_profile_id', $profile->id);
+    })->where('status', 'terminé')->count() : 0;
+
+    // Réservations cette semaine et semaine prochaine
+    $reservationsSemaine = $profile ? \App\Models\Booking::whereHas('course', function($q) use ($profile) {
+        $q->where('teacher_profile_id', $profile->id);
+    })->with(['user', 'course'])
+      ->whereBetween('scheduled_at', [now()->startOfWeek(), now()->endOfWeek()->addWeek()])
+      ->orderBy('scheduled_at')
+      ->get() : collect();
+
+    // Avis reçus groupés par cours
+    $avisParCours = \App\Models\Review::whereHas('course', function($q) use ($profile) {
+        $q->where('teacher_profile_id', $profile->id);
+    })
+    ->with(['course', 'user'])
+    ->orderByDesc('created_at')
+    ->get()
+    ->groupBy('course_id');
+    return view('professeur.dashboard', compact(
+        'user', 'profile', 'courses', 'reservationsCount',
+        'cagnotteMensuelle', 'nombreEleves', 'totalCoursDonnes',
+        'reservationsSemaine', 'avisParCours'
+    ));
+}
     public function editProfil()
     {
         $user = auth()->user();
@@ -85,16 +123,25 @@ public function updateProfil(\Illuminate\Http\Request $request)
         $user->save();
     }
 
-    $profile->update([
-        'bio' => $request->bio,
-        'a_propos_cours' => $request->a_propos_cours,
-        'hourly_rate' => $request->hourly_rate,
-        'experience_years' => $request->experience_years,
-        'first_course_free' => $request->has('first_course_free') ? true : false,
-        'lieu_cours' => $request->lieu_cours ?? [],
-        'zone_deplacement' => $request->zone_deplacement,
-        'video_url' => $request->video_url,
-    ]);
+    $parcours = array_values(array_filter($request->input('parcours_academique', []), function($p) {
+        return !empty($p['diplome']) || !empty($p['annees']);
+    }));
+
+    \Illuminate\Support\Facades\DB::table('teacher_profiles')
+        ->where('id', $profile->id)
+        ->update([
+            'bio' => $request->bio,
+            'a_propos_cours' => $request->a_propos_cours,
+            'hourly_rate' => $request->hourly_rate,
+            'experience_years' => $request->experience_years,
+            'first_course_free' => $request->has('first_course_free') ? 1 : 0,
+            'lieu_cours' => json_encode($request->lieu_cours ?? []),
+            'zone_deplacement' => $request->zone_deplacement,
+            'video_url' => $request->video_url,
+            'parcours_academique' => json_encode($parcours),
+            'response_time' => $request->response_time,
+            'updated_at' => now(),
+        ]);
 
     $user->update([
         'ville' => $request->ville,
@@ -104,7 +151,6 @@ public function updateProfil(\Illuminate\Http\Request $request)
     return redirect()->route('professeur.dashboard')
         ->with('success', 'Profil mis à jour avec succès !');
 }
-
     public function createCours()
     {
         return view('professeur.create-cours');
@@ -114,21 +160,45 @@ public function updateProfil(\Illuminate\Http\Request $request)
 {
     $profile = auth()->user()->teacherProfile;
 
-    Course::create([
+    $cours = Course::create([
         'teacher_profile_id' => $profile->id,
-        'title' => $request->title,
-        'description' => $request->description,
-        'category' => $request->category,
-        'level' => $request->level,
-        'format' => $request->format,
-        'price_per_hour' => $request->price_per_hour,
-        'is_active' => true,
-        'is_group' => $request->has('is_group') ? true : false,
-        'max_students' => $request->is_group ? $request->max_students : null,
+        'title'              => $request->title,
+        'description'        => $request->description,
+        'category'           => $request->category,
+        'level'              => $request->level,
+        'format'             => $request->format,
+        'price_per_hour'     => $request->price_per_hour,
+        'is_active'          => false,      // invisible jusqu'à validation
+        'status'             => 'pending',  // en attente admin
+        'is_group'           => $request->has('is_group') ? true : false,
+        'max_students'       => $request->is_group ? $request->max_students : null,
+        'lieu_cours'         => $request->lieu_cours ?? [],
+        'zone_deplacement'   => $request->zone_deplacement,
     ]);
 
+    // Notifier tous les admins
+    $admins = User::where('role', 'admin')->get();
+    foreach ($admins as $admin) {
+        Notification::notifier(
+            userId: $admin->id,
+            type:   'course_pending',
+            title:  'Nouveau cours à valider',
+            body:   auth()->user()->name . ' a soumis un nouveau cours : "' . $cours->title . '"',
+            link:   '/admin/cours/' . $cours->id
+        );
+    }
+
+    // Notifier le prof
+    Notification::notifier(
+        userId: auth()->id(),
+        type:   'course_pending',
+        title:  'Cours soumis avec succès',
+        body:   'Votre cours "' . $cours->title . '" est en attente de validation par l\'équipe Kimboo.',
+        link:   route('professeur.create-cours')
+    );
+
     return redirect()->route('professeur.dashboard')
-        ->with('success', 'Cours ajouté avec succès !');
+        ->with('success', 'Cours soumis ! Il sera visible après validation par notre équipe.');
 }
 
     public function deleteCours($id)

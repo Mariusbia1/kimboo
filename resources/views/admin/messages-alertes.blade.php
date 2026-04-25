@@ -1,0 +1,226 @@
+@extends('layouts.dashboard')
+
+@section('title', 'Alertes messages')
+@section('page-title', 'Alertes messages')
+@section('page-subtitle', 'Messages suspects détectés par le système')
+
+@section('content')
+
+@if(session('success'))
+<div class="mb-6 px-4 py-3 rounded-xl text-sm font-medium text-green-700 bg-green-100 flex items-center gap-2">
+    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+    </svg>
+    {{ session('success') }}
+</div>
+@endif
+
+{{-- Stats rapides --}}
+<div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:1rem;" class="mb-8">
+    <div class="bg-white rounded-2xl p-5" style="box-shadow:0 4px 12px rgba(0,0,0,0.08);">
+        <div class="flex items-center justify-between mb-3">
+            <span class="text-xs text-gray-400">En attente</span>
+            <span class="w-8 h-8 rounded-xl flex items-center justify-center bg-red-100">
+                <svg class="w-4 h-4 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                </svg>
+            </span>
+        </div>
+        <p class="text-3xl font-bold text-black" style="font-family:'Poppins',sans-serif;">
+            {{ $alertes->where('status', 'pending')->count() }}
+        </p>
+        <p class="text-xs text-gray-400 mt-1">alertes à traiter</p>
+    </div>
+
+    <div class="bg-white rounded-2xl p-5" style="box-shadow:0 4px 12px rgba(0,0,0,0.08);">
+        <div class="flex items-center justify-between mb-3">
+            <span class="text-xs text-gray-400">Traitées</span>
+            <span class="w-8 h-8 rounded-xl flex items-center justify-center bg-green-100">
+                <svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+            </span>
+        </div>
+        <p class="text-3xl font-bold text-black" style="font-family:'Poppins',sans-serif;">
+            {{ $alertes->where('status', 'reviewed')->count() }}
+        </p>
+        <p class="text-xs text-gray-400 mt-1">alertes traitées</p>
+    </div>
+
+    <div class="bg-white rounded-2xl p-5" style="box-shadow:0 4px 12px rgba(0,0,0,0.08);">
+        <div class="flex items-center justify-between mb-3">
+            <span class="text-xs text-gray-400">Ignorées</span>
+            <span class="w-8 h-8 rounded-xl flex items-center justify-center bg-gray-100">
+                <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+            </span>
+        </div>
+        <p class="text-3xl font-bold text-black" style="font-family:'Poppins',sans-serif;">
+            {{ $alertes->where('status', 'ignored')->count() }}
+        </p>
+        <p class="text-xs text-gray-400 mt-1">alertes ignorées</p>
+    </div>
+</div>
+
+{{-- Liste alertes --}}
+<div class="bg-white rounded-2xl p-6" style="box-shadow:0 4px 12px rgba(0,0,0,0.06);">
+    <div class="flex items-center justify-between mb-6">
+        <div>
+            <h2 class="font-semibold text-black">Alertes détectées</h2>
+            <p class="text-xs text-gray-400 mt-0.5">{{ $alertes->total() }} alertes au total</p>
+        </div>
+        <a href="{{ route('admin.messages.conversations') }}"
+           class="text-sm font-semibold px-4 py-2 rounded-xl text-black transition hover:opacity-90 flex items-center gap-2"
+           style="background:#FCB315;">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+            </svg>
+            Voir toutes les conversations
+        </a>
+    </div>
+
+    @if($alertes->isEmpty())
+    <div class="text-center py-12">
+        <div class="w-14 h-14 rounded-2xl flex items-center justify-center mx-auto mb-4 bg-gray-100">
+            <svg class="w-7 h-7 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+        </div>
+        <p class="font-semibold text-black mb-1">Aucune alerte</p>
+        <p class="text-sm text-gray-400">Tous les messages respectent les règles de la plateforme.</p>
+    </div>
+    @else
+    <div class="space-y-4">
+        @foreach($alertes as $alerte)
+        <div class="border rounded-2xl p-5 {{ $alerte->status === 'pending' ? 'border-red-200 bg-red-50' : ($alerte->status === 'reviewed' ? 'border-green-200 bg-green-50' : 'border-gray-200 bg-gray-50') }}">
+            <div class="flex items-start justify-between gap-4">
+
+                {{-- Infos alerte --}}
+                <div class="flex-1">
+                    <div class="flex items-center gap-3 mb-3">
+
+                        {{-- Badge type --}}
+                        @if($alerte->alert_type === 'phone')
+                        <span class="px-2.5 py-1 rounded-full text-xs font-medium bg-red-100 text-red-700 flex items-center gap-1">
+                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
+                            </svg>
+                            Numéro de téléphone
+                        </span>
+                        @elseif($alerte->alert_type === 'bank')
+                        <span class="px-2.5 py-1 rounded-full text-xs font-medium bg-orange-100 text-orange-700 flex items-center gap-1">
+                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/>
+                            </svg>
+                            Coordonnées bancaires
+                        </span>
+                        @elseif($alerte->alert_type === 'link')
+                        <span class="px-2.5 py-1 rounded-full text-xs font-medium bg-amber-100 text-amber-700 flex items-center gap-1">
+                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/>
+                            </svg>
+                            Lien externe
+                        </span>
+                        @endif
+
+                        {{-- Badge statut --}}
+                        @if($alerte->status === 'pending')
+                        <span class="px-2.5 py-1 rounded-full text-xs font-medium bg-red-100 text-red-700">En attente</span>
+                        @elseif($alerte->status === 'reviewed')
+                        <span class="px-2.5 py-1 rounded-full text-xs font-medium bg-green-100 text-green-700">Traité</span>
+                        @else
+                        <span class="px-2.5 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-500">Ignoré</span>
+                        @endif
+
+                        <span class="text-xs text-gray-400">{{ $alerte->created_at->diffForHumans() }}</span>
+                    </div>
+
+                    {{-- Expéditeur → Destinataire --}}
+                    <div class="flex items-center gap-3 mb-3">
+                        <div class="flex items-center gap-2">
+                            <x-avatar :user="$alerte->sender" size="7" rounded="full"/>
+                            <span class="text-sm font-medium text-black">{{ $alerte->sender->name }}</span>
+                        </div>
+                        <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+                        </svg>
+                        <div class="flex items-center gap-2">
+                            <x-avatar :user="$alerte->receiver" size="7" rounded="full"/>
+                            <span class="text-sm font-medium text-black">{{ $alerte->receiver->name }}</span>
+                        </div>
+                    </div>
+
+                    {{-- Contenu suspect --}}
+                    <div class="bg-white rounded-xl px-4 py-3 border border-gray-200">
+                        <p class="text-xs text-gray-400 mb-1">Contenu détecté :</p>
+                        <p class="text-sm font-mono text-red-600">{{ $alerte->matched_content }}</p>
+                    </div>
+
+                    {{-- Message complet --}}
+                    @if($alerte->message)
+                    <div class="mt-2 bg-white rounded-xl px-4 py-3 border border-gray-200">
+                        <p class="text-xs text-gray-400 mb-1">Message complet :</p>
+                        <p class="text-sm text-gray-700">{{ $alerte->message->content }}</p>
+                        @if($alerte->message->is_blocked)
+                        <span class="inline-block mt-1 text-xs px-2 py-0.5 rounded-full bg-red-100 text-red-600">Message bloqué</span>
+                        @else
+                        <span class="inline-block mt-1 text-xs px-2 py-0.5 rounded-full bg-amber-100 text-amber-600">Message envoyé (lien signalé)</span>
+                        @endif
+                    </div>
+                    @endif
+
+                    {{-- Lien voir conversation --}}
+                    <a href="{{ route('admin.messages.voir', [$alerte->sender_id, $alerte->receiver_id]) }}"
+                       class="inline-flex items-center gap-1.5 mt-3 text-xs font-medium hover:underline"
+                       style="color:#FCB315;">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                        </svg>
+                        Voir la conversation complète
+                    </a>
+                </div>
+
+                {{-- Actions --}}
+                @if($alerte->status === 'pending')
+                <div class="flex flex-col gap-2 shrink-0">
+                    <form method="POST" action="{{ route('admin.messages.alertes.reviewed', $alerte->id) }}">
+                        @csrf @method('PATCH')
+                        <button type="submit"
+                            class="w-full text-xs px-4 py-2 rounded-xl text-white font-semibold flex items-center justify-center gap-1.5 transition hover:opacity-90 bg-green-500">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                            Traité
+                        </button>
+                    </form>
+                    <form method="POST" action="{{ route('admin.messages.alertes.ignored', $alerte->id) }}">
+                        @csrf @method('PATCH')
+                        <button type="submit"
+                            class="w-full text-xs px-4 py-2 rounded-xl font-semibold flex items-center justify-center gap-1.5 transition hover:bg-gray-200 bg-gray-100 text-gray-600">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                            </svg>
+                            Ignorer
+                        </button>
+                    </form>
+                </div>
+                @endif
+
+            </div>
+        </div>
+        @endforeach
+    </div>
+
+    {{-- Pagination --}}
+    @if($alertes->hasPages())
+    <div class="mt-6 flex justify-center">
+        {{ $alertes->links() }}
+    </div>
+    @endif
+
+    @endif
+</div>
+
+@endsection

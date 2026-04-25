@@ -26,6 +26,11 @@ class UpdateTeacherProfileRequest extends FormRequest
             'zone_deplacement' => ['nullable', 'string', 'max:100'],
             'video_url' => ['nullable', 'url', 'max:255'],
             'avatar' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
+            'parcours_academique' => ['nullable', 'array'],
+            'parcours_academique.*.annees' => ['nullable', 'string'],
+            'parcours_academique.*.diplome' => ['nullable', 'string'],
+            'parcours_academique.*.etablissement' => ['nullable', 'string'],
+            'response_time' => ['nullable', 'integer'],
         ];
     }
 

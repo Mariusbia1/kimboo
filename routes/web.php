@@ -8,16 +8,25 @@ use App\Http\Controllers\ProfesseurController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CoursController;
 use App\Http\Controllers\MessageController;
+use App\Http\Controllers\StatsController;
+use App\Http\Controllers\NotificationController;
+
 
 Route::get('/', [HomeController::class, 'index']);
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-
+    Route::post('/notifications/{id}/read', [NotificationController::class, 'markRead'])->name('notifications.read');
+Route::post('/notifications/read-all', [NotificationController::class, 'readAll'])->name('notifications.read-all');
     // Espace élève
     Route::middleware(['role:eleve'])->prefix('eleve')->name('eleve.')->group(function () {
         Route::get('/dashboard', [EleveController::class, 'dashboard'])->name('dashboard');
+
         Route::patch('/reservations/{id}/cancel', [EleveController::class, 'cancelBooking'])->name('booking.cancel');
+        Route::patch('/reservations/{id}/terminer', [EleveController::class, 'terminerBooking'])->name('booking.terminer');
+        Route::post('/reservations/{id}/avis', [EleveController::class, 'storeAvis'])->name('booking.avis');
+        Route::get('/profil', [EleveController::class, 'editProfil'])->name('edit-profil');
+        Route::post('/profil', [EleveController::class, 'updateProfil'])->name('update-profil');
     });
 
     // Espace professeur
@@ -37,9 +46,21 @@ Route::middleware(['auth'])->group(function () {
     Route::middleware(['role:admin'])->prefix('admin')->name('admin.')->group(function () {
         Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
         Route::get('/utilisateurs', [AdminController::class, 'users'])->name('users');
+        Route::get('/statistiques', [StatsController::class, 'index'])->name('stats'); // ← ajouter
+
         Route::patch('/professeurs/{id}/certifier', [AdminController::class, 'certifierProfesseur'])->name('certifier');
         Route::patch('/professeurs/{id}/decertifier', [AdminController::class, 'decertifierProfesseur'])->name('decertifier');
         Route::delete('/utilisateurs/{id}', [AdminController::class, 'deleteUser'])->name('delete-user');
+        Route::get('/cours', [AdminController::class, 'cours'])->name('cours');
+        Route::get('/cours/{id}', [AdminController::class, 'showCours'])->name('cours.show');
+        Route::patch('/cours/{id}/approuver', [AdminController::class, 'approuverCours'])->name('cours.approuver');
+        Route::patch('/cours/{id}/refuser', [AdminController::class, 'refuserCours'])->name('cours.refuser');
+        Route::delete('/cours/{id}', [AdminController::class, 'supprimerCours'])->name('cours.supprimer');
+        Route::get('/messages/alertes', [AdminController::class, 'messagesAlertes'])->name('messages.alertes');
+        Route::get('/messages/conversations', [AdminController::class, 'messagesConversations'])->name('messages.conversations');
+        Route::get('/messages/conversations/{userId1}/{userId2}', [AdminController::class, 'voirConversation'])->name('messages.voir');
+        Route::patch('/messages/alertes/{id}/reviewed', [AdminController::class, 'alerteReviewed'])->name('messages.alertes.reviewed');
+        Route::patch('/messages/alertes/{id}/ignored', [AdminController::class, 'alerteIgnored'])->name('messages.alertes.ignored');
     });
 });
 
@@ -51,5 +72,11 @@ Route::post('/professeur/{id}/reserver', [HomeController::class, 'storeBooking']
 Route::get('/messages', [MessageController::class, 'index'])->name('messages.index');
 Route::get('/messages/{userId}', [MessageController::class, 'show'])->name('messages.show');
 Route::post('/messages/{userId}', [MessageController::class, 'send'])->name('messages.send');
+
+use App\Http\Controllers\FavoriteController;
+
+// Dans le groupe auth
+Route::post('/favoris/{profileId}', [FavoriteController::class, 'toggle'])->name('favoris.toggle');
+Route::get('/favoris', [FavoriteController::class, 'index'])->name('favoris.index');
 
 require __DIR__.'/auth.php';

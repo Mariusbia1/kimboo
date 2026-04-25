@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Message;
+use App\Models\MessageAlert;
+use App\Models\Notification;
 use App\Models\User;
+use App\Services\MessageModerator;
 use Illuminate\Http\Request;
 
 class MessageController extends Controller
@@ -12,7 +15,6 @@ class MessageController extends Controller
     {
         $user = auth()->user();
 
-        // Récupérer toutes les conversations
         $conversations = Message::where('sender_id', $user->id)
             ->orWhere('receiver_id', $user->id)
             ->with(['sender', 'receiver'])
@@ -32,7 +34,7 @@ class MessageController extends Controller
 
     public function show($userId)
     {
-        $user = auth()->user();
+        $user    = auth()->user();
         $contact = User::findOrFail($userId);
 
         $messages = Message::where(function($q) use ($user, $userId) {
@@ -52,44 +54,125 @@ class MessageController extends Controller
         return view('messages.show', compact('messages', 'contact'));
     }
 
-   public function send(Request $request, $userId)
-{
-    $request->validate([
-        'content' => ['required', 'string', 'max:1000'],
-    ]);
+    public function send(Request $request, $userId)
+    {
+        $request->validate([
+            'content' => ['required', 'string', 'max:1000'],
+        ]);
 
-    $content = $request->content;
+        $content  = $request->content;
+        $detected = MessageModerator::analyze($content);
 
-    // Patterns à bloquer
-    $patterns = [
-        // Numéros de téléphone
-        '/(\+?\d[\s\-\.]?){7,15}/',
-        // Numéros de carte bancaire
-        '/\b\d{4}[\s\-]?\d{4}[\s\-]?\d{4}[\s\-]?\d{4}\b/',
-        // IBAN
-        '/[A-Z]{2}\d{2}[A-Z0-9]{4}\d{7}([A-Z0-9]?){0,16}/',
-        // QR code mentions
-        '/qr\s*code/i',
-        '/scanner/i',
-        // Liens suspects
-        '/(?:https?:\/\/)?(?:wa\.me|whatsapp|telegram|t\.me)/i',
-    ];
+        // Séparer les types détectés
+        $blockedTypes  = ['phone', 'bank'];
+        $warningTypes  = ['link'];
 
-    foreach ($patterns as $pattern) {
-        if (preg_match($pattern, $content)) {
+        $blockedMatches = array_filter($detected, fn($d) => in_array($d['type'], $blockedTypes));
+        $warningMatches = array_filter($detected, fn($d) => in_array($d['type'], $warningTypes));
+
+        // Bloquer si téléphone ou banque détecté
+        if (!empty($blockedMatches)) {
+            $typeLabels = [
+                'phone' => 'numéro de téléphone',
+                'bank'  => 'coordonnées bancaires',
+            ];
+
+            $types = array_unique(array_map(fn($d) => $typeLabels[$d['type']] ?? $d['type'], $blockedMatches));
+            $label = implode(' et ', $types);
+
+            // Enregistrer le message quand même (masqué) pour que l'admin puisse le voir
+            $message = Message::create([
+                'sender_id'   => auth()->id(),
+                'receiver_id' => $userId,
+                'content'     => $content,
+                'is_read'     => false,
+                'is_blocked'  => true,
+            ]);
+
+            // Créer une alerte
+            foreach ($blockedMatches as $match) {
+                MessageAlert::create([
+                    'message_id'      => $message->id,
+                    'sender_id'       => auth()->id(),
+                    'receiver_id'     => $userId,
+                    'alert_type'      => $match['type'],
+                    'matched_content' => $match['matched'],
+                    'status'          => 'pending',
+                ]);
+            }
+
+            // Notifier les admins
+            $admins = User::where('role', 'admin')->get();
+            foreach ($admins as $admin) {
+                Notification::notifier(
+                    userId: $admin->id,
+                    type:   'message_alert',
+                    title:  'Message suspect détecté',
+                    body:   auth()->user()->name . ' a tenté d\'envoyer un ' . $label . ' dans un message.',
+                    link:   '/admin/messages/alertes'
+                );
+            }
+
+            // Notifier l'expéditeur
+            Notification::notifier(
+                userId: auth()->id(),
+                type:   'message_alert',
+                title:  'Message non envoyé',
+                body:   'Votre message contient un ' . $label . ' non autorisé sur Kimboo. Échangez via la plateforme uniquement.',
+                link:   route('messages.show', $userId)
+            );
+
             return back()
                 ->withInput()
-                ->with('error', 'Votre message contient des informations non autorisées (numéro de téléphone, données bancaires, QR code). Veuillez utiliser la plateforme Kimboo pour vos échanges.');
+                ->with('error', 'Votre message contient un ' . $label . ' non autorisé. Veuillez utiliser uniquement la plateforme Kimboo pour vos échanges.');
         }
+
+        // Avertissement si lien détecté (message envoyé mais signalé)
+        if (!empty($warningMatches)) {
+            $message = Message::create([
+                'sender_id'   => auth()->id(),
+                'receiver_id' => $userId,
+                'content'     => $content,
+                'is_read'     => false,
+                'is_blocked'  => false,
+            ]);
+
+            foreach ($warningMatches as $match) {
+                MessageAlert::create([
+                    'message_id'      => $message->id,
+                    'sender_id'       => auth()->id(),
+                    'receiver_id'     => $userId,
+                    'alert_type'      => 'link',
+                    'matched_content' => $match['matched'],
+                    'status'          => 'pending',
+                ]);
+            }
+
+            // Notifier les admins
+            $admins = User::where('role', 'admin')->get();
+            foreach ($admins as $admin) {
+                Notification::notifier(
+                    userId: $admin->id,
+                    type:   'message_alert',
+                    title:  'Lien externe détecté',
+                    body:   auth()->user()->name . ' a envoyé un lien externe dans un message. À vérifier.',
+                    link:   '/admin/messages/alertes'
+                );
+            }
+
+            return redirect()->route('messages.show', $userId)
+                ->with('warning', 'Votre message a été envoyé mais contient un lien externe qui a été signalé à l\'équipe Kimboo.');
+        }
+
+        // Message normal
+        Message::create([
+            'sender_id'   => auth()->id(),
+            'receiver_id' => $userId,
+            'content'     => $content,
+            'is_read'     => false,
+            'is_blocked'  => false,
+        ]);
+
+        return redirect()->route('messages.show', $userId);
     }
-
-    Message::create([
-        'sender_id' => auth()->id(),
-        'receiver_id' => $userId,
-        'content' => $content,
-        'is_read' => false,
-    ]);
-
-    return redirect()->route('messages.show', $userId);
-}
 }

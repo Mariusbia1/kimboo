@@ -2,7 +2,7 @@
 
 @section('title', 'Modifier mon profil')
 @section('page-title', 'Mon profil')
-@section('page-subtitle', 'Modifiez vos informations')
+@section('page-subtitle', 'Modifiez vos inations')
 
 @section('content')
 
@@ -48,7 +48,7 @@
                             <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                             </svg>
-                            <span class="text-sm text-gray-500">Choisir une photo</span>
+                            <span class="text-sm text-[rgb(43,43,43)]">Choisir une photo</span>
                         </label>
                         <input type="file" name="avatar" id="avatar-input" accept="image/*" class="hidden"/>
                         <p class="text-xs text-gray-400 mt-1">JPG, PNG ou WEBP · Max 2MB</p>
@@ -146,7 +146,53 @@
                             Offrir le premier cours gratuitement
                         </label>
                     </div>
+                    <!-- Parcours académique -->
+<div>
+    <label class="text-sm font-semibold text-gray-700 mb-3 block">Parcours académique</label>
+    <div id="parcours-container" style="display:flex; flex-direction:column; gap:0.75rem;">
+        @php $parcours_list = is_array($profile->parcours_academique) ? $profile->parcours_academique : json_decode($profile->parcours_academique, true) ?? []; @endphp
+@if(count($parcours_list) > 0)
+            @foreach($parcours_list as $index => $parcours)
+            <div class="parcours-item rounded-xl border-2 border-gray-100 p-4 bg-gray-50" style="display:grid; grid-template-columns: 1fr 1fr 1fr auto; gap:0.75rem; align-items:center;">
+                <input type="text" name="parcours_academique[{{ $index }}][annees]"
+                    value="{{ $parcours['annees'] ?? '' }}"
+                    placeholder="Ex: 2018 - 2020"
+                    class="border-2 border-gray-100 rounded-xl px-3 py-2 text-sm outline-none focus:border-yellow-400 bg-white"/>
+                <input type="text" name="parcours_academique[{{ $index }}][diplome]"
+                    value="{{ $parcours['diplome'] ?? '' }}"
+                    placeholder="Ex: Master en Physique"
+                    class="border-2 border-gray-100 rounded-xl px-3 py-2 text-sm outline-none focus:border-yellow-400 bg-white"/>
+                <input type="text" name="parcours_academique[{{ $index }}][etablissement]"
+                    value="{{ $parcours['etablissement'] ?? '' }}"
+                    placeholder="Ex: Université de..."
+                    class="border-2 border-gray-100 rounded-xl px-3 py-2 text-sm outline-none focus:border-yellow-400 bg-white"/>
+                <button type="button" onclick="this.closest('.parcours-item').remove()"
+                    class="w-8 h-8 rounded-lg flex items-center justify-center bg-red-100 text-red-500 hover:bg-red-200 transition shrink-0">
+                    ✕
+                </button>
+            </div>
+            @endforeach
+        @endif
+    </div>
+    <button type="button" onclick="addParcours()"
+        class="mt-3 text-sm px-4 py-2 rounded-xl border-2 border-dashed border-gray-200 hover:border-yellow-400 transition w-full"
+        style="color:#2b2b2b;">
+        + Ajouter un diplôme
+    </button>
+</div>
 
+<!-- Temps de réponse -->
+<div>
+    <label class="text-sm font-semibold text-gray-700 mb-1.5 block">Temps de réponse moyen (minutes)</label>
+    <select name="response_time" class="w-full border-2 border-gray-100 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-yellow-400 transition bg-gray-50">
+        <option value="">Choisir...</option>
+        <option value="30" {{ $profile->response_time == 30 ? 'selected' : '' }}>30 minutes</option>
+        <option value="60" {{ $profile->response_time == 60 ? 'selected' : '' }}>1 heure</option>
+        <option value="120" {{ $profile->response_time == 120 ? 'selected' : '' }}>2 heures</option>
+        <option value="240" {{ $profile->response_time == 240 ? 'selected' : '' }}>4 heures</option>
+        <option value="1440" {{ $profile->response_time == 1440 ? 'selected' : '' }}>24 heures</option>
+    </select>
+</div>
                     <button type="submit"
                         class="w-full py-3 rounded-xl text-black font-semibold transition hover:opacity-90"
                         style="background:#FCB315;">
@@ -192,7 +238,7 @@
 
         <div class="rounded-xl p-4 text-center mb-4" style="background:#FFF8E7;">
             <p class="text-2xl font-bold" style="color:#FCB315;">{{ number_format($profile->hourly_rate, 0, ',', ' ') }} Fcfa</p>
-            <p class="text-xs text-gray-500 mt-0.5">par heure</p>
+            <p class="text-xs text-[rgb(43,43,43)] mt-0.5">par heure</p>
         </div>
 
         <div class="text-sm space-y-2 mb-5">
@@ -249,6 +295,32 @@ document.getElementById('avatar-input').addEventListener('change', function(e) {
     }
     reader.readAsDataURL(file);
 });
+
+let parcoursCount = {{ count($parcours_list) }};
+
+function addParcours() {
+    const container = document.getElementById('parcours-container');
+    const index = parcoursCount++;
+    const div = document.createElement('div');
+    div.className = 'parcours-item rounded-xl border-2 border-gray-100 p-4 bg-gray-50';
+    div.style.cssText = 'display:grid; grid-template-columns: 1fr 1fr 1fr auto; gap:0.75rem; align-items:center;';
+    div.innerHTML = `
+        <input type="text" name="parcours_academique[${index}][annees]"
+            placeholder="Ex: 2018 - 2020"
+            class="border-2 border-gray-100 rounded-xl px-3 py-2 text-sm outline-none focus:border-yellow-400 bg-white"/>
+        <input type="text" name="parcours_academique[${index}][diplome]"
+            placeholder="Ex: Master en Physique"
+            class="border-2 border-gray-100 rounded-xl px-3 py-2 text-sm outline-none focus:border-yellow-400 bg-white"/>
+        <input type="text" name="parcours_academique[${index}][etablissement]"
+            placeholder="Ex: Université de..."
+            class="border-2 border-gray-100 rounded-xl px-3 py-2 text-sm outline-none focus:border-yellow-400 bg-white"/>
+        <button type="button" onclick="this.closest('.parcours-item').remove()"
+            class="w-8 h-8 rounded-lg flex items-center justify-center bg-red-100 text-red-500 hover:bg-red-200 transition shrink-0">
+            ✕
+        </button>
+    `;
+    container.appendChild(div);
+}
 </script>
 
 @endsection

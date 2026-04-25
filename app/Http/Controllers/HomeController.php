@@ -8,23 +8,39 @@ use Illuminate\Http\Request;
 class HomeController extends Controller
 {
     public function index()
-    {
-        $professeurs = TeacherProfile::with(['user', 'courses'])
-            ->orderBy('rating', 'desc')
-            ->take(4)
-            ->get();
+{
+    $professeurs = TeacherProfile::with(['user', 'courses'])
+        ->withCount(['courses as cours_donnes' => function($q) {
+            $q->whereHas('bookings', function($q2) {
+                $q2->where('status', 'terminé');
+            });
+        }])
+        ->orderBy('cours_donnes', 'desc')
+        ->orderBy('rating', 'desc')
+        ->take(4)
+        ->get();
 
-        $categories = [
-            ['emoji' => '📐', 'label' => 'Mathématiques'],
-            ['emoji' => '🍳', 'label' => 'Cuisine'],
-            ['emoji' => '⚽', 'label' => 'Sport'],
-            ['emoji' => '🌍', 'label' => 'Langues'],
-            ['emoji' => '🎵', 'label' => 'Musique'],
-            ['emoji' => '💻', 'label' => 'Informatique'],
-        ];
+        // Meilleur prof pour la section "Devenir mentor"
+    $meilleurProf = \App\Models\TeacherProfile::with('user')
+        ->where('is_verified', true)
+        ->orderBy('rating', 'desc')
+        ->first();
 
-        return view('welcome', compact('professeurs', 'categories'));
-    }
+    $categories = [
+        ['emoji' => '📐', 'label' => 'Mathématiques'],
+        ['emoji' => '🍳', 'label' => 'Cuisine'],
+        ['emoji' => '⚽', 'label' => 'Sport'],
+        ['emoji' => '🌍', 'label' => 'Langues'],
+        ['emoji' => '🎵', 'label' => 'Musique'],
+        ['emoji' => '💻', 'label' => 'Informatique'],
+    ];
+
+    $favorisIds = auth()->check()
+        ? \App\Models\Favorite::where('user_id', auth()->id())->pluck('teacher_profile_id')->toArray()
+        : [];
+
+    return view('welcome', compact('professeurs', 'categories', 'favorisIds', 'meilleurProf'));
+}
 
    public function profil($id)
 {

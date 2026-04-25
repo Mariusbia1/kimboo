@@ -37,5 +37,8 @@
                 {{ __('Se connecter') }}
             </x-primary-button>
         </div>
+        <a class="underline text-sm text-gray-600 hover:text-gray-900" href="{{ route('register') }}">
+            Vous avez n'avez pas de compte ? Inscrivez-vous
+        </a>
     </form>
 </x-guest-layout>
