@@ -1,59 +1,175 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Kimboo — Plateforme de mise en relation Élèves & Enseignants
 
 <p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
+  <img src="https://img.shields.io/badge/Laravel-Framework-red?style=for-the-badge&logo=laravel">
+  <img src="https://img.shields.io/badge/PHP-Backend-blue?style=for-the-badge&logo=php">
+  <img src="https://img.shields.io/badge/MySQL-Database-orange?style=for-the-badge&logo=mysql">
+  <img src="https://img.shields.io/badge/Blade-Templating-black?style=for-the-badge">
+  <img src="https://img.shields.io/badge/Status-Production--Ready-brightgreen?style=for-the-badge">
 </p>
 
-## About Laravel
+---
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Vision du projet
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+**Kimboo** est une application web complète conçue pour simplifier et moderniser la mise en relation entre élèves et enseignants.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+L’objectif est de proposer une plateforme intuitive, performante et sécurisée permettant :
 
-## Learning Laravel
+* une meilleure accessibilité à l’éducation
+* une gestion fluide des cours
+* une communication efficace entre utilisateurs
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+---
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## Ce que démontre ce projet
 
-## Laravel Sponsors
+Ce projet met en avant ma capacité à :
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+* Concevoir une **architecture backend robuste avec Laravel**
+* Implémenter un **système complet multi-utilisateurs**
+* Développer des **fonctionnalités avancées (messagerie, notifications, tracking)**
+* Structurer une base de données avec migrations
+* Créer une **interface utilisateur fonctionnelle et responsive**
+* Gérer un projet réel de bout en bout (conception → développement → déploiement)
 
-### Premium Partners
+---
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+## Fonctionnalités clés
 
-## Contributing
+### Gestion des enseignants
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+* Création et gestion de profils
+* Ajout de parcours académique
+* Publication de cours
+* Gestion des disponibilités
 
-## Code of Conduct
+### Expérience élève
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+* Recherche de cours
+* Ajout aux favoris
+* Réservation de cours
+* Gestion du profil
 
-## Security Vulnerabilities
+### Messagerie intelligente
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+* Conversations en temps réel
+* Système de modération
+* Détection de contenu inapproprié
+* Alertes automatiques
 
-## License
+### Notifications dynamiques
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+* Suivi des actions importantes
+* Interaction en temps réel
+
+### Système de tracking & statistiques
+
+* Suivi des visites (Page Views)
+* Analyse du comportement utilisateur
+* Dashboard administrateur
+
+### Espace administrateur
+
+* Gestion globale de la plateforme
+* Surveillance des messages
+* Accès aux statistiques
+* Contrôle des contenus
+
+---
+
+## Architecture du projet
+
+```bash
+app/
+ ├── Http/Controllers   # Logique métier
+ ├── Models             # Modèles Eloquent
+ ├── Services           # Services métier (ex: modération)
+ ├── Middleware         # Tracking & sécurité
+
+database/
+ ├── migrations         # Structure BDD
+
+resources/
+ ├── views              # Interfaces Blade
+```
+
+---
+
+## Stack technique
+
+| Technologie  | Rôle                  |
+| ------------ | --------------------- |
+| Laravel      | Framework backend     |
+| TailwindCSS  | Framework frontend    |
+| PHP          | Logique serveur       |
+| MySQL        | Base de données       |
+| Blade        | Templates             |
+| JavaScript   | Interactions frontend |
+| Git / GitHub | Versionning           |
+
+---
+
+## Installation rapide
+
+```bash
+git clone git@github.com:Mariusbia1/kimboo.git
+cd kimboo
+composer install
+npm install
+cp .env.example .env
+php artisan key:generate
+php artisan migrate
+php artisan serve
+```
+
+---
+
+## Aperçu du projet
+
+> À compléter par des captures d’écran :
+
+* Page d’accueil
+* Dashboard admin
+* Interface élève
+* Messagerie
+
+---
+
+## Axes d’amélioration
+
+* Intégration de paiement (Stripe / Mobile Money)
+* Système de notation des enseignants
+* Version mobile (Flutter ou React Native)
+* Optimisation des performances
+* Renforcement de la sécurité
+
+---
+
+## À propos de moi
+
+**Marius Biaou**
+Développeur Web (Laravel / JavaScript)
+
+Objectif : intégrer une entreprise pour contribuer à des projets concrets et monter en expertise.
+
+🔗 GitHub : https://github.com/Mariusbia1
+
+---
+
+## Pourquoi ce projet est pertinent pour un recruteur ?
+
+Kimboo n’est pas un simple projet académique.
+
+C’est une **application complète**, qui démontre :
+
+* une compréhension réelle des besoins utilisateurs
+* une capacité à développer des fonctionnalités complexes
+* une approche structurée du développement
+
+Ce projet reflète directement mon niveau actuel et mon potentiel en entreprise.
+
+
+## 📄 Licence
+
+Projet open-source à but éducatif.
