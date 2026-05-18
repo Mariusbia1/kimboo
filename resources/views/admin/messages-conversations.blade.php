@@ -11,7 +11,7 @@
     <div class="flex items-center justify-between mb-6">
         <div>
             <h2 class="font-semibold text-black">Toutes les conversations</h2>
-            <p class="text-xs text-gray-400 mt-0.5">{{ $conversations->count() }} conversations actives</p>
+            <p class="text-sm text-gray-400 mt-0.5">{{ $conversations->count() }} conversations actives</p>
         </div>
         <a href="{{ route('admin.messages.alertes') }}"
            class="text-sm font-semibold px-4 py-2 rounded-xl text-white transition hover:opacity-90 flex items-center gap-2 bg-red-500">
@@ -54,7 +54,7 @@
                         {{ $user1->name }} — {{ $user2->name }}
                     </p>
                     @if($hasAlert)
-                    <span class="px-2 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-600 flex items-center gap-1">
+                    <span class="px-2 py-0.5 rounded-full text-sm font-medium bg-red-100 text-red-600 flex items-center gap-1">
                         <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
                         </svg>
@@ -62,12 +62,12 @@
                     </span>
                     @endif
                 </div>
-                <p class="text-xs text-gray-500 truncate">{{ Str::limit($message->content, 60) }}</p>
+                <p class="text-sm text-gray-500 truncate">{{ Str::limit($message->content, 60) }}</p>
             </div>
 
             {{-- Date + flèche --}}
             <div class="flex items-center gap-3 shrink-0">
-                <span class="text-xs text-gray-400">{{ $message->created_at->diffForHumans() }}</span>
+                <span class="text-sm text-gray-400">{{ $message->created_at->diffForHumans() }}</span>
                 <svg class="w-4 h-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
                 </svg>

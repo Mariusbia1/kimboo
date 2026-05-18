@@ -242,4 +242,46 @@ public function updateProfil(\Illuminate\Http\Request $request)
         $booking->update(['status' => 'annulé']);
         return back()->with('success', 'Réservation annulée.');
     }
+
+    public function calendrier(Request $request)
+{
+    $profile = auth()->user()->teacherProfile;
+    $mois    = $request->get('mois', now()->month);
+    $annee   = $request->get('annee', now()->year);
+
+    $coursduMois = Booking::whereHas('course', function($q) use ($profile) {
+            $q->where('teacher_profile_id', $profile->id);
+        })
+        ->whereIn('status', ['confirmé', 'terminé'])
+        ->whereMonth('scheduled_at', $mois)
+        ->whereYear('scheduled_at', $annee)
+        ->with(['course', 'user'])
+        ->orderBy('scheduled_at')
+        ->get();
+
+    $prochainsCoours = Booking::whereHas('course', function($q) use ($profile) {
+            $q->where('teacher_profile_id', $profile->id);
+        })
+        ->where('status', 'confirmé')
+        ->where('scheduled_at', '>=', now())
+        ->with(['course', 'user'])
+        ->orderBy('scheduled_at')
+        ->get();
+
+    $coursParJour = $coursduMois->groupBy(function($booking) {
+        return \Carbon\Carbon::parse($booking->scheduled_at)->format('j');
+    });
+
+    $premierJourMois = \Carbon\Carbon::create($annee, $mois, 1);
+    $dernierJourMois = $premierJourMois->copy()->endOfMonth();
+    $moisPrecedent   = $premierJourMois->copy()->subMonth();
+    $moisSuivant     = $premierJourMois->copy()->addMonth();
+
+    return view('professeur.calendrier', compact(
+        'coursduMois', 'prochainsCoours', 'coursParJour',
+        'premierJourMois', 'dernierJourMois',
+        'moisPrecedent', 'moisSuivant',
+        'mois', 'annee'
+    ));
+}
 }

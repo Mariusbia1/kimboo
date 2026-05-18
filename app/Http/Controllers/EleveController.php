@@ -14,23 +14,53 @@ use Illuminate\Support\Facades\Storage;
 class EleveController extends Controller
 {
     public function dashboard()
-    {
-        $user = auth()->user();
-        $reservations = Booking::where('user_id', $user->id)
-            ->with(['course.teacherProfile.user'])
-            ->orderBy('created_at', 'desc')
-            ->get();
+{
+    $user = auth()->user();
 
-        $reservationsCount = $reservations->count();
-        $coursesTermines   = $reservations->where('status', 'terminé')->count();
-        $coursesConfirmes  = $reservations->where('status', 'confirmé')->count();
+    $reservationsCount = Booking::where('user_id', $user->id)->count();
+    $coursesTermines   = Booking::where('user_id', $user->id)->where('status', 'terminé')->count();
+    $coursesConfirmes  = Booking::where('user_id', $user->id)->where('status', 'confirmé')->count();
 
-        return view('eleve.dashboard', compact(
-            'user', 'reservations', 'reservationsCount',
-            'coursesTermines', 'coursesConfirmes'
-        ));
-    }
+    // Prochains cours confirmés (max 3)
+    $prochainsCoours = Booking::where('user_id', $user->id)
+        ->where('status', 'confirmé')
+        ->where('scheduled_at', '>=', now())
+        ->with(['course.teacherProfile.user'])
+        ->orderBy('scheduled_at', 'asc')
+        ->limit(3)
+        ->get();
 
+    return view('eleve.dashboard', compact(
+        'user', 'reservationsCount',
+        'coursesTermines', 'coursesConfirmes',
+        'prochainsCoours'
+    ));
+}
+
+public function mesReservations()
+{
+    $user = auth()->user();
+
+    $reservations = Booking::where('user_id', $user->id)
+        ->with(['course.teacherProfile.user'])
+        ->orderBy('created_at', 'desc')
+        ->paginate(10);
+
+    return view('eleve.mes-reservations', compact('reservations'));
+}
+
+public function mesCours()
+{
+    $user = auth()->user();
+
+    $cours = Booking::where('user_id', $user->id)
+        ->whereIn('status', ['confirmé', 'terminé'])
+        ->with(['course.teacherProfile.user'])
+        ->orderBy('scheduled_at', 'desc')
+        ->paginate(9);
+
+    return view('eleve.mes-cours', compact('cours'));
+}
     public function cancelBooking($id)
     {
         $booking = Booking::findOrFail($id);
@@ -181,5 +211,47 @@ public function updateProfil(\Illuminate\Http\Request $request)
 
     return redirect()->route('eleve.edit-profil')
         ->with('success', 'Profil mis à jour avec succès !');
+}
+
+public function calendrier(Request $request)
+{
+    $user = auth()->user();
+    $mois = $request->get('mois', now()->month);
+    $annee = $request->get('annee', now()->year);
+
+    // Cours du mois sélectionné
+    $coursduMois = Booking::where('user_id', $user->id)
+        ->whereIn('status', ['confirmé', 'terminé'])
+        ->whereMonth('scheduled_at', $mois)
+        ->whereYear('scheduled_at', $annee)
+        ->with(['course.teacherProfile.user'])
+        ->orderBy('scheduled_at')
+        ->get();
+
+    // Prochains cours (liste)
+    $prochainsCoours = Booking::where('user_id', $user->id)
+        ->whereIn('status', ['confirmé'])
+        ->where('scheduled_at', '>=', now())
+        ->with(['course.teacherProfile.user'])
+        ->orderBy('scheduled_at')
+        ->get();
+
+    // Grouper par jour pour la vue mensuelle
+    $coursParJour = $coursduMois->groupBy(function($booking) {
+        return \Carbon\Carbon::parse($booking->scheduled_at)->format('j');
+    });
+
+    $premierJourMois = \Carbon\Carbon::create($annee, $mois, 1);
+    $dernierJourMois = $premierJourMois->copy()->endOfMonth();
+
+    $moisPrecedent = $premierJourMois->copy()->subMonth();
+    $moisSuivant   = $premierJourMois->copy()->addMonth();
+
+    return view('eleve.calendrier', compact(
+        'coursduMois', 'prochainsCoours', 'coursParJour',
+        'premierJourMois', 'dernierJourMois',
+        'moisPrecedent', 'moisSuivant',
+        'mois', 'annee'
+    ));
 }
 }

@@ -21,14 +21,14 @@
 
         <div class="flex-1">
             <p class="font-semibold text-black text-sm">{{ $contact->name }}</p>
-            <p class="text-xs text-gray-400 capitalize">{{ $contact->role }}</p>
+            <p class="text-sm text-gray-400 capitalize">{{ $contact->role }}</p>
         </div>
 
         {{-- Lien vers profil si professeur --}}
         @if($contact->role === 'professeur' && $contact->teacherProfile)
         <a href="{{ route('professeur.profil', $contact->teacherProfile->id) }}"
            target="_blank"
-           class="text-xs px-3 py-1.5 rounded-xl font-medium flex items-center gap-1.5 transition hover:opacity-90"
+           class="text-sm px-3 py-1.5 rounded-xl font-medium flex items-center gap-1.5 transition hover:opacity-90"
            style="background:#FCB315; color:#000;">
             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
@@ -75,7 +75,7 @@
         @if($msgDate !== $lastDate)
         <div class="flex items-center gap-3 my-4">
             <div class="flex-1 h-px bg-gray-100"></div>
-            <span class="text-xs text-gray-400 shrink-0">
+            <span class="text-sm text-gray-400 shrink-0">
                 {{ \Carbon\Carbon::parse($message->created_at)->isToday() ? "Aujourd'hui" :
                    (\Carbon\Carbon::parse($message->created_at)->isYesterday() ? 'Hier' : $msgDate) }}
             </span>
@@ -98,7 +98,7 @@
                     style="{{ $isMine ? 'background:#FCB315;' : '' }}">
                     {{ $message->content }}
                 </div>
-                <p class="text-xs text-gray-400 mt-1 {{ $isMine ? 'text-right' : 'text-left' }}">
+                <p class="text-sm text-gray-400 mt-1 {{ $isMine ? 'text-right' : 'text-left' }}">
                     {{ \Carbon\Carbon::parse($message->created_at)->format('H:i') }}
                     @if($isMine)
                     ·

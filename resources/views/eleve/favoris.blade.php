@@ -61,7 +61,7 @@
             <a href="{{ route('professeur.profil', $profile->id) }}" class="hover:underline">
                 <h3 class="font-semibold text-black">{{ $profile->user->name }}</h3>
             </a>
-            <p class="text-xs mb-2" style="color:#2b2b2b;">{{ $profile->courses->first()->category ?? 'Cours divers' }}</p>
+            <p class="text-sm mb-2" style="color:#2b2b2b;">{{ $profile->courses->first()->category ?? 'Cours divers' }}</p>
             <div class="flex items-center justify-between">
                 <div class="flex items-center gap-1">
                     <span style="color:#FCB315;">★</span>

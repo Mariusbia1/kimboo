@@ -21,12 +21,15 @@ Route::post('/notifications/read-all', [NotificationController::class, 'readAll'
     // Espace élève
     Route::middleware(['role:eleve'])->prefix('eleve')->name('eleve.')->group(function () {
         Route::get('/dashboard', [EleveController::class, 'dashboard'])->name('dashboard');
-
+        Route::get('/mes-cours', [EleveController::class, 'mesCours'])->name('mes-cours');
+        Route::get('/reservations', [EleveController::class, 'mesReservations'])->name('reservations');
         Route::patch('/reservations/{id}/cancel', [EleveController::class, 'cancelBooking'])->name('booking.cancel');
+
         Route::patch('/reservations/{id}/terminer', [EleveController::class, 'terminerBooking'])->name('booking.terminer');
         Route::post('/reservations/{id}/avis', [EleveController::class, 'storeAvis'])->name('booking.avis');
         Route::get('/profil', [EleveController::class, 'editProfil'])->name('edit-profil');
         Route::post('/profil', [EleveController::class, 'updateProfil'])->name('update-profil');
+        Route::get('/calendrier', [EleveController::class, 'calendrier'])->name('calendrier');
     });
 
     // Espace professeur
@@ -40,6 +43,7 @@ Route::post('/notifications/read-all', [NotificationController::class, 'readAll'
         Route::get('/reservations', [ProfesseurController::class, 'reservations'])->name('reservations');
         Route::patch('/reservations/{id}/confirm', [ProfesseurController::class, 'confirmBooking'])->name('booking.confirm');
         Route::patch('/reservations/{id}/cancel', [ProfesseurController::class, 'cancelBooking'])->name('booking.cancel');
+        Route::get('/calendrier', [ProfesseurController::class, 'calendrier'])->name('calendrier');
     });
 
     // Espace admin
@@ -61,6 +65,8 @@ Route::post('/notifications/read-all', [NotificationController::class, 'readAll'
         Route::get('/messages/conversations/{userId1}/{userId2}', [AdminController::class, 'voirConversation'])->name('messages.voir');
         Route::patch('/messages/alertes/{id}/reviewed', [AdminController::class, 'alerteReviewed'])->name('messages.alertes.reviewed');
         Route::patch('/messages/alertes/{id}/ignored', [AdminController::class, 'alerteIgnored'])->name('messages.alertes.ignored');
+        Route::get('/parametres', [AdminController::class, 'parametres'])->name('parametres');
+        Route::post('/parametres', [AdminController::class, 'updateParametres'])->name('parametres.update');
     });
 });
 

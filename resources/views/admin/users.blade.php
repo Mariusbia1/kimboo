@@ -21,7 +21,7 @@
     <div class="flex items-center justify-between mb-6">
         <div>
             <h2 class="font-semibold text-black">Tous les utilisateurs</h2>
-            <p class="text-xs text-gray-400 mt-0.5">{{ $users->total() }} comptes enregistrés</p>
+            <p class="text-sm text-gray-400 mt-0.5">{{ $users->total() }} comptes enregistrés</p>
         </div>
 
         {{-- Bouton ajouter (non fonctionnel pour l'instant) --}}
@@ -40,12 +40,12 @@
         <table class="w-full text-sm">
             <thead>
                 <tr class="border-b border-gray-100">
-                    <th class="text-left py-3 px-4 text-gray-400 font-medium text-xs uppercase tracking-wide">Utilisateur</th>
-                    <th class="text-left py-3 px-4 text-gray-400 font-medium text-xs uppercase tracking-wide">Rôle</th>
-                    <th class="text-left py-3 px-4 text-gray-400 font-medium text-xs uppercase tracking-wide">Ville</th>
-                    <th class="text-left py-3 px-4 text-gray-400 font-medium text-xs uppercase tracking-wide">Téléphone</th>
-                    <th class="text-left py-3 px-4 text-gray-400 font-medium text-xs uppercase tracking-wide">Inscrit le</th>
-                    <th class="text-left py-3 px-4 text-gray-400 font-medium text-xs uppercase tracking-wide">Action</th>
+                    <th class="text-left py-3 px-4 text-gray-400 font-medium text-sm uppercase tracking-wide">Utilisateur</th>
+                    <th class="text-left py-3 px-4 text-gray-400 font-medium text-sm uppercase tracking-wide">Rôle</th>
+                    <th class="text-left py-3 px-4 text-gray-400 font-medium text-sm uppercase tracking-wide">Ville</th>
+                    <th class="text-left py-3 px-4 text-gray-400 font-medium text-sm uppercase tracking-wide">Téléphone</th>
+                    <th class="text-left py-3 px-4 text-gray-400 font-medium text-sm uppercase tracking-wide">Inscrit le</th>
+                    <th class="text-left py-3 px-4 text-gray-400 font-medium text-sm uppercase tracking-wide">Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -58,7 +58,7 @@
                             <x-avatar :user="$user" size="9" rounded="full"/>
                             <div>
                                 <p class="font-medium text-black">{{ $user->name }}</p>
-                                <p class="text-xs text-gray-400">{{ $user->email }}</p>
+                                <p class="text-sm text-gray-400">{{ $user->email }}</p>
                             </div>
                         </div>
                     </td>
@@ -66,21 +66,21 @@
                     {{-- Rôle --}}
                     <td class="py-3 px-4">
                         @if($user->role === 'admin')
-                        <span class="px-2.5 py-1 rounded-full text-xs font-medium bg-purple-100 text-purple-700 flex items-center gap-1 w-fit">
+                        <span class="px-2.5 py-1 rounded-full text-sm font-medium bg-purple-100 text-purple-700 flex items-center gap-1 w-fit">
                             <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
                             </svg>
                             Admin
                         </span>
                         @elseif($user->role === 'professeur')
-                        <span class="px-2.5 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-700 flex items-center gap-1 w-fit">
+                        <span class="px-2.5 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-700 flex items-center gap-1 w-fit">
                             <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
                             </svg>
                             Professeur
                         </span>
                         @else
-                        <span class="px-2.5 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-600 flex items-center gap-1 w-fit">
+                        <span class="px-2.5 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-600 flex items-center gap-1 w-fit">
                             <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
                             </svg>
@@ -135,7 +135,7 @@
                             @csrf @method('DELETE')
                             <button type="submit"
                                 onclick="return confirm('Confirmer la suppression de {{ $user->name }} ?')"
-                                class="text-xs px-3 py-1.5 rounded-lg text-white font-medium flex items-center gap-1.5 transition hover:opacity-90 bg-red-500">
+                                class="text-sm px-3 py-1.5 rounded-lg text-white font-medium flex items-center gap-1.5 transition hover:opacity-90 bg-red-500">
                                 <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
                                 </svg>
@@ -143,7 +143,7 @@
                             </button>
                         </form>
                         @else
-                        <span class="text-xs text-gray-300">—</span>
+                        <span class="text-sm text-gray-300">—</span>
                         @endif
                     </td>
 

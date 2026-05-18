@@ -25,7 +25,7 @@
         </svg>
         En attente
         @if($coursPending->count() > 0)
-        <span class="w-5 h-5 rounded-full bg-black text-white text-xs flex items-center justify-center font-bold">
+        <span class="w-5 h-5 rounded-full bg-black text-white text-sm flex items-center justify-center font-bold">
             {{ $coursPending->count() }}
         </span>
         @endif
@@ -71,19 +71,19 @@
                 {{-- Infos cours --}}
                 <div class="flex-1">
                     <div class="flex items-center gap-3 mb-2">
-                        <span class="px-2.5 py-1 rounded-full text-xs font-medium bg-amber-100 text-amber-700 flex items-center gap-1">
+                        <span class="px-2.5 py-1 rounded-full text-sm font-medium bg-amber-100 text-amber-700 flex items-center gap-1">
                             <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
                             </svg>
                             En attente
                         </span>
-                        <span class="text-xs text-gray-400">{{ $cours->created_at->diffForHumans() }}</span>
+                        <span class="text-sm text-gray-400">{{ $cours->created_at->diffForHumans() }}</span>
                     </div>
 
                     <h3 class="font-bold text-black text-base mb-1">{{ $cours->title }}</h3>
                     <p class="text-sm text-gray-500 mb-3 leading-relaxed">{{ Str::limit($cours->description, 150) }}</p>
 
-                    <div class="flex flex-wrap gap-3 text-xs text-gray-500">
+                    <div class="flex flex-wrap gap-3 text-sm text-gray-500">
                         {{-- Nom prof cliquable --}}
                         <a href="{{ route('professeur.profil', $cours->teacherProfile->id) }}"
                            target="_blank"
@@ -133,7 +133,7 @@
                     <form method="POST" action="{{ route('admin.cours.approuver', $cours->id) }}">
                         @csrf @method('PATCH')
                         <button type="submit"
-                            class="w-full text-xs px-4 py-2 rounded-xl text-white font-semibold flex items-center justify-center gap-2 transition hover:opacity-90 bg-green-500">
+                            class="w-full text-sm px-4 py-2 rounded-xl text-white font-semibold flex items-center justify-center gap-2 transition hover:opacity-90 bg-green-500">
                             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
                             </svg>
@@ -143,7 +143,7 @@
 
                     {{-- Refuser --}}
                     <button onclick="toggleRefus({{ $cours->id }})"
-                        class="w-full text-xs px-4 py-2 rounded-xl text-white font-semibold flex items-center justify-center gap-2 transition hover:opacity-90 bg-red-500">
+                        class="w-full text-sm px-4 py-2 rounded-xl text-white font-semibold flex items-center justify-center gap-2 transition hover:opacity-90 bg-red-500">
                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
                         </svg>
@@ -155,7 +155,7 @@
                           onsubmit="return confirm('Supprimer définitivement ce cours ?')">
                         @csrf @method('DELETE')
                         <button type="submit"
-                            class="w-full text-xs px-4 py-2 rounded-xl font-semibold flex items-center justify-center gap-2 transition hover:bg-gray-200 bg-gray-100 text-gray-600">
+                            class="w-full text-sm px-4 py-2 rounded-xl font-semibold flex items-center justify-center gap-2 transition hover:bg-gray-200 bg-gray-100 text-gray-600">
                             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
                             </svg>
@@ -169,17 +169,17 @@
             <div id="refus-{{ $cours->id }}" class="hidden mt-4 pt-4 border-t border-gray-100">
                 <form method="POST" action="{{ route('admin.cours.refuser', $cours->id) }}">
                     @csrf @method('PATCH')
-                    <label class="block text-xs font-medium text-gray-600 mb-2">Raison du refus (optionnelle)</label>
+                    <label class="block text-sm font-medium text-gray-600 mb-2">Raison du refus (optionnelle)</label>
                     <textarea name="reason" rows="2"
                         class="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-yellow-400 transition resize-none"
                         placeholder="Expliquez pourquoi ce cours est refusé..."></textarea>
                     <div class="flex gap-2 mt-2">
                         <button type="submit"
-                            class="text-xs px-4 py-2 rounded-xl text-white font-semibold bg-red-500 transition hover:opacity-90">
+                            class="text-sm px-4 py-2 rounded-xl text-white font-semibold bg-red-500 transition hover:opacity-90">
                             Confirmer le refus
                         </button>
                         <button type="button" onclick="toggleRefus({{ $cours->id }})"
-                            class="text-xs px-4 py-2 rounded-xl font-semibold transition hover:bg-gray-100 text-gray-600">
+                            class="text-sm px-4 py-2 rounded-xl font-semibold transition hover:bg-gray-100 text-gray-600">
                             Annuler
                         </button>
                     </div>
@@ -202,12 +202,12 @@
         <table class="w-full text-sm">
             <thead>
                 <tr class="border-b border-gray-100">
-                    <th class="text-left py-3 px-4 text-gray-400 font-medium text-xs uppercase tracking-wide">Cours</th>
-                    <th class="text-left py-3 px-4 text-gray-400 font-medium text-xs uppercase tracking-wide">Professeur</th>
-                    <th class="text-left py-3 px-4 text-gray-400 font-medium text-xs uppercase tracking-wide">Catégorie</th>
-                    <th class="text-left py-3 px-4 text-gray-400 font-medium text-xs uppercase tracking-wide">Prix</th>
-                    <th class="text-left py-3 px-4 text-gray-400 font-medium text-xs uppercase tracking-wide">Statut</th>
-                    <th class="text-left py-3 px-4 text-gray-400 font-medium text-xs uppercase tracking-wide">Action</th>
+                    <th class="text-left py-3 px-4 text-gray-400 font-medium text-sm uppercase tracking-wide">Cours</th>
+                    <th class="text-left py-3 px-4 text-gray-400 font-medium text-sm uppercase tracking-wide">Professeur</th>
+                    <th class="text-left py-3 px-4 text-gray-400 font-medium text-sm uppercase tracking-wide">Catégorie</th>
+                    <th class="text-left py-3 px-4 text-gray-400 font-medium text-sm uppercase tracking-wide">Prix</th>
+                    <th class="text-left py-3 px-4 text-gray-400 font-medium text-sm uppercase tracking-wide">Statut</th>
+                    <th class="text-left py-3 px-4 text-gray-400 font-medium text-sm uppercase tracking-wide">Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -226,14 +226,14 @@
                     <td class="py-3 px-4 text-gray-600">{{ $cours->category }}</td>
                     <td class="py-3 px-4 font-semibold text-black">{{ number_format($cours->price_per_hour, 0, ',', ' ') }} FCFA/h</td>
                     <td class="py-3 px-4">
-                        <span class="px-2.5 py-1 rounded-full text-xs font-medium bg-green-100 text-green-700">Approuvé</span>
+                        <span class="px-2.5 py-1 rounded-full text-sm font-medium bg-green-100 text-green-700">Approuvé</span>
                     </td>
                     <td class="py-3 px-4">
                         <form method="POST" action="{{ route('admin.cours.supprimer', $cours->id) }}"
                               onsubmit="return confirm('Supprimer définitivement ce cours ?')">
                             @csrf @method('DELETE')
                             <button type="submit"
-                                class="text-xs px-3 py-1.5 rounded-lg font-semibold flex items-center gap-1.5 transition hover:opacity-90 bg-red-500 text-white">
+                                class="text-sm px-3 py-1.5 rounded-lg font-semibold flex items-center gap-1.5 transition hover:opacity-90 bg-red-500 text-white">
                                 <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
                                 </svg>
@@ -260,11 +260,11 @@
         <table class="w-full text-sm">
             <thead>
                 <tr class="border-b border-gray-100">
-                    <th class="text-left py-3 px-4 text-gray-400 font-medium text-xs uppercase tracking-wide">Cours</th>
-                    <th class="text-left py-3 px-4 text-gray-400 font-medium text-xs uppercase tracking-wide">Professeur</th>
-                    <th class="text-left py-3 px-4 text-gray-400 font-medium text-xs uppercase tracking-wide">Raison</th>
-                    <th class="text-left py-3 px-4 text-gray-400 font-medium text-xs uppercase tracking-wide">Date</th>
-                    <th class="text-left py-3 px-4 text-gray-400 font-medium text-xs uppercase tracking-wide">Action</th>
+                    <th class="text-left py-3 px-4 text-gray-400 font-medium text-sm uppercase tracking-wide">Cours</th>
+                    <th class="text-left py-3 px-4 text-gray-400 font-medium text-sm uppercase tracking-wide">Professeur</th>
+                    <th class="text-left py-3 px-4 text-gray-400 font-medium text-sm uppercase tracking-wide">Raison</th>
+                    <th class="text-left py-3 px-4 text-gray-400 font-medium text-sm uppercase tracking-wide">Date</th>
+                    <th class="text-left py-3 px-4 text-gray-400 font-medium text-sm uppercase tracking-wide">Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -280,14 +280,14 @@
                             {{ $cours->teacherProfile->user->name }}
                         </a>
                     </td>
-                    <td class="py-3 px-4 text-gray-500 text-xs">{{ $cours->rejection_reason ?? '—' }}</td>
-                    <td class="py-3 px-4 text-gray-400 text-xs">{{ $cours->updated_at->format('d/m/Y') }}</td>
+                    <td class="py-3 px-4 text-gray-500 text-sm">{{ $cours->rejection_reason ?? '—' }}</td>
+                    <td class="py-3 px-4 text-gray-400 text-sm">{{ $cours->updated_at->format('d/m/Y') }}</td>
                     <td class="py-3 px-4">
                         <form method="POST" action="{{ route('admin.cours.supprimer', $cours->id) }}"
                               onsubmit="return confirm('Supprimer définitivement ce cours ?')">
                             @csrf @method('DELETE')
                             <button type="submit"
-                                class="text-xs px-3 py-1.5 rounded-lg font-semibold flex items-center gap-1.5 transition hover:opacity-90 bg-red-500 text-white">
+                                class="text-sm px-3 py-1.5 rounded-lg font-semibold flex items-center gap-1.5 transition hover:opacity-90 bg-red-500 text-white">
                                 <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
                                 </svg>

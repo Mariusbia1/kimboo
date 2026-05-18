@@ -24,7 +24,7 @@
                     <input type="text" name="title" value="{{ old('title') }}"
                         class="w-full border-2 border-gray-100 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-yellow-400 transition bg-gray-50"
                         placeholder="Ex: Cours de mathématiques lycée"/>
-                    @error('title') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                    @error('title') <p class="text-red-500 text-sm mt-1">{{ $message }}</p> @enderror
                 </div>
 
                 <div>
@@ -43,7 +43,7 @@
                             <option value="{{ $cat }}" {{ old('category') == $cat ? 'selected' : '' }}>{{ $cat }}</option>
                             @endforeach
                         </select>
-                        @error('category') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                        @error('category') <p class="text-red-500 text-sm mt-1">{{ $message }}</p> @enderror
                     </div>
                     <div>
                         <label class="text-sm font-semibold text-gray-700 mb-1.5 block">Niveau</label>
@@ -53,7 +53,7 @@
                             <option value="{{ $level }}" {{ old('level') == $level ? 'selected' : '' }}>{{ $level }}</option>
                             @endforeach
                         </select>
-                        @error('level') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                        @error('level') <p class="text-red-500 text-sm mt-1">{{ $message }}</p> @enderror
                     </div>
                 </div>
 
@@ -66,14 +66,14 @@
                             <option value="En ligne" {{ old('format') == 'En ligne' ? 'selected' : '' }}>En ligne</option>
                             <option value="Les deux" {{ old('format') == 'Les deux' ? 'selected' : '' }}>Les deux</option>
                         </select>
-                        @error('format') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                        @error('format') <p class="text-red-500 text-sm mt-1">{{ $message }}</p> @enderror
                     </div>
                     <div>
                         <label class="text-sm font-semibold text-gray-700 mb-1.5 block">Prix par heure (FCFA)</label>
                         <input type="number" name="price_per_hour" value="{{ old('price_per_hour') }}"
                             class="w-full border-2 border-gray-100 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-yellow-400 transition bg-gray-50"
                             placeholder="Ex: 10000"/>
-                        @error('price_per_hour') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                        @error('price_per_hour') <p class="text-red-500 text-sm mt-1">{{ $message }}</p> @enderror
                     </div>
                 </div>
 
@@ -111,7 +111,7 @@
                     <div class="flex items-center justify-between mb-3">
                         <div>
                             <p class="text-sm font-semibold text-gray-700">Cours de groupe</p>
-                            <p class="text-xs mt-0.5" style="color:#2b2b2b;">Permettre à plusieurs élèves de rejoindre ce cours</p>
+                            <p class="text-sm mt-0.5" style="color:#2b2b2b;">Permettre à plusieurs élèves de rejoindre ce cours</p>
                         </div>
                         <label class="relative inline-flex items-center cursor-pointer">
                             <input type="checkbox" name="is_group" id="is_group" value="1"

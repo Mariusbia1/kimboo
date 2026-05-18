@@ -11,7 +11,7 @@ class User extends Authenticatable
     use HasFactory, Notifiable;
 
     protected $fillable = [
-        'name', 'email', 'phone', 'avatar', 'role', 'ville', 'password'
+        'name', 'email', 'phone', 'avatar', 'role', 'ville', 'password', 'message_attempts', 'message_blocked_until',
     ];
 
     protected $hidden = [
@@ -23,6 +23,7 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'message_blocked_until' => 'datetime',
         ];
     }
 

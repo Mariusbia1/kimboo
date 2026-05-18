@@ -58,12 +58,12 @@
         </div>
 
         <p class="font-semibold text-black">{{ $user->name }}</p>
-        <p class="text-xs text-gray-400 mt-1">{{ $user->email }}</p>
-        <span class="inline-block mt-2 px-3 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-600 capitalize">
+        <p class="text-sm text-gray-400 mt-1">{{ $user->email }}</p>
+        <span class="inline-block mt-2 px-3 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-600 capitalize">
             {{ $user->role }}
         </span>
 
-        <p class="text-xs text-gray-400 mt-4">Formats acceptés : JPG, PNG. Max 2 Mo.</p>
+        <p class="text-sm text-gray-400 mt-4">Formats acceptés : JPG, PNG. Max 2 Mo.</p>
     </div>
 
     {{-- Formulaire infos --}}
@@ -81,21 +81,21 @@
             <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1rem;">
 
                 <div>
-                    <label class="block text-xs font-medium text-gray-600 mb-1.5">Nom complet</label>
+                    <label class="block text-sm font-medium text-gray-600 mb-1.5">Nom complet</label>
                     <input type="text" name="name" value="{{ old('name', $user->name) }}"
                         class="w-full border-2 border-gray-100 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-yellow-400 transition bg-gray-50"
                         placeholder="Votre nom complet"/>
                 </div>
 
                 <div>
-                    <label class="block text-xs font-medium text-gray-600 mb-1.5">Adresse email</label>
+                    <label class="block text-sm font-medium text-gray-600 mb-1.5">Adresse email</label>
                     <input type="email" value="{{ $user->email }}" disabled
                         class="w-full border-2 border-gray-100 rounded-xl px-4 py-2.5 text-sm bg-gray-100 text-gray-400 cursor-not-allowed"/>
-                    <p class="text-xs text-gray-400 mt-1">L'email ne peut pas être modifié.</p>
+                    <p class="text-sm text-gray-400 mt-1">L'email ne peut pas être modifié.</p>
                 </div>
 
                 <div>
-                    <label class="block text-xs font-medium text-gray-600 mb-1.5">Téléphone</label>
+                    <label class="block text-sm font-medium text-gray-600 mb-1.5">Téléphone</label>
                     <div class="relative">
                         <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
@@ -107,7 +107,7 @@
                 </div>
 
                 <div>
-                    <label class="block text-xs font-medium text-gray-600 mb-1.5">Ville</label>
+                    <label class="block text-sm font-medium text-gray-600 mb-1.5">Ville</label>
                     <div class="relative">
                         <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
@@ -130,12 +130,12 @@
                 </svg>
                 Sécurité
             </h2>
-            <p class="text-xs text-gray-400 mb-5">Laissez vide si vous ne souhaitez pas changer de mot de passe.</p>
+            <p class="text-sm text-gray-400 mb-5">Laissez vide si vous ne souhaitez pas changer de mot de passe.</p>
 
             <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1rem;">
 
                 <div>
-                    <label class="block text-xs font-medium text-gray-600 mb-1.5">Nouveau mot de passe</label>
+                    <label class="block text-sm font-medium text-gray-600 mb-1.5">Nouveau mot de passe</label>
                     <div class="relative">
                         <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
@@ -147,7 +147,7 @@
                 </div>
 
                 <div>
-                    <label class="block text-xs font-medium text-gray-600 mb-1.5">Confirmer le mot de passe</label>
+                    <label class="block text-sm font-medium text-gray-600 mb-1.5">Confirmer le mot de passe</label>
                     <div class="relative">
                         <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>

@@ -24,11 +24,11 @@
 
         <div class="flex-1">
             <p class="font-semibold text-black text-sm">{{ $user1->name }} — {{ $user2->name }}</p>
-            <p class="text-xs text-gray-400">{{ $messages->count() }} messages</p>
+            <p class="text-sm text-gray-400">{{ $messages->count() }} messages</p>
         </div>
 
         {{-- Badge admin --}}
-        <span class="px-3 py-1.5 rounded-xl text-xs font-semibold bg-gray-100 text-gray-600 flex items-center gap-1.5">
+        <span class="px-3 py-1.5 rounded-xl text-sm font-semibold bg-gray-100 text-gray-600 flex items-center gap-1.5">
             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
@@ -60,7 +60,7 @@
         @if($msgDate !== $lastDate)
         <div class="flex items-center gap-3 my-4">
             <div class="flex-1 h-px bg-gray-100"></div>
-            <span class="text-xs text-gray-400 shrink-0">
+            <span class="text-sm text-gray-400 shrink-0">
                 {{ \Carbon\Carbon::parse($message->created_at)->isToday() ? "Aujourd'hui" :
                    (\Carbon\Carbon::parse($message->created_at)->isYesterday() ? 'Hier' : $msgDate) }}
             </span>
@@ -83,7 +83,7 @@
                     <svg class="w-3 h-3 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
                     </svg>
-                    <span class="text-xs text-red-500 font-medium">
+                    <span class="text-sm text-red-500 font-medium">
                         {{ $message->is_blocked ? 'Message bloqué' : 'Signalé' }}
                     </span>
                 </div>
@@ -96,7 +96,7 @@
                     {{ $message->content }}
                 </div>
 
-                <p class="text-xs text-gray-400 mt-1 {{ $isUser1 ? 'text-left' : 'text-right' }}">
+                <p class="text-sm text-gray-400 mt-1 {{ $isUser1 ? 'text-left' : 'text-right' }}">
                     <span class="font-medium text-gray-500">{{ $sender->name }}</span>
                     · {{ \Carbon\Carbon::parse($message->created_at)->format('H:i') }}
                 </p>

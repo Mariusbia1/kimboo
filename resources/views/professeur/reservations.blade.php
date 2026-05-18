@@ -47,13 +47,13 @@
                     </td>
                     <td class="py-3 px-4">
                         @if($booking->status === 'en_attente')
-                        <span class="px-2.5 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-700">En attente</span>
+                        <span class="px-2.5 py-1 rounded-full text-sm font-medium bg-yellow-100 text-yellow-700">En attente</span>
                         @elseif($booking->status === 'confirmé')
-                        <span class="px-2.5 py-1 rounded-full text-xs font-medium bg-green-100 text-green-700">Confirmé</span>
+                        <span class="px-2.5 py-1 rounded-full text-sm font-medium bg-green-100 text-green-700">Confirmé</span>
                         @elseif($booking->status === 'annulé')
-                        <span class="px-2.5 py-1 rounded-full text-xs font-medium bg-red-100 text-red-700">Annulé</span>
+                        <span class="px-2.5 py-1 rounded-full text-sm font-medium bg-red-100 text-red-700">Annulé</span>
                         @else
-                        <span class="px-2.5 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-600">Terminé</span>
+                        <span class="px-2.5 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-600">Terminé</span>
                         @endif
                     </td>
                     <td class="py-3 px-4">
@@ -61,19 +61,19 @@
                         <div class="flex gap-2">
                             <form method="POST" action="{{ route('professeur.booking.confirm', $booking->id) }}">
                                 @csrf @method('PATCH')
-                                <button type="submit" class="text-xs px-3 py-1.5 rounded-lg text-white font-medium" style="background:#1A2B3C;">
+                                <button type="submit" class="text-sm px-3 py-1.5 rounded-lg text-white font-medium" style="background:#1A2B3C;">
                                     Confirmer
                                 </button>
                             </form>
                             <form method="POST" action="{{ route('professeur.booking.cancel', $booking->id) }}">
                                 @csrf @method('PATCH')
-                                <button type="submit" class="text-xs px-3 py-1.5 rounded-lg text-white font-medium bg-red-500">
+                                <button type="submit" class="text-sm px-3 py-1.5 rounded-lg text-white font-medium bg-red-500">
                                     Annuler
                                 </button>
                             </form>
                         </div>
                         @else
-                        <span class="text-xs text-gray-400">—</span>
+                        <span class="text-sm text-gray-400">—</span>
                         @endif
                     </td>
                 </tr>

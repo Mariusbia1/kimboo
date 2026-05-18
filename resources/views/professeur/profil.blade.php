@@ -32,10 +32,10 @@
 
     <!-- Badge certifié haut à droite -->
     @if($profile->is_verified)
-    <div class="absolute top-2 right-2 w-6 h-6 rounded-full flex items-center justify-center" style="background:#1877F2;">
-        <svg class="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
-            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414L8.414 15 3.293 9.879a1 1 0 011.414-1.414L8.414 12.172l6.879-6.879a1 1 0 011.414 0z" clip-rule="evenodd"/>
-        </svg>
+    <div class="absolute top-2 right-2">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" style="width:26px; height:26px;" fill="#1877F2">
+        <path d="m344-60-76-128-144-32 14-148-98-112 98-112-14-148 144-32 76-128 136 58 136-58 76 128 144 32-14 148 98 112-98 112 14 148-144 32-76 128-136-58-136 58Zm34-102 102-44 104 44 56-96 110-26-10-112 74-84-74-86 10-112-110-24-58-96-102 44-104-44-56 96-110 24 10 112-74 86 74 84-10 114 110 24 58 96Zm102-318Zm-42 142 226-226-56-58-170 170-86-84-56 56 142 142Z"/>
+    </svg>
     </div>
     @endif
 
@@ -63,15 +63,13 @@
     <!-- Nom + badge -->
     <div class="text-center mb-3">
         <div class="flex items-center justify-center gap-2 flex-wrap">
-            <h1 class="text-2xl font-bold text-black" style="font-family:'Plus Jakarta Sans',sans-serif;">
+            <h1 class="text-4xl font-bold text-black" style="font-family:'Plus Jakarta Sans',sans-serif;">
                 {{ $profile->user->name }}
             </h1>
             @if($profile->is_verified)
-            <div class="w-6 h-6 rounded-full flex items-center justify-center shrink-0" style="background:#1877F2;" title="Certifié">
-                <svg class="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
-                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414L8.414 15 3.293 9.879a1 1 0 011.414-1.414L8.414 12.172l6.879-6.879a1 1 0 011.414 0z" clip-rule="evenodd"/>
-                </svg>
-            </div>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" style="width:22px; height:22px;" fill="#1877F2" title="Certifié">
+                <path d="m344-60-76-128-144-32 14-148-98-112 98-112-14-148 144-32 76-128 136 58 136-58 76 128 144 32-14 148 98 112-98 112 14 148-144 32-76 128-136-58-136 58Zm34-102 102-44 104 44 56-96 110-26-10-112 74-84-74-86 10-112-110-24-58-96-102 44-104-44-56 96-110 24 10 112-74 86 74 84-10 114 110 24 58 96Zm102-318Zm-42 142 226-226-56-58-170 170-86-84-56 56 142 142Z"/>
+            </svg>
             @endif
         </div>
 
@@ -92,20 +90,20 @@
             @endfor
         </div>
         <span class="text-sm font-semibold text-black">{{ $profile->rating }}</span>
-        <span class="text-xs" style="color:#2b2b2b;">({{ $profile->reviews_count }} avis)</span>
+        <span class="text-sm" style="color:#2b2b2b;">({{ $profile->reviews_count }} avis)</span>
     </div>
 
     <!-- Tarif -->
     <div class="text-center mb-4">
-        <p class="text-2xl font-bold text-black" style="font-family:'Plus Jakarta Sans',sans-serif;">
+        <p class="text-4xl font-bold text-black" style="font-family:'Plus Jakarta Sans',sans-serif;">
             {{ number_format($profile->hourly_rate, 0, ',', ' ') }} FCFA / H
         </p>
         @if($profile->first_course_free)
         <div class="mt-2 space-y-1">
-            <span class="inline-block text-xs font-semibold text-green-700 bg-green-100 px-3 py-1 rounded-full">
+            <span class="inline-block text-sm font-semibold text-green-700 bg-green-100 px-3 py-1 rounded-full">
                 ✓ 1er cours offert
             </span>
-            <p class="text-xs" style="color:#2b2b2b;">✓ Annulation gratuite 24h à l'avance</p>
+            <p class="text-sm" style="color:#2b2b2b;">✓ Annulation gratuite 24h à l'avance</p>
         </div>
         @endif
     </div>
@@ -113,14 +111,14 @@
     <!-- Lieu du cours -->
     @if($profile->lieu_cours && count($profile->lieu_cours) > 0)
     <div class="mb-4">
-        <p class="text-xs font-semibold mb-2 text-center" style="color:#2b2b2b;">
+        <p class="text-sm font-semibold mb-2 text-center" style="color:#2b2b2b;">
             @foreach($profile->lieu_cours as $lieu)
             {{ $lieu === 'chez_prof' ? '🏠 Chez le prof' : ($lieu === 'chez_eleve' ? '📍 Chez l\'élève' : '💻 Webcam') }}
             @if(!$loop->last) · @endif
             @endforeach
         </p>
         @if($profile->zone_deplacement)
-        <p class="text-xs text-center" style="color:#2b2b2b;">
+        <p class="text-sm text-center" style="color:#2b2b2b;">
             Je peux me déplacer dans un périmètre de {{ $profile->zone_deplacement }}
         </p>
         @endif
@@ -210,9 +208,9 @@
     <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:1rem;">
         @foreach($parcours_list as $parcours)
         <div class="p-4 rounded-xl border-2 border-gray-100">
-            <p class="text-xs mb-2" style="color:#2b2b2b;">{{ $parcours['annees'] }}</p>
+            <p class="text-sm mb-2" style="color:#2b2b2b;">{{ $parcours['annees'] }}</p>
             <p class="font-bold text-black text-sm mb-1">{{ $parcours['diplome'] }}</p>
-            <p class="text-xs" style="color:#2b2b2b;">{{ $parcours['etablissement'] }}</p>
+            <p class="text-sm" style="color:#2b2b2b;">{{ $parcours['etablissement'] }}</p>
         </div>
         @endforeach
     </div>
@@ -253,17 +251,17 @@
                 <p class="font-semibold text-black text-sm">{{ $course->title }}</p>
                 <div class="flex gap-1 shrink-0 ml-2">
                     @if($course->is_group)
-                    <span class="text-xs px-2 py-0.5 rounded-full font-medium" style="background:#E8F5E9; color:#2E7D32;">
+                    <span class="text-sm px-2 py-0.5 rounded-full font-medium" style="background:#E8F5E9; color:#2E7D32;">
                         Groupe
                     </span>
                     @endif
-                    <span class="text-xs px-2 py-0.5 rounded-full font-medium" style="background:#FFF8E7; color:#FCB315;">
+                    <span class="text-sm px-2 py-0.5 rounded-full font-medium" style="background:#FFF8E7; color:#FCB315;">
                         {{ $course->format }}
                     </span>
                 </div>
 
             </div>
-            <p class="text-xs mb-2" style="color:#2b2b2b;">
+            <p class="text-sm mb-2" style="color:#2b2b2b;">
     {{ $course->category }} · {{ $course->level }}
     @if($course->lieu_cours && count(is_array($course->lieu_cours) ? $course->lieu_cours : json_decode($course->lieu_cours, true) ?? []) > 0)
     @php $lieux = is_array($course->lieu_cours) ? $course->lieu_cours : json_decode($course->lieu_cours, true) ?? []; @endphp
@@ -271,10 +269,10 @@
     @endif
 </p>
 @if($course->zone_deplacement)
-<p class="text-xs mb-2" style="color:#2b2b2b;">{{ $course->zone_deplacement }}</p>
+<p class="text-sm mb-2" style="color:#2b2b2b;">{{ $course->zone_deplacement }}</p>
 @endif
             @if($course->description)
-            <p class="text-xs text-[rgb(43,43,43)] leading-relaxed mb-3">{{ Str::limit($course->description, 80) }}</p>
+            <p class="text-sm text-[rgb(43,43,43)] leading-relaxed mb-3">{{ Str::limit($course->description, 80) }}</p>
             @endif
             <div class="pt-2 border-t border-gray-50">
                 <p class="font-bold text-black text-sm">{{ number_format($course->price_per_hour, 0, ',', ' ') }} Fcfa/h</p>
@@ -309,9 +307,9 @@
                             </div>
                         </div>
                         @if($review->comment)
-                        <p class="text-[rgb(43,43,43)] text-xs leading-relaxed">{{ $review->comment }}</p>
+                        <p class="text-[rgb(43,43,43)] text-sm leading-relaxed">{{ $review->comment }}</p>
                         @endif
-                        <p class="text-xs text-gray-300 mt-1">{{ \Carbon\Carbon::parse($review->created_at)->format('d/m/Y') }}</p>
+                        <p class="text-sm text-gray-300 mt-1">{{ \Carbon\Carbon::parse($review->created_at)->format('d/m/Y') }}</p>
                     </div>
                 </div>
                 @empty
@@ -376,31 +374,31 @@
         <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:1.5rem;">
             @foreach($similaires as $sim)
             <div class="bg-white rounded-2xl p-5 relative" style="box-shadow:0 4px 12px rgba(0,0,0,0.08);">
-                @if($sim->is_verified)
-                <div class="absolute top-4 right-4 w-7 h-7 rounded-full flex items-center justify-center" style="background:#1A2B3C;">
-                    <svg class="w-3.5 h-3.5 text-white" fill="currentColor" viewBox="0 0 20 20">
-                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414L8.414 15 3.293 9.879a1 1 0 011.414-1.414L8.414 12.172l6.879-6.879a1 1 0 011.414 0z" clip-rule="evenodd"/>
-                    </svg>
-                </div>
-                @endif
+            @if($sim->is_verified)
+            <div class="absolute top-4 right-4">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" style="width:26px; height:26px;" fill="#1877F2">
+                    <path d="m344-60-76-128-144-32 14-148-98-112 98-112-14-148 144-32 76-128 136 58 136-58 76 128 144 32-14 148 98 112-98 112 14 148-144 32-76 128-136-58-136 58Zm34-102 102-44 104 44 56-96 110-26-10-112 74-84-74-86 10-112-110-24-58-96-102 44-104-44-56 96-110 24 10 112-74 86 74 84-10 114 110 24 58 96Zm102-318Zm-42 142 226-226-56-58-170 170-86-84-56 56 142 142Z"/>
+                </svg>
+            </div>
+            @endif
                 <div class="w-14 h-14 rounded-2xl mb-3 flex items-center justify-center text-xl font-bold text-black" style="background:#FCB315;">
                     {{ strtoupper(substr($sim->user->name, 0, 1)) }}
                 </div>
                 <h3 class="font-semibold text-black text-sm">{{ $sim->user->name }}</h3>
-                <p class="text-xs text-gray-400 mb-2">{{ $sim->courses->first()->category ?? 'Cours divers' }}</p>
+                <p class="text-sm text-gray-400 mb-2">{{ $sim->courses->first()->category ?? 'Cours divers' }}</p>
                 <div class="flex items-center gap-1 mb-3">
                     <span style="color:#FCB315;">★</span>
                     <span class="text-sm font-medium text-black">{{ $sim->rating }}</span>
-                    <span class="text-xs text-gray-400">({{ $sim->reviews_count }} avis)</span>
+                    <span class="text-sm text-gray-400">({{ $sim->reviews_count }} avis)</span>
                 </div>
                 <div class="flex items-center justify-between mb-3">
                     <span class="font-bold text-black text-sm">{{ number_format($sim->hourly_rate, 0, ',', ' ') }} Fcfa/h</span>
                     @if($sim->first_course_free)
-                    <span class="text-xs font-medium" style="color:#FCB315;">1er cours offert</span>
+                    <span class="text-sm font-medium" style="color:#FCB315;">1er cours offert</span>
                     @endif
                 </div>
                 <a href="{{ route('professeur.profil', $sim->id) }}"
-                   class="block w-full text-center py-2 rounded-xl text-black text-xs font-semibold transition hover:opacity-90"
+                   class="block w-full text-center py-2 rounded-xl text-black text-sm font-semibold transition hover:opacity-90"
                    style="background:#FCB315;">
                     Voir le profil
                 </a>

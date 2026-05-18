@@ -10,6 +10,9 @@ use App\Models\Course;
 use App\Models\Notification;
 use App\Models\MessageAlert;
 use App\Models\Message;
+use App\Models\SiteSetting;
+
+
 
 
 class AdminController extends Controller
@@ -126,11 +129,43 @@ public function supprimerCours($id)
 public function messagesAlertes()
 {
     $alertes = MessageAlert::with(['message', 'sender', 'receiver'])
-        ->orderByRaw("FIELD(status, 'pending', 'reviewed', 'ignored')")
         ->orderByDesc('created_at')
-        ->paginate(20);
+        ->paginate(10);
 
-    return view('admin.messages-alertes', compact('alertes'));
+    // Alertes système
+    $comptesSuspects = \App\Models\User::where('message_attempts', '>=', 2)
+        ->paginate(5, ['*'], 'suspects_page');
+
+    $coursEnAttente48h = \App\Models\Course::with('teacherProfile.user')
+        ->where('status', 'pending')
+        ->where('created_at', '<=', now()->subHours(48))
+        ->paginate(5, ['*'], 'cours_page');
+
+    $profsNonVerifies = \App\Models\TeacherProfile::with('user')
+        ->where('is_verified', false)
+        ->where('created_at', '<=', now()->subDays(7))
+        ->paginate(5, ['*'], 'profs_page');
+
+    $reservationsAnnulees = \App\Models\User::withCount(['bookings as annulations' => function($q) {
+            $q->where('status', 'annulé')->where('updated_at', '>=', now()->subDays(7));
+        }])
+        ->having('annulations', '>=', 3)
+        ->paginate(5, ['*'], 'annulations_page');
+
+    $profsInactifs = \App\Models\TeacherProfile::with('user')
+        ->whereDoesntHave('courses', function($q) {
+            $q->where('updated_at', '>=', now()->subDays(30));
+        })
+        ->paginate(5, ['*'], 'inactifs_page');
+
+    return view('admin.messages-alertes', compact(
+        'alertes',
+        'comptesSuspects',
+        'coursEnAttente48h',
+        'profsNonVerifies',
+        'reservationsAnnulees',
+        'profsInactifs'
+    ));
 }
 
 public function messagesConversations()
@@ -158,6 +193,7 @@ public function voirConversation($userId1, $userId2)
     })->orWhere(function($q) use ($userId1, $userId2) {
         $q->where('sender_id', $userId2)->where('receiver_id', $userId1);
     })
+    ->with(['sender'])
     ->orderBy('created_at', 'asc')
     ->get();
 
@@ -174,6 +210,28 @@ public function alerteIgnored($id)
 {
     MessageAlert::findOrFail($id)->update(['status' => 'ignored']);
     return back()->with('success', 'Alerte ignorée.');
+}
+
+
+public function parametres()
+{
+    $settings = [
+        'facebook'  => SiteSetting::get('facebook'),
+        'instagram' => SiteSetting::get('instagram'),
+        'tiktok'    => SiteSetting::get('tiktok'),
+        'whatsapp'  => SiteSetting::get('whatsapp'),
+    ];
+
+    return view('admin.parametres', compact('settings'));
+}
+
+public function updateParametres(Request $request)
+{
+    foreach (['facebook', 'instagram', 'tiktok', 'whatsapp'] as $key) {
+        SiteSetting::set($key, $request->input($key) ?? '');
+    }
+
+    return back()->with('success', 'Paramètres mis à jour avec succès.');
 }
 
 }

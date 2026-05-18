@@ -50,24 +50,24 @@
                 <div class="flex items-center justify-between mb-1">
                     <div class="flex items-center gap-2">
                         <p class="font-semibold text-black text-sm">{{ $contact->name }}</p>
-                        <span class="text-xs px-2 py-0.5 rounded-full
+                        <span class="text-sm px-2 py-0.5 rounded-full
                             {{ $contact->role === 'professeur' ? 'bg-blue-100 text-blue-600' : 'bg-gray-100 text-gray-500' }}">
                             {{ ucfirst($contact->role) }}
                         </span>
                     </div>
-                    <p class="text-xs text-gray-400 shrink-0 ml-2">
+                    <p class="text-sm text-gray-400 shrink-0 ml-2">
                         {{ \Carbon\Carbon::parse($message->created_at)->diffForHumans() }}
                     </p>
                 </div>
                 <div class="flex items-center justify-between">
-                    <p class="text-xs text-gray-500 truncate">
+                    <p class="text-sm text-gray-500 truncate">
                         @if($message->sender_id === auth()->id())
                         <span class="text-gray-400">Vous : </span>
                         @endif
                         {{ Str::limit($message->content, 55) }}
                     </p>
                     @if($unread > 0)
-                    <span class="ml-2 w-5 h-5 rounded-full text-black text-xs flex items-center justify-center shrink-0 font-bold"
+                    <span class="ml-2 w-5 h-5 rounded-full text-black text-sm flex items-center justify-center shrink-0 font-bold"
                           style="background:#FCB315;">
                         {{ $unread }}
                     </span>

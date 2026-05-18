@@ -17,10 +17,10 @@
 
         <!-- Logo -->
         <div class="px-6 py-6 border-b border-white/10">
-            <a href="{{ url('/') }}" class="text-2xl font-bold" style="color:#FCB315; font-family:'Poppins',sans-serif;">
+            <a href="{{ url('/') }}" class="text-4xl font-bold" style="color:#FCB315; font-family:'Poppins',sans-serif;">
                 kimboo
             </a>
-            <p class="mt-1 text-xs text-gray-500">
+            <p class="mt-1 text-sm text-gray-500">
                 @if(auth()->user()->role === 'admin') Administration
                 @elseif(auth()->user()->role === 'professeur') Espace professeur
                 @else Espace élève
@@ -34,7 +34,7 @@
                 <x-avatar :user="auth()->user()" size="10" rounded="full"/>
                 <div class="overflow-hidden">
                     <p class="text-sm font-semibold text-white truncate">{{ auth()->user()->name }}</p>
-                    <p class="text-xs text-gray-400 truncate">{{ auth()->user()->email }}</p>
+                    <p class="text-sm text-gray-400 truncate">{{ auth()->user()->email }}</p>
                 </div>
             </div>
         </div>
@@ -51,6 +51,7 @@
                 <x-sidebar-link href="{{ route('admin.users') }}" icon="users" label="Utilisateurs"/>
                 <x-sidebar-link href="{{ route('admin.cours') }}" icon="book" label="Cours" :badge="$pendingCours ?: null"/>
                 <x-sidebar-link href="{{ route('admin.stats') }}" icon="bar-chart" label="Statistiques"/>
+                <x-sidebar-link href="{{ route('admin.parametres') }}" icon="settings" label="Paramètres" :active="request()->routeIs('admin.parametres')" />
                 @php
                 $pendingAlertes = \App\Models\MessageAlert::where('status', 'pending')->count();
                 @endphp
@@ -64,6 +65,7 @@
                 <x-sidebar-link href="{{ route('professeur.dashboard') }}" icon="grid" label="Tableau de bord"/>
                 <x-sidebar-link href="{{ route('professeur.create-cours') }}" icon="book" label="Mes cours"/>
                 <x-sidebar-link href="{{ route('professeur.reservations') }}" icon="calendar" label="Réservations"/>
+                <x-sidebar-link href="{{ route('professeur.calendrier') }}" icon="calendar" label="Calendrier"/>
                 <x-sidebar-link href="{{ route('messages.index') }}" icon="message-circle" label="Messages" :badge="$unreadMessages > 0 ? $unreadMessages : null"/>
                 <x-sidebar-link href="{{ route('professeur.edit-profil') }}" icon="user" label="Mon profil"/>
 
@@ -74,7 +76,9 @@
                 @endphp
                 <x-sidebar-link href="{{ route('eleve.dashboard') }}" icon="grid" label="Tableau de bord"/>
                 <x-sidebar-link href="{{ route('cours.index') }}" icon="search" label="Trouver un prof"/>
-                <x-sidebar-link href="{{ route('eleve.dashboard') }}" icon="calendar" label="Mes réservations"/>
+                <x-sidebar-link href="{{ route('eleve.mes-cours') }}" icon="book" label="Mes cours"/>
+                <x-sidebar-link href="{{ route('eleve.reservations') }}" icon="calendar" label="Mes réservations"/>
+                <x-sidebar-link href="{{ route('eleve.calendrier') }}" icon="calendar" label="Calendrier"/>
                 <x-sidebar-link href="{{ route('favoris.index') }}" icon="heart" label="Mes favoris"/>
                 <x-sidebar-link href="{{ route('messages.index') }}" icon="message-circle" label="Messages" :badge="$unreadMessages > 0 ? $unreadMessages : null"/>
                 <x-sidebar-link href="{{ route('eleve.edit-profil') }}" icon="user" label="Mon profil"/>
@@ -99,7 +103,7 @@
         <header class="flex items-center justify-between px-8 py-4 bg-white border-b border-gray-100">
             <div>
                 <h1 class="text-lg font-bold text-black" style="font-family:'Poppins',sans-serif;">@yield('page-title')</h1>
-                <p class="text-xs text-gray-400">@yield('page-subtitle')</p>
+                <p class="text-sm text-gray-400">@yield('page-subtitle')</p>
             </div>
             <div class="flex items-center gap-3">
 
@@ -128,7 +132,7 @@
                             @if(isset($unreadNotifs) && $unreadNotifs > 0)
                             <form method="POST" action="{{ route('notifications.read-all') }}">
                                 @csrf
-                                <button type="submit" class="text-xs font-medium hover:underline" style="color:#FCB315;">
+                                <button type="submit" class="text-sm font-medium hover:underline" style="color:#FCB315;">
                                     Tout marquer comme lu
                                 </button>
                             </form>
@@ -193,9 +197,9 @@
                                 </div>
 
                                 <div class="flex-1 min-w-0">
-                                    <p class="text-xs font-semibold text-black">{{ $notif->title }}</p>
-                                    <p class="text-xs text-gray-500 mt-0.5 leading-relaxed">{{ Str::limit($notif->body, 80) }}</p>
-                                    <p class="text-xs text-gray-400 mt-1">{{ $notif->created_at->diffForHumans() }}</p>
+                                    <p class="text-sm font-semibold text-black">{{ $notif->title }}</p>
+                                    <p class="text-sm text-gray-500 mt-0.5 leading-relaxed">{{ Str::limit($notif->body, 80) }}</p>
+                                    <p class="text-sm text-gray-400 mt-1">{{ $notif->created_at->diffForHumans() }}</p>
                                 </div>
 
                                 @if(!$notif->is_read)
@@ -220,8 +224,8 @@
                         class="flex items-center gap-2 px-3 py-2 transition rounded-xl hover:bg-gray-100">
                         <x-avatar :user="auth()->user()" size="8" rounded="full"/>
                         <div class="hidden text-left sm:block">
-                            <p class="text-xs font-semibold leading-tight text-black">{{ auth()->user()->name }}</p>
-                            <p class="text-xs leading-tight text-gray-400 capitalize">{{ auth()->user()->role }}</p>
+                            <p class="text-sm font-semibold leading-tight text-black">{{ auth()->user()->name }}</p>
+                            <p class="text-sm leading-tight text-gray-400 capitalize">{{ auth()->user()->role }}</p>
                         </div>
                         <svg class="w-3.5 h-3.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
@@ -232,7 +236,7 @@
                         class="absolute right-0 z-50 hidden py-2 mt-2 bg-white border border-gray-100 shadow-lg w-52 rounded-2xl">
                         <div class="px-4 py-3 border-b border-gray-100">
                             <p class="text-sm font-semibold text-black">{{ auth()->user()->name }}</p>
-                            <p class="text-xs text-gray-400">{{ auth()->user()->email }}</p>
+                            <p class="text-sm text-gray-400">{{ auth()->user()->email }}</p>
                         </div>
                         <div class="py-2">
                             @php

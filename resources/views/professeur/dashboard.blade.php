@@ -16,12 +16,12 @@
 @endif
 
 {{-- Stats --}}
-<p class="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-3">Aperçu</p>
+<p class="text-sm font-semibold text-gray-400 uppercase tracking-widest mb-3">Aperçu</p>
 <div style="display:grid; grid-template-columns: repeat(5, 1fr); gap:1rem;" class="mb-8">
 
     <div class="bg-white rounded-2xl p-5" style="box-shadow:0 4px 12px rgba(0,0,0,0.08);">
         <div class="flex items-center justify-between mb-3">
-            <span class="text-xs text-gray-400">Cours publiés</span>
+            <span class="text-sm text-gray-400">Cours publiés</span>
             <span class="w-8 h-8 rounded-xl flex items-center justify-center" style="background:#FCB31520;">
                 <svg class="w-4 h-4" style="color:#FCB315;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
@@ -29,12 +29,12 @@
             </span>
         </div>
         <p class="text-3xl font-bold text-black" style="font-family:'Poppins',sans-serif;">{{ $courses->count() }}</p>
-        <p class="text-xs text-gray-400 mt-1">cours au total</p>
+        <p class="text-sm text-gray-400 mt-1">cours au total</p>
     </div>
 
     <div class="bg-white rounded-2xl p-5" style="box-shadow:0 4px 12px rgba(0,0,0,0.08);">
         <div class="flex items-center justify-between mb-3">
-            <span class="text-xs text-gray-400">Réservations</span>
+            <span class="text-sm text-gray-400">Réservations</span>
             <span class="w-8 h-8 rounded-xl flex items-center justify-center" style="background:#6366f120;">
                 <svg class="w-4 h-4 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
@@ -42,12 +42,12 @@
             </span>
         </div>
         <p class="text-3xl font-bold text-black" style="font-family:'Poppins',sans-serif;">{{ $reservationsCount }}</p>
-        <p class="text-xs text-gray-400 mt-1">réservations</p>
+        <p class="text-sm text-gray-400 mt-1">réservations</p>
     </div>
 
     <div class="bg-white rounded-2xl p-5" style="box-shadow:0 4px 12px rgba(0,0,0,0.08);">
         <div class="flex items-center justify-between mb-3">
-            <span class="text-xs text-gray-400">Élèves</span>
+            <span class="text-sm text-gray-400">Élèves</span>
             <span class="w-8 h-8 rounded-xl flex items-center justify-center" style="background:#10b98120;">
                 <svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a4 4 0 00-3-3.87M9 20H4v-2a4 4 0 013-3.87m9-4a4 4 0 11-8 0 4 4 0 018 0zm6 4a2 2 0 100-4 2 2 0 000 4zM3 16a2 2 0 100-4 2 2 0 000 4z"/>
@@ -55,12 +55,12 @@
             </span>
         </div>
         <p class="text-3xl font-bold text-black" style="font-family:'Poppins',sans-serif;">{{ $nombreEleves }}</p>
-        <p class="text-xs text-gray-400 mt-1">élèves uniques</p>
+        <p class="text-sm text-gray-400 mt-1">élèves uniques</p>
     </div>
 
     <div class="bg-white rounded-2xl p-5" style="box-shadow:0 4px 12px rgba(0,0,0,0.08);">
         <div class="flex items-center justify-between mb-3">
-            <span class="text-xs text-gray-400">Cours donnés</span>
+            <span class="text-sm text-gray-400">Cours donnés</span>
             <span class="w-8 h-8 rounded-xl flex items-center justify-center" style="background:#1A2B3C20;">
                 <svg class="w-4 h-4" style="color:#1A2B3C;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
@@ -68,12 +68,12 @@
             </span>
         </div>
         <p class="text-3xl font-bold text-black" style="font-family:'Poppins',sans-serif;">{{ $totalCoursDonnes }}</p>
-        <p class="text-xs text-gray-400 mt-1">terminés</p>
+        <p class="text-sm text-gray-400 mt-1">terminés</p>
     </div>
 
     <div class="bg-white rounded-2xl p-5" style="box-shadow:0 4px 12px rgba(0,0,0,0.08);">
         <div class="flex items-center justify-between mb-3">
-            <span class="text-xs text-gray-400">Cagnotte ce mois</span>
+            <span class="text-sm text-gray-400">Cagnotte ce mois</span>
             <span class="w-8 h-8 rounded-xl flex items-center justify-center bg-green-50">
                 <svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
@@ -81,7 +81,7 @@
             </span>
         </div>
         <p class="text-3xl font-bold text-green-500" style="font-family:'Poppins',sans-serif;">{{ number_format($cagnotteMensuelle, 0, ',', ' ') }}</p>
-        <p class="text-xs text-gray-400 mt-1">FCFA</p>
+        <p class="text-sm text-gray-400 mt-1">FCFA</p>
     </div>
 
 </div>
@@ -114,21 +114,21 @@
                 <x-avatar :user="$booking->user" size="10" rounded="full"/>
                 <div class="flex-1">
                     <p class="font-semibold text-black text-sm">{{ $booking->user->name }}</p>
-                    <p class="text-xs text-gray-500">{{ $booking->course->title }}</p>
+                    <p class="text-sm text-gray-500">{{ $booking->course->title }}</p>
                 </div>
                 <div class="text-right">
                     <p class="text-sm font-bold text-black">
                         {{ \Carbon\Carbon::parse($booking->scheduled_at)->format('d/m') }}
                     </p>
-                    <p class="text-xs text-gray-500">
+                    <p class="text-sm text-gray-500">
                         {{ \Carbon\Carbon::parse($booking->scheduled_at)->format('H:i') }}
                     </p>
                 </div>
                 <div>
                     @if($booking->status === 'confirmé')
-                    <span class="text-xs px-2 py-1 rounded-full bg-green-100 text-green-700">Confirmé</span>
+                    <span class="text-sm px-2 py-1 rounded-full bg-green-100 text-green-700">Confirmé</span>
                     @elseif($booking->status === 'en_attente')
-                    <span class="text-xs px-2 py-1 rounded-full bg-amber-100 text-amber-700">En attente</span>
+                    <span class="text-sm px-2 py-1 rounded-full bg-amber-100 text-amber-700">En attente</span>
                     @endif
                 </div>
             </div>
@@ -173,21 +173,21 @@
                     <div class="flex items-center gap-2 mb-1">
                         <p class="font-medium text-black text-sm">{{ $course->title }}</p>
                         @if($course->is_group)
-                        <span class="text-xs px-2 py-0.5 rounded-full font-medium" style="background:#FFF8E7; color:#FCB315;">
+                        <span class="text-sm px-2 py-0.5 rounded-full font-medium" style="background:#FFF8E7; color:#FCB315;">
                             Groupe · {{ $course->max_students }} max
                         </span>
                         @endif
                         @if($course->status === 'pending')
-                        <span class="text-xs px-2 py-0.5 rounded-full bg-amber-100 text-amber-700">En attente</span>
+                        <span class="text-sm px-2 py-0.5 rounded-full bg-amber-100 text-amber-700">En attente</span>
                         @elseif($course->status === 'rejected')
-                        <span class="text-xs px-2 py-0.5 rounded-full bg-red-100 text-red-700">Refusé</span>
+                        <span class="text-sm px-2 py-0.5 rounded-full bg-red-100 text-red-700">Refusé</span>
                         @endif
                     </div>
-                    <p class="text-xs text-gray-500">{{ $course->category }} · {{ $course->level }} · {{ $course->format }}</p>
+                    <p class="text-sm text-gray-500">{{ $course->category }} · {{ $course->level }} · {{ $course->format }}</p>
                 </div>
                 <div class="text-right shrink-0">
                     <p class="font-bold text-sm text-black">{{ number_format($course->price_per_hour, 0, ',', ' ') }} FCFA/h</p>
-                    <span class="text-xs px-2 py-0.5 rounded-full {{ $course->is_active ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500' }}">
+                    <span class="text-sm px-2 py-0.5 rounded-full {{ $course->is_active ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500' }}">
                         {{ $course->is_active ? 'Actif' : 'Inactif' }}
                     </span>
                 </div>
@@ -200,7 +200,7 @@
 </div>
 
 {{-- Avis reçus --}}
-<p class="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-3">Avis reçus</p>
+<p class="text-sm font-semibold text-gray-400 uppercase tracking-widest mb-3">Avis reçus</p>
 <div class="bg-white rounded-2xl p-6" style="box-shadow:0 4px 12px rgba(0,0,0,0.06);">
 
     @if($avisParCours->isEmpty())
@@ -224,7 +224,7 @@
             class="avis-tab px-4 py-2 rounded-xl text-sm font-semibold transition"
             style="{{ $loop->first ? 'background:#FCB315; color:#000;' : 'background:#f3f4f6; color:#666;' }}">
             {{ $cours->title }}
-            <span class="ml-1 text-xs opacity-70">({{ $avis->count() }})</span>
+            <span class="ml-1 text-sm opacity-70">({{ $avis->count() }})</span>
         </button>
         @endforeach
     </div>
@@ -242,7 +242,7 @@
         <div class="flex items-center justify-between mb-4 p-4 rounded-xl bg-gray-50">
             <div>
                 <p class="font-semibold text-black">{{ $cours->title }}</p>
-                <p class="text-xs text-gray-500">{{ $cours->category }} · {{ $totalAvis }} avis</p>
+                <p class="text-sm text-gray-500">{{ $cours->category }} · {{ $totalAvis }} avis</p>
             </div>
             <div class="flex items-center gap-2">
                 <div class="flex gap-0.5">
@@ -253,7 +253,7 @@
                     @endfor
                 </div>
                 <span class="font-bold text-black">{{ $moyenneAvis }}</span>
-                <span class="text-xs text-gray-400">/ 5</span>
+                <span class="text-sm text-gray-400">/ 5</span>
             </div>
         </div>
 
@@ -266,7 +266,7 @@
                     <div class="flex-1">
                         <div class="flex items-center justify-between mb-1">
                             <p class="font-semibold text-black text-sm">{{ $review->user->name }}</p>
-                            <span class="text-xs text-gray-400">{{ $review->created_at->diffForHumans() }}</span>
+                            <span class="text-sm text-gray-400">{{ $review->created_at->diffForHumans() }}</span>
                         </div>
                         <div class="flex gap-0.5 mb-2">
                             @for($i = 1; $i <= 5; $i++)
@@ -274,12 +274,12 @@
                                 <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
                             </svg>
                             @endfor
-                            <span class="text-xs text-gray-500 ml-1">{{ $review->rating }}/5</span>
+                            <span class="text-sm text-gray-500 ml-1">{{ $review->rating }}/5</span>
                         </div>
                         @if($review->comment)
                         <p class="text-sm text-gray-600 leading-relaxed">{{ $review->comment }}</p>
                         @else
-                        <p class="text-xs text-gray-400 italic">Aucun commentaire laissé.</p>
+                        <p class="text-sm text-gray-400 italic">Aucun commentaire laissé.</p>
                         @endif
                     </div>
                 </div>
@@ -290,7 +290,7 @@
         {{-- Pagination avis --}}
         @if($totalAvis > 3)
         <div class="flex items-center justify-between mt-4 pt-4 border-t border-gray-100">
-            <p class="text-xs text-gray-400">
+            <p class="text-sm text-gray-400">
                 <span id="avis-showing-{{ $courseId }}">1–3</span> sur {{ $totalAvis }} avis
             </p>
             <div class="flex items-center gap-2">
@@ -302,7 +302,7 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
                     </svg>
                 </button>
-                <span class="text-xs text-gray-500" id="page-info-{{ $courseId }}">
+                <span class="text-sm text-gray-500" id="page-info-{{ $courseId }}">
                     Page 1 / {{ ceil($totalAvis / 3) }}
                 </span>
                 <button onclick="nextAvis('{{ $courseId }}', {{ $totalAvis }})"

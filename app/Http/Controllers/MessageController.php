@@ -25,9 +25,7 @@ class MessageController extends Controller
                     ? $message->receiver_id
                     : $message->sender_id;
             })
-            ->map(function($messages) {
-                return $messages->first();
-            });
+            ->map(fn($messages) => $messages->first());
 
         return view('messages.index', compact('conversations'));
     }
@@ -45,7 +43,6 @@ class MessageController extends Controller
         ->orderBy('created_at', 'asc')
         ->get();
 
-        // Marquer les messages comme lus
         Message::where('sender_id', $userId)
             ->where('receiver_id', $user->id)
             ->where('is_read', false)
@@ -60,40 +57,56 @@ class MessageController extends Controller
             'content' => ['required', 'string', 'max:1000'],
         ]);
 
-        $content  = $request->content;
-        $detected = MessageModerator::analyze($content);
+        $user    = auth()->user();
+        $content = $request->content;
 
-        // Séparer les types détectés
-        $blockedTypes  = ['phone', 'bank'];
-        $warningTypes  = ['link'];
+        // Vérifier si l'utilisateur est bloqué pour 24h
+        if ($user->message_blocked_until && now()->lt($user->message_blocked_until)) {
+            $remaining = now()->diffInMinutes($user->message_blocked_until);
+            $heures    = floor($remaining / 60);
+            $minutes   = $remaining % 60;
 
+            return back()->withInput()->with('error',
+                "Votre accès à la messagerie est suspendu pour " .
+                ($heures > 0 ? "{$heures}h " : '') . "{$minutes}min suite à plusieurs violations des règles."
+            );
+        }
+
+        // Réinitialiser le blocage si expiré
+        if ($user->message_blocked_until && now()->gte($user->message_blocked_until)) {
+            $user->update(['message_attempts' => 0, 'message_blocked_until' => null]);
+        }
+
+        $detected       = MessageModerator::analyze($content);
+        $blockedTypes   = ['phone', 'bank'];
+        $warningTypes   = ['link'];
         $blockedMatches = array_filter($detected, fn($d) => in_array($d['type'], $blockedTypes));
         $warningMatches = array_filter($detected, fn($d) => in_array($d['type'], $warningTypes));
 
-        // Bloquer si téléphone ou banque détecté
+        // Contenu interdit (téléphone ou banque)
         if (!empty($blockedMatches)) {
-            $typeLabels = [
-                'phone' => 'numéro de téléphone',
-                'bank'  => 'coordonnées bancaires',
-            ];
+            $typeLabels = ['phone' => 'numéro de téléphone', 'bank' => 'coordonnées bancaires'];
+            $types      = array_unique(array_map(fn($d) => $typeLabels[$d['type']] ?? $d['type'], $blockedMatches));
+            $label      = implode(' et ', $types);
 
-            $types = array_unique(array_map(fn($d) => $typeLabels[$d['type']] ?? $d['type'], $blockedMatches));
-            $label = implode(' et ', $types);
+            // Incrémenter les tentatives
+            $attempts = $user->message_attempts + 1;
+            $user->update(['message_attempts' => $attempts]);
 
-            // Enregistrer le message quand même (masqué) pour que l'admin puisse le voir
+            // Enregistrer le message bloqué pour l'admin
             $message = Message::create([
-                'sender_id'   => auth()->id(),
+                'sender_id'   => $user->id,
                 'receiver_id' => $userId,
                 'content'     => $content,
                 'is_read'     => false,
                 'is_blocked'  => true,
             ]);
 
-            // Créer une alerte
+            // Créer l'alerte
             foreach ($blockedMatches as $match) {
                 MessageAlert::create([
                     'message_id'      => $message->id,
-                    'sender_id'       => auth()->id(),
+                    'sender_id'       => $user->id,
                     'receiver_id'     => $userId,
                     'alert_type'      => $match['type'],
                     'matched_content' => $match['matched'],
@@ -101,36 +114,62 @@ class MessageController extends Controller
                 ]);
             }
 
+            // 3ème tentative → blocage 24h
+            if ($attempts >= 3) {
+                $blockedUntil = now()->addHours(24);
+                $user->update(['message_blocked_until' => $blockedUntil]);
+
+                // Notifier les admins
+                $admins = User::where('role', 'admin')->get();
+                foreach ($admins as $admin) {
+                    Notification::notifier(
+                        userId: $admin->id,
+                        type:   'message_alert',
+                        title:  'Compte suspendu — messagerie',
+                        body:   $user->name . ' a été suspendu 24h de la messagerie après 3 tentatives d\'envoi de ' . $label . '.',
+                        link:   '/admin/messages/alertes'
+                    );
+                }
+
+                // Notifier l'utilisateur
+                Notification::notifier(
+                    userId: $user->id,
+                    type:   'message_alert',
+                    title:  'Messagerie suspendue 24h',
+                    body:   'Votre accès à la messagerie a été suspendu 24h suite à 3 tentatives d\'envoi de ' . $label . '.',
+                    link:   '#'
+                );
+
+                return back()->withInput()->with('error',
+                    "Votre accès à la messagerie est suspendu pour 24h suite à 3 violations des règles de la plateforme."
+                );
+            }
+
+            // 1ère ou 2ème tentative → avertissement
+            $restantes = 3 - $attempts;
+
             // Notifier les admins
             $admins = User::where('role', 'admin')->get();
             foreach ($admins as $admin) {
                 Notification::notifier(
                     userId: $admin->id,
                     type:   'message_alert',
-                    title:  'Message suspect détecté',
-                    body:   auth()->user()->name . ' a tenté d\'envoyer un ' . $label . ' dans un message.',
+                    title:  'Message suspect — tentative ' . $attempts,
+                    body:   $user->name . ' a tenté d\'envoyer un ' . $label . '. (' . $attempts . '/3 tentatives)',
                     link:   '/admin/messages/alertes'
                 );
             }
 
-            // Notifier l'expéditeur
-            Notification::notifier(
-                userId: auth()->id(),
-                type:   'message_alert',
-                title:  'Message non envoyé',
-                body:   'Votre message contient un ' . $label . ' non autorisé sur Kimboo. Échangez via la plateforme uniquement.',
-                link:   route('messages.show', $userId)
+            return back()->withInput()->with('error',
+                "⚠️ Message non envoyé : votre message contient un {$label} non autorisé sur Kimboo. " .
+                "Il vous reste {$restantes} tentative(s) avant une suspension de 24h."
             );
-
-            return back()
-                ->withInput()
-                ->with('error', 'Votre message contient un ' . $label . ' non autorisé. Veuillez utiliser uniquement la plateforme Kimboo pour vos échanges.');
         }
 
-        // Avertissement si lien détecté (message envoyé mais signalé)
+        // Lien externe → avertissement mais message envoyé
         if (!empty($warningMatches)) {
             $message = Message::create([
-                'sender_id'   => auth()->id(),
+                'sender_id'   => $user->id,
                 'receiver_id' => $userId,
                 'content'     => $content,
                 'is_read'     => false,
@@ -140,7 +179,7 @@ class MessageController extends Controller
             foreach ($warningMatches as $match) {
                 MessageAlert::create([
                     'message_id'      => $message->id,
-                    'sender_id'       => auth()->id(),
+                    'sender_id'       => $user->id,
                     'receiver_id'     => $userId,
                     'alert_type'      => 'link',
                     'matched_content' => $match['matched'],
@@ -148,25 +187,24 @@ class MessageController extends Controller
                 ]);
             }
 
-            // Notifier les admins
             $admins = User::where('role', 'admin')->get();
             foreach ($admins as $admin) {
                 Notification::notifier(
                     userId: $admin->id,
                     type:   'message_alert',
                     title:  'Lien externe détecté',
-                    body:   auth()->user()->name . ' a envoyé un lien externe dans un message. À vérifier.',
+                    body:   $user->name . ' a envoyé un lien externe. À vérifier.',
                     link:   '/admin/messages/alertes'
                 );
             }
 
             return redirect()->route('messages.show', $userId)
-                ->with('warning', 'Votre message a été envoyé mais contient un lien externe qui a été signalé à l\'équipe Kimboo.');
+                ->with('warning', 'Votre message a été envoyé mais contient un lien externe signalé à l\'équipe Kimboo.');
         }
 
         // Message normal
         Message::create([
-            'sender_id'   => auth()->id(),
+            'sender_id'   => $user->id,
             'receiver_id' => $userId,
             'content'     => $content,
             'is_read'     => false,

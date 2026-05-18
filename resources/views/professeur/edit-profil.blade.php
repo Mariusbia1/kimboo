@@ -51,7 +51,7 @@
                             <span class="text-sm text-[rgb(43,43,43)]">Choisir une photo</span>
                         </label>
                         <input type="file" name="avatar" id="avatar-input" accept="image/*" class="hidden"/>
-                        <p class="text-xs text-gray-400 mt-1">JPG, PNG ou WEBP · Max 2MB</p>
+                        <p class="text-sm text-gray-400 mt-1">JPG, PNG ou WEBP · Max 2MB</p>
                     </div>
                 </div>
                 <div style="display:flex; flex-direction:column; gap:1rem;">
@@ -61,7 +61,7 @@
                         <textarea name="bio" rows="4"
                             class="w-full border-2 border-gray-100 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-yellow-400 transition bg-gray-50 resize-none"
                             placeholder="Parlez de votre parcours universitaire, vos diplômes...">{{ old('bio', $profile->bio) }}</textarea>
-                        @error('bio') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                        @error('bio') <p class="text-red-500 text-sm mt-1">{{ $message }}</p> @enderror
                     </div>
 
                     <div>
@@ -76,14 +76,14 @@
                             <label class="text-sm font-semibold text-gray-700 mb-1.5 block">Tarif horaire (Fcfa)</label>
                             <input type="number" name="hourly_rate" value="{{ old('hourly_rate', $profile->hourly_rate) }}"
                                 class="w-full border-2 border-gray-100 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-yellow-400 transition bg-gray-50"/>
-                            @error('hourly_rate') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                            @error('hourly_rate') <p class="text-red-500 text-sm mt-1">{{ $message }}</p> @enderror
                         </div>
                         <div>
                             <label class="text-sm font-semibold text-gray-700 mb-1.5 block">Années d'expérience</label>
                             <input type="text" name="experience_years" value="{{ old('experience_years', $profile->experience_years) }}"
                                 class="w-full border-2 border-gray-100 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-yellow-400 transition bg-gray-50"
                                 placeholder="Ex: 5 ans"/>
-                            @error('experience_years') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                            @error('experience_years') <p class="text-red-500 text-sm mt-1">{{ $message }}</p> @enderror
                         </div>
                     </div>
 
@@ -92,7 +92,7 @@
                             <label class="text-sm font-semibold text-gray-700 mb-1.5 block">Ville</label>
                             <input type="text" name="ville" value="{{ old('ville', $user->ville) }}"
                                 class="w-full border-2 border-gray-100 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-yellow-400 transition bg-gray-50"/>
-                            @error('ville') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                            @error('ville') <p class="text-red-500 text-sm mt-1">{{ $message }}</p> @enderror
                         </div>
                         <div>
                             <label class="text-sm font-semibold text-gray-700 mb-1.5 block">Téléphone</label>
@@ -216,19 +216,22 @@
             <h3 class="font-bold text-black">{{ $user->name }}</h3>
             <p class="text-sm text-gray-400">{{ $user->ville }}</p>
             @if($profile->is_verified)
-            <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold text-white mt-2" style="background:#1A2B3C;">
-                ✓ Certifié
-            </span>
+            <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold text-white mt-2" style="background:#1877F2;">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" style="width:14px; height:14px;" fill="white">
+                    <path d="m344-60-76-128-144-32 14-148-98-112 98-112-14-148 144-32 76-128 136 58 136-58 76 128 144 32-14 148 98 112-98 112 14 148-144 32-76 128-136-58-136 58Zm34-102 102-44 104 44 56-96 110-26-10-112 74-84-74-86 10-112-110-24-58-96-102 44-104-44-56 96-110 24 10 112-74 86 74 84-10 114 110 24 58 96Zm102-318Zm-42 142 226-226-56-58-170 170-86-84-56 56 142 142Z"/>
+                </svg>
+                Profil certifié
+            </div>
             @endif
         </div>
 
         <!-- Lieu du cours -->
         @if($profile->lieu_cours && count($profile->lieu_cours) > 0)
         <div class="mb-4">
-            <p class="text-xs font-semibold text-gray-400 mb-2">LIEU DU COURS</p>
+            <p class="text-sm font-semibold text-gray-400 mb-2">LIEU DU COURS</p>
             <div class="flex flex-wrap gap-2">
                 @foreach($profile->lieu_cours as $lieu)
-                <span class="text-xs px-3 py-1 rounded-full font-medium" style="background:#FFF8E7; color:#FCB315;">
+                <span class="text-sm px-3 py-1 rounded-full font-medium" style="background:#FFF8E7; color:#FCB315;">
                     {{ $lieu === 'chez_prof' ? '🏠 Chez le prof' : ($lieu === 'chez_eleve' ? '📍 Chez l\'élève' : '💻 Webcam') }}
                 </span>
                 @endforeach
@@ -236,10 +239,10 @@
         </div>
         @endif
 
-        <div class="rounded-xl p-4 text-center mb-4" style="background:#FFF8E7;">
-            <p class="text-2xl font-bold" style="color:#FCB315;">{{ number_format($profile->hourly_rate, 0, ',', ' ') }} Fcfa</p>
-            <p class="text-xs text-[rgb(43,43,43)] mt-0.5">par heure</p>
-        </div>
+        <div class="rounded-xl p-4 text-center mb-4" style="background:#ffffff; border:2px solid #f0f0f0;">
+    <p class="text-4xl font-bold text-black" style="font-family:'Plus Jakarta Sans',sans-serif;">{{ number_format($profile->hourly_rate, 0, ',', ' ') }} Fcfa</p>
+    <p class="text-sm text-gray-400 mt-0.5">par heure</p>
+</div>
 
         <div class="text-sm space-y-2 mb-5">
             <div class="flex justify-between py-2 border-b border-gray-50">

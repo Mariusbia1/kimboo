@@ -52,7 +52,7 @@ style="min-height: calc(80vh); background: linear-gradient(rgba(0,0,0,0.45), rgb
 <section class="py-16 bg-white border-b border-gray-100">
     <div class="max-w-5xl mx-auto px-4">
 
-        <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:2rem;">
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
 
             <!-- Stat 1 -->
             <div class="relative text-center group">
@@ -67,7 +67,7 @@ style="min-height: calc(80vh); background: linear-gradient(rgba(0,0,0,0.45), rgb
 
                 </div>
                 <p class="font-semibold text-black mb-1">Professeurs</p>
-                <p class="text-xs" style="color:#2b2b2b;">Des experts passionnés prêts à vous accompagner</p>
+                <p class="text-sm" style="color:#2b2b2b;">Des experts passionnés prêts à vous accompagner</p>
             </div>
 
             <!-- Séparateur vertical -->
@@ -83,7 +83,7 @@ style="min-height: calc(80vh); background: linear-gradient(rgba(0,0,0,0.45), rgb
 
                 </div>
                 <p class="font-semibold text-black mb-1">Matières</p>
-                <p class="text-xs" style="color:#2b2b2b;">Des disciplines variées pour tous vos objectifs</p>
+                <p class="text-sm" style="color:#2b2b2b;">Des disciplines variées pour tous vos objectifs</p>
             </div>
 
             <!-- Stat 3 -->
@@ -99,7 +99,7 @@ style="min-height: calc(80vh); background: linear-gradient(rgba(0,0,0,0.45), rgb
 
                 </div>
                 <p class="font-semibold text-black mb-1">Élèves satisfaits</p>
-                <p class="text-xs" style="color:#2b2b2b;">Des apprenants qui progressent chaque jour</p>
+                <p class="text-sm" style="color:#2b2b2b;">Des apprenants qui progressent chaque jour</p>
             </div>
 
         </div>
@@ -110,7 +110,7 @@ style="min-height: calc(80vh); background: linear-gradient(rgba(0,0,0,0.45), rgb
 <!-- CATÉGORIES -->
 <section class="py-16 px-4 bg-white">
     <div class="max-w-6xl mx-auto">
-        <h2 class="text-2xl font-bold text-black mb-2" style="font-family:'Poppins',sans-serif;">Explorez par catégorie</h2>
+        <h2 class="text-4xl font-bold text-black mb-2" style="font-family:'Poppins',sans-serif;">Explorez par catégorie</h2>
         <p class="text-gray-400 text-sm mb-8">Des cours pour tous les goûts et tous les niveaux</p>
 
         <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-4">
@@ -182,7 +182,7 @@ style="min-height: calc(80vh); background: linear-gradient(rgba(0,0,0,0.45), rgb
 <!-- PROFESSEURS RECOMMANDÉS -->
 <section class="py-16 px-4 bg-white">
     <div class="max-w-6xl mx-auto">
-        <h2 class="text-2xl font-bold text-black mb-2" style="font-family:'Plus Jakarta Sans',sans-serif;">
+        <h2 class="text-4xl font-bold text-black mb-2" style="font-family:'Plus Jakarta Sans',sans-serif;">
             Les meilleurs profs de Côte d'Ivoire sont sur Kimboo
         </h2>
         <p class="text-sm mb-8" style="color:#2b2b2b;">Vérifiés par l'équipe Kimboo</p>
@@ -206,10 +206,10 @@ style="min-height: calc(80vh); background: linear-gradient(rgba(0,0,0,0.45), rgb
 
     <!-- Badge certifié haut à droite -->
     @if($profile->is_verified)
-    <div class="absolute top-3 right-3 w-7 h-7 rounded-full flex items-center justify-center" style="background:#1877F2;">
-        <svg class="w-3.5 h-3.5 text-white" fill="currentColor" viewBox="0 0 20 20">
-            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414L8.414 15 3.293 9.879a1 1 0 011.414-1.414L8.414 12.172l6.879-6.879a1 1 0 011.414 0z" clip-rule="evenodd"/>
-        </svg>
+    <div class="absolute top-3 right-3">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" style="width:26px; height:26px;" fill="#1877F2">
+        <path d="m344-60-76-128-144-32 14-148-98-112 98-112-14-148 144-32 76-128 136 58 136-58 76 128 144 32-14 148 98 112-98 112 14 148-144 32-76 128-136-58-136 58Zm34-102 102-44 104 44 56-96 110-26-10-112 74-84-74-86 10-112-110-24-58-96-102 44-104-44-56 96-110 24 10 112-74 86 74 84-10 114 110 24 58 96Zm102-318Zm-42 142 226-226-56-58-170 170-86-84-56 56 142 142Z"/>
+    </svg>
     </div>
     @endif
 
@@ -230,23 +230,23 @@ style="min-height: calc(80vh); background: linear-gradient(rgba(0,0,0,0.45), rgb
 
                 <!-- Infos -->
                 <h3 class="font-semibold text-black text-base group-hover:underline">{{ $profile->user->name }}</h3>
-                <p class="text-xs mb-1" style="color:#2b2b2b;">{{ $profile->courses->first()->category ?? 'Cours divers' }}</p>
+                <p class="text-sm mb-1" style="color:#2b2b2b;">{{ $profile->courses->first()->category ?? 'Cours divers' }}</p>
 
                 <!-- Note -->
                 <div class="flex items-center gap-1 mb-2">
                     <span style="color:#FCB315;">★</span>
                     <span class="text-sm font-medium text-black">{{ $profile->rating }}</span>
-                    <span class="text-xs" style="color:#2b2b2b;">({{ $profile->reviews_count }} avis)</span>
+                    <span class="text-sm" style="color:#2b2b2b;">({{ $profile->reviews_count }} avis)</span>
                 </div>
 
                 <!-- Bio -->
-                <p class="text-xs leading-relaxed mb-2" style="color:#2b2b2b;">{{ Str::limit($profile->bio, 60) }}</p>
+                <p class="text-sm leading-relaxed mb-2" style="color:#2b2b2b;">{{ Str::limit($profile->bio, 60) }}</p>
 
                 <!-- Prix + 1er cours -->
                 <div class="flex items-center justify-between">
                     <span class="text-sm font-bold text-black">{{ number_format($profile->hourly_rate, 0, ',', ' ') }} FCFA / H</span>
                     @if($profile->first_course_free)
-                    <span class="text-xs font-medium" style="color:#FCB315;">1er cours offert</span>
+                    <span class="text-sm font-medium" style="color:#FCB315;">1er cours offert</span>
                     @endif
                 </div>
             </a>
@@ -261,10 +261,10 @@ style="min-height: calc(80vh); background: linear-gradient(rgba(0,0,0,0.45), rgb
     <div class="max-w-6xl mx-auto">
 
         <div class="text-center mb-16">
-            <span class="inline-block px-4 py-1.5 rounded-full text-xs font-bold mb-4" style="background:#FFF8E7; color:#FCB315;">
+            <span class="inline-block px-4 py-1.5 rounded-full text-sm font-bold mb-4" style="background:#FFF8E7; color:#FCB315;">
                 SIMPLE & RAPIDE
             </span>
-            <h2 class="text-4xl font-bold text-black mb-4" style="font-family:'Plus Jakarta Sans',sans-serif;">
+            <h2 class="text-5xl font-bold text-black mb-4" style="font-family:'Plus Jakarta Sans',sans-serif;">
                 Comment marche Kimboo ?
             </h2>
             <p class="text-gray-400 max-w-md mx-auto">Trouvez votre professeur idéal et commencez à apprendre en moins de 5 minutes</p>
@@ -275,7 +275,7 @@ style="min-height: calc(80vh); background: linear-gradient(rgba(0,0,0,0.45), rgb
             <!-- Ligne de connexion -->
             <div class="hidden md:block absolute top-12 left-0 right-0 h-0.5 mx-32" style="background: linear-gradient(90deg, #FCB315 0%, #FCB315 100%); opacity:0.2;"></div>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
 
                 <!-- Étape 1 -->
                 <div class="relative group">
@@ -359,11 +359,11 @@ style="min-height: calc(80vh); background: linear-gradient(rgba(0,0,0,0.45), rgb
 <!-- DEVENIR MENTOR -->
 <section class="py-24 px-4" style="background:#0a0a0a;">
     <div class="max-w-6xl mx-auto">
-        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:5rem; align-items:center;">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
 
             <!-- Texte -->
             <div>
-                <span class="inline-block px-4 py-1.5 rounded-full text-xs font-bold mb-6" style="background:rgba(252,179,21,0.15); color:#FCB315;">
+                <span class="inline-block px-4 py-1.5 rounded-full text-sm font-bold mb-6" style="background:rgba(252,179,21,0.15); color:#FCB315;">
                     POUR LES PROFESSEURS
                 </span>
                 <h2 class="text-4xl font-bold text-white mb-6" style="font-family:'Plus Jakarta Sans',sans-serif; line-height:1.2;">
@@ -447,11 +447,10 @@ style="min-height: calc(80vh); background: linear-gradient(rgba(0,0,0,0.45), rgb
 
                     <!-- Badge certifié -->
                     @if($meilleurProf->is_verified)
-                    <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold text-white mb-3" style="background:#1877F2;">
-                        <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414L8.414 15 3.293 9.879a1 1 0 011.414-1.414L8.414 12.172l6.879-6.879a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                    <div class="absolute top-3 right-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" style="width:26px; height:26px;" fill="#1877F2">
+                            <path d="m344-60-76-128-144-32 14-148-98-112 98-112-14-148 144-32 76-128 136 58 136-58 76 128 144 32-14 148 98 112-98 112 14 148-144 32-76 128-136-58-136 58Zm34-102 102-44 104 44 56-96 110-26-10-112 74-84-74-86 10-112-110-24-58-96-102 44-104-44-56 96-110 24 10 112-74 86 74 84-10 114 110 24 58 96Zm102-318Zm-42 142 226-226-56-58-170 170-86-84-56 56 142 142Z"/>
                         </svg>
-                        Profil certifié
                     </div>
                     @endif
 
@@ -477,11 +476,11 @@ style="min-height: calc(80vh); background: linear-gradient(rgba(0,0,0,0.45), rgb
                     <div class="grid grid-cols-2 gap-3 mb-5">
                         <div class="rounded-xl p-3" style="background:#F9FAFB;">
                             <p class="text-lg font-black text-black" style="font-family:'Plus Jakarta Sans',sans-serif;">{{ $meilleurProf->reviews_count }}</p>
-                            <p class="text-xs" style="color:#2b2b2b;">Avis</p>
+                            <p class="text-sm" style="color:#2b2b2b;">Avis</p>
                         </div>
                         <div class="rounded-xl p-3" style="background:#F9FAFB;">
                             <p class="text-lg font-black text-black" style="font-family:'Plus Jakarta Sans',sans-serif;">{{ $meilleurProf->experience_years ?? 'N/A' }}</p>
-                            <p class="text-xs" style="color:#2b2b2b;">Expérience</p>
+                            <p class="text-sm" style="color:#2b2b2b;">Expérience</p>
                         </div>
                     </div>
 
@@ -505,10 +504,10 @@ style="min-height: calc(80vh); background: linear-gradient(rgba(0,0,0,0.45), rgb
     <div class="max-w-6xl mx-auto">
 
         <div class="text-center mb-14">
-            <span class="inline-block px-4 py-1.5 rounded-full text-xs font-bold mb-4" style="background:#FFF8E7; color:#FCB315;">
+            <span class="inline-block px-4 py-1.5 rounded-full text-sm font-bold mb-4" style="background:#FFF8E7; color:#FCB315;">
                 TÉMOIGNAGES
             </span>
-            <h2 class="text-3xl font-bold text-black mb-3" style="font-family:'Plus Jakarta Sans',sans-serif;">
+            <h2 class="text-5xl font-bold text-black mb-3" style="font-family:'Plus Jakarta Sans',sans-serif;">
                 Ils nous font confiance
             </h2>
             <p class="text-sm" style="color:#2b2b2b;">Ce que disent nos élèves et professeurs</p>
@@ -590,7 +589,7 @@ style="min-height: calc(80vh); background: linear-gradient(rgba(0,0,0,0.45), rgb
                             </div>
                             <div>
                                 <p class="font-bold text-black text-sm">{{ $t['nom'] }}</p>
-                                <p class="text-xs" style="color:#2b2b2b;">{{ $t['role'] }} · {{ $t['ville'] }}</p>
+                                <p class="text-sm" style="color:#2b2b2b;">{{ $t['role'] }} · {{ $t['ville'] }}</p>
                             </div>
                         </div>
                     </div>
