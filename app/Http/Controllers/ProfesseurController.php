@@ -10,6 +10,11 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use App\Models\Notification;
 use App\Models\User;
+use App\Mail\NouvelleReservation;
+use App\Mail\ReservationConfirmee;
+use App\Mail\ReservationAnnulee;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 
 class ProfesseurController extends Controller
 {
@@ -30,10 +35,7 @@ class ProfesseurController extends Controller
       ->whereMonth('created_at', now()->month)
       ->sum('total_price') : 0;
 
-    // Nombre d'élèves uniques
-    $nombreEleves = $profile ? \App\Models\Booking::whereHas('course', function($q) use ($profile) {
-        $q->where('teacher_profile_id', $profile->id);
-    })->distinct('user_id')->count('user_id') : 0;
+    $nombreEleves = $profile ? $profile->nombreElevesUniques() : 0;
 
     // Total cours donnés
     $totalCoursDonnes = $profile ? \App\Models\Booking::whereHas('course', function($q) use ($profile) {
@@ -230,18 +232,60 @@ public function updateProfil(\Illuminate\Http\Request $request)
     }
 
     public function confirmBooking($id)
-    {
-        $booking = Booking::findOrFail($id);
-        $booking->update(['status' => 'confirmé']);
-        return back()->with('success', 'Réservation confirmée !');
+{
+    $booking = Booking::with(['user', 'course.teacherProfile.user'])->findOrFail($id);
+    $booking->update(['status' => 'confirmé']);
+
+    // Notifier l'élève
+    Notification::notifier(
+        userId: $booking->user_id,
+        type:   'course_approved',
+        title:  'Réservation confirmée',
+        body:   'Votre réservation pour "' . $booking->course->title . '" a été confirmée.',
+        link:   route('eleve.reservations')
+    );
+
+    // Envoi mail à l'élève
+    try {
+        Mail::to($booking->user->email)->send(new ReservationConfirmee($booking));
+    } catch (\Throwable $e) {
+        Log::error('Échec de l\'envoi du mail de confirmation de réservation', [
+            'exception' => $e,
+            'booking_id' => $booking->id,
+            'user_id' => $booking->user_id,
+        ]);
     }
 
+    return back()->with('success', 'Réservation confirmée !');
+}
+
     public function cancelBooking($id)
-    {
-        $booking = Booking::findOrFail($id);
-        $booking->update(['status' => 'annulé']);
-        return back()->with('success', 'Réservation annulée.');
+{
+    $booking = Booking::with(['user', 'course.teacherProfile.user'])->findOrFail($id);
+    $booking->update(['status' => 'annulé']);
+
+    // Notifier l'élève
+    Notification::notifier(
+        userId: $booking->user_id,
+        type:   'course_rejected',
+        title:  'Réservation annulée',
+        body:   'Votre réservation pour "' . $booking->course->title . '" a été annulée par le professeur.',
+        link:   route('eleve.reservations')
+    );
+
+    // Envoi mail à l'élève
+    try {
+        Mail::to($booking->user->email)->send(new ReservationAnnulee($booking, 'prof'));
+    } catch (\Throwable $e) {
+        Log::error('Échec de l\'envoi du mail d\'annulation de réservation professeur', [
+            'exception' => $e,
+            'booking_id' => $booking->id,
+            'user_id' => $booking->user_id,
+        ]);
     }
+
+    return back()->with('success', 'Réservation annulée.');
+}
 
     public function calendrier(Request $request)
 {

@@ -58,11 +58,7 @@
                     <p class="text-sm text-gray-500 truncate">{{ $booking->course->category }}</p>
                 </div>
                 @if($profile->is_verified)
-                <div class="w-6 h-6 rounded-full flex items-center justify-center shrink-0" style="background:#1877F2;">
-                    <svg class="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
-                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414L8.414 15 3.293 9.879a1 1 0 011.414-1.414L8.414 12.172l6.879-6.879a1 1 0 011.414 0z" clip-rule="evenodd"/>
-                    </svg>
-                </div>
+                <x-verified-badge :size="22" class="shrink-0" />
                 @endif
             </div>
 

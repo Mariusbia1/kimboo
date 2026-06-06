@@ -33,9 +33,7 @@
     <!-- Badge certifié haut à droite -->
     @if($profile->is_verified)
     <div class="absolute top-2 right-2">
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" style="width:26px; height:26px;" fill="#1877F2">
-        <path d="m344-60-76-128-144-32 14-148-98-112 98-112-14-148 144-32 76-128 136 58 136-58 76 128 144 32-14 148 98 112-98 112 14 148-144 32-76 128-136-58-136 58Zm34-102 102-44 104 44 56-96 110-26-10-112 74-84-74-86 10-112-110-24-58-96-102 44-104-44-56 96-110 24 10 112-74 86 74 84-10 114 110 24 58 96Zm102-318Zm-42 142 226-226-56-58-170 170-86-84-56 56 142 142Z"/>
-    </svg>
+        <x-verified-badge />
     </div>
     @endif
 
@@ -67,9 +65,7 @@
                 {{ $profile->user->name }}
             </h1>
             @if($profile->is_verified)
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" style="width:22px; height:22px;" fill="#1877F2" title="Certifié">
-                <path d="m344-60-76-128-144-32 14-148-98-112 98-112-14-148 144-32 76-128 136 58 136-58 76 128 144 32-14 148 98 112-98 112 14 148-144 32-76 128-136-58-136 58Zm34-102 102-44 104 44 56-96 110-26-10-112 74-84-74-86 10-112-110-24-58-96-102 44-104-44-56 96-110 24 10 112-74 86 74 84-10 114 110 24 58 96Zm102-318Zm-42 142 226-226-56-58-170 170-86-84-56 56 142 142Z"/>
-            </svg>
+            <x-verified-badge :size="22" title="Certifié" />
             @endif
         </div>
 
@@ -134,6 +130,12 @@
         <div class="flex items-center justify-between py-2 border-b border-gray-100">
             <span style="color:#2b2b2b;">Cours disponibles</span>
             <span class="font-medium text-black">{{ $profile->courses->count() }}</span>
+        </div>
+        <div class="flex items-center justify-between py-2 border-b border-gray-100">
+            <span style="color:#2b2b2b;">Élèves</span>
+            <span class="font-medium text-black">
+                {{ $nombreEleves }} {{ $nombreEleves <= 1 ? 'élève' : 'élèves' }}
+            </span>
         </div>
         <div class="flex items-center justify-between py-2">
     <span style="color:#2b2b2b;">⚡ Répond en moyenne</span>
@@ -376,9 +378,7 @@
             <div class="bg-white rounded-2xl p-5 relative" style="box-shadow:0 4px 12px rgba(0,0,0,0.08);">
             @if($sim->is_verified)
             <div class="absolute top-4 right-4">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" style="width:26px; height:26px;" fill="#1877F2">
-                    <path d="m344-60-76-128-144-32 14-148-98-112 98-112-14-148 144-32 76-128 136 58 136-58 76 128 144 32-14 148 98 112-98 112 14 148-144 32-76 128-136-58-136 58Zm34-102 102-44 104 44 56-96 110-26-10-112 74-84-74-86 10-112-110-24-58-96-102 44-104-44-56 96-110 24 10 112-74 86 74 84-10 114 110 24 58 96Zm102-318Zm-42 142 226-226-56-58-170 170-86-84-56 56 142 142Z"/>
-                </svg>
+                <x-verified-badge />
             </div>
             @endif
                 <div class="w-14 h-14 rounded-2xl mb-3 flex items-center justify-center text-xl font-bold text-black" style="background:#FCB315;">

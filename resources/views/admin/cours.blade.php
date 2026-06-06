@@ -15,6 +15,15 @@
 </div>
 @endif
 
+@if(session('info'))
+<div class="mb-6 px-4 py-3 rounded-xl text-sm font-medium text-blue-700 bg-blue-100 flex items-center gap-2">
+    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+    </svg>
+    {{ session('info') }}
+</div>
+@endif
+
 {{-- Tabs --}}
 <div class="flex gap-2 mb-6">
     <button onclick="showTab('pending')" id="tab-pending"
@@ -325,5 +334,11 @@ function showTab(tab) {
 function toggleRefus(id) {
     document.getElementById('refus-' + id).classList.toggle('hidden');
 }
+
+document.addEventListener('DOMContentLoaded', function () {
+    @if(session('active_tab'))
+    showTab(@json(session('active_tab')));
+    @endif
+});
 </script>
 @endpush

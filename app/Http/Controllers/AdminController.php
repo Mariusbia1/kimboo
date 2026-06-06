@@ -11,6 +11,9 @@ use App\Models\Notification;
 use App\Models\MessageAlert;
 use App\Models\Message;
 use App\Models\SiteSetting;
+use App\Mail\CoursApprouve;
+use App\Mail\CoursRefuse;
+use Illuminate\Support\Facades\Mail;
 
 
 
@@ -61,17 +64,20 @@ class AdminController extends Controller
 
 public function cours()
 {
-    $coursPending  = Course::with('teacherProfile.user')
+    $coursPending = Course::with('teacherProfile.user')
         ->where('status', 'pending')
-        ->latest()->get();
+        ->latest()
+        ->get();
 
     $coursApproved = Course::with('teacherProfile.user')
         ->where('status', 'approved')
-        ->latest()->limit(10)->get();
+        ->latest()
+        ->get();
 
     $coursRejected = Course::with('teacherProfile.user')
         ->where('status', 'rejected')
-        ->latest()->limit(10)->get();
+        ->latest()
+        ->get();
 
     return view('admin.cours', compact('coursPending', 'coursApproved', 'coursRejected'));
 }
@@ -85,39 +91,83 @@ public function showCours($id)
 public function approuverCours($id)
 {
     $cours = Course::with('teacherProfile.user')->findOrFail($id);
-    $cours->update(['status' => 'approved', 'is_active' => true]);
 
-    // Notifier le prof
+    if ($cours->status === 'approved') {
+        return redirect()->route('admin.cours')
+            ->with('info', 'Ce cours est déjà approuvé.')
+            ->with('active_tab', 'approved');
+    }
+
+    $cours->update([
+        'status'           => 'approved',
+        'is_active'        => true,
+        'rejection_reason' => null,
+    ]);
+
     Notification::notifier(
         userId: $cours->teacherProfile->user->id,
         type:   'course_approved',
         title:  'Cours validé',
         body:   'Votre cours "' . $cours->title . '" a été approuvé et est maintenant visible par les élèves.',
-        link:   route('professeur.create-cours')
+        link:   route('professeur.dashboard')
     );
 
-    return back()->with('success', 'Cours approuvé et publié avec succès.');
+    // Envoi mail si l'utilisateur n'est pas connecté
+    $user = $cours->teacherProfile->user;
+    try {
+        Mail::to($user->email)->send(new CoursApprouve($cours));
+    } catch (\Throwable $e) {
+        Log::error('Échec de l\'envoi du mail de cours approuvé', [
+            'exception' => $e,
+            'course_id' => $cours->id,
+            'user_id' => $user->id,
+        ]);
+    }
+
+    return redirect()->route('admin.cours')
+        ->with('success', 'Cours approuvé et publié avec succès.')
+        ->with('active_tab', 'approved');
+
 }
 
 public function refuserCours(Request $request, $id)
 {
+    $request->validate([
+        'reason' => ['nullable', 'string', 'max:1000'],
+    ]);
+
     $cours = Course::with('teacherProfile.user')->findOrFail($id);
+
     $cours->update([
         'status'           => 'rejected',
         'is_active'        => false,
         'rejection_reason' => $request->reason,
     ]);
 
-    // Notifier le prof
     Notification::notifier(
         userId: $cours->teacherProfile->user->id,
         type:   'course_rejected',
         title:  'Cours refusé',
         body:   'Votre cours "' . $cours->title . '" a été refusé.' . ($request->reason ? ' Raison : ' . $request->reason : ''),
-        link:   route('professeur.create-cours')
+        link:   route('professeur.dashboard')
     );
 
-    return back()->with('success', 'Cours refusé.');
+    // Envoi mail
+    $user = $cours->teacherProfile->user;
+    try {
+        Mail::to($user->email)->send(new CoursRefuse($cours));
+    } catch (\Throwable $e) {
+        Log::error('Échec de l\'envoi du mail de cours refusé', [
+            'exception' => $e,
+            'course_id' => $cours->id,
+            'user_id' => $user->id,
+        ]);
+    }
+
+    return redirect()->route('admin.cours')
+        ->with('success', 'Cours refusé.')
+        ->with('active_tab', 'rejected');
+
 }
 
 public function supprimerCours($id)

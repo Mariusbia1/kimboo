@@ -7,8 +7,12 @@ use App\Models\Review;
 use App\Models\Notification;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use App\Mail\NouvelAvis;
+use Illuminate\Support\Facades\Mail;
 
 
 class EleveController extends Controller
@@ -63,13 +67,34 @@ public function mesCours()
 }
     public function cancelBooking($id)
     {
-        $booking = Booking::findOrFail($id);
+        $booking = Booking::with(['course.teacherProfile.user'])->findOrFail($id);
 
         if ($booking->user_id !== auth()->id()) {
             abort(403);
         }
 
         $booking->update(['status' => 'annulé']);
+
+        // Notifier le professeur
+        Notification::notifier(
+            userId: $booking->course->teacherProfile->user->id,
+            type:   'course_rejected',
+            title:  'Réservation annulée',
+            body:   auth()->user()->name . ' a annulé sa réservation pour "' . $booking->course->title . '".',
+            link:   route('professeur.reservations')
+        );
+
+        // Envoi mail au professeur
+        try {
+            Mail::to($booking->course->teacherProfile->user->email)
+                ->send(new \App\Mail\ReservationAnnulee($booking, 'eleve'));
+        } catch (\Throwable $e) {
+            Log::error('Échec de l\'envoi du mail d\'annulation de réservation élève', [
+                'exception' => $e,
+                'booking_id' => $booking->id,
+                'user_id' => auth()->id(),
+            ]);
+        }
 
         return back()->with('success', 'Réservation annulée avec succès.');
     }
@@ -165,6 +190,9 @@ public function mesCours()
             body:   auth()->user()->name . ' a laissé un avis ' . $request->rating . '/5 sur votre cours "' . $booking->course->title . '".',
             link:   route('professeur.dashboard')
         );
+        // Envoi mail au professeur
+        $review = \App\Models\Review::where('booking_id', $booking->id)->latest()->first();
+        Mail::to($profile->user->email)->send(new NouvelAvis($review->load('user')));
 
         return back()->with('success', 'Avis publié avec succès ! Merci pour votre retour.');
     }
@@ -184,6 +212,7 @@ public function updateProfil(\Illuminate\Http\Request $request)
         'name'                  => 'required|string|max:100',
         'phone'                 => 'nullable|string|max:20',
         'ville'                 => 'nullable|string|max:100',
+        'payment_method'        => 'nullable|in:wave,orange_money',
         'avatar'                => 'nullable|image|max:2048',
         'password'              => 'nullable|string|min:8|confirmed',
     ]);
@@ -198,9 +227,10 @@ public function updateProfil(\Illuminate\Http\Request $request)
     }
 
     // Infos de base
-    $user->name  = $request->name;
-    $user->phone = $request->phone;
-    $user->ville = $request->ville;
+    $user->name           = $request->name;
+    $user->phone          = $request->phone;
+    $user->ville          = $request->ville;
+    $user->payment_method = $request->payment_method;
 
     // Mot de passe
     if ($request->filled('password')) {
@@ -211,6 +241,27 @@ public function updateProfil(\Illuminate\Http\Request $request)
 
     return redirect()->route('eleve.edit-profil')
         ->with('success', 'Profil mis à jour avec succès !');
+}
+
+public function destroyAccount(Request $request)
+{
+    $request->validate([
+        'password' => ['required', 'current_password'],
+    ]);
+
+    $user = auth()->user();
+
+    if ($user->avatar && Storage::disk('public')->exists($user->avatar)) {
+        Storage::disk('public')->delete($user->avatar);
+    }
+
+    Auth::logout();
+    $user->delete();
+
+    $request->session()->invalidate();
+    $request->session()->regenerateToken();
+
+    return redirect('/')->with('success', 'Votre compte a été supprimé définitivement.');
 }
 
 public function calendrier(Request $request)

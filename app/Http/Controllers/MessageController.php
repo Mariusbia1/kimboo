@@ -8,6 +8,8 @@ use App\Models\Notification;
 use App\Models\User;
 use App\Services\MessageModerator;
 use Illuminate\Http\Request;
+use App\Mail\MessageSuspect;
+use Illuminate\Support\Facades\Mail;
 
 class MessageController extends Controller
 {
@@ -103,8 +105,9 @@ class MessageController extends Controller
             ]);
 
             // Créer l'alerte
+            $alertCreee = null;
             foreach ($blockedMatches as $match) {
-                MessageAlert::create([
+                $alertCreee = MessageAlert::create([
                     'message_id'      => $message->id,
                     'sender_id'       => $user->id,
                     'receiver_id'     => $userId,
@@ -114,11 +117,21 @@ class MessageController extends Controller
                 ]);
             }
 
+            // Envoi mail — un seul mail suffit
+            if ($alertCreee) {
+                Mail::to($user->email)->send(new MessageSuspect($alertCreee->load('sender')));
+            }
+
+
+
             // 3ème tentative → blocage 24h
             if ($attempts >= 3) {
                 $blockedUntil = now()->addHours(24);
                 $user->update(['message_blocked_until' => $blockedUntil]);
 
+                // Mail compte suspendu
+                Mail::to($user->email)->send(new \App\Mail\CompteSuspendu($user));
+                
                 // Notifier les admins
                 $admins = User::where('role', 'admin')->get();
                 foreach ($admins as $admin) {
@@ -176,8 +189,9 @@ class MessageController extends Controller
                 'is_blocked'  => false,
             ]);
 
+            $alertCreee = null;
             foreach ($warningMatches as $match) {
-                MessageAlert::create([
+                $alertCreee = MessageAlert::create([
                     'message_id'      => $message->id,
                     'sender_id'       => $user->id,
                     'receiver_id'     => $userId,
@@ -185,6 +199,11 @@ class MessageController extends Controller
                     'matched_content' => $match['matched'],
                     'status'          => 'pending',
                 ]);
+            }
+
+            // Envoi mail — un seul mail suffit
+            if ($alertCreee) {
+                Mail::to($user->email)->send(new MessageSuspect($alertCreee->load('sender')));
             }
 
             $admins = User::where('role', 'admin')->get();

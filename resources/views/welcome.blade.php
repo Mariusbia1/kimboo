@@ -207,9 +207,7 @@ style="min-height: calc(80vh); background: linear-gradient(rgba(0,0,0,0.45), rgb
     <!-- Badge certifié haut à droite -->
     @if($profile->is_verified)
     <div class="absolute top-3 right-3">
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" style="width:26px; height:26px;" fill="#1877F2">
-        <path d="m344-60-76-128-144-32 14-148-98-112 98-112-14-148 144-32 76-128 136 58 136-58 76 128 144 32-14 148 98 112-98 112 14 148-144 32-76 128-136-58-136 58Zm34-102 102-44 104 44 56-96 110-26-10-112 74-84-74-86 10-112-110-24-58-96-102 44-104-44-56 96-110 24 10 112-74 86 74 84-10 114 110 24 58 96Zm102-318Zm-42 142 226-226-56-58-170 170-86-84-56 56 142 142Z"/>
-    </svg>
+        <x-verified-badge />
     </div>
     @endif
 
@@ -448,9 +446,7 @@ style="min-height: calc(80vh); background: linear-gradient(rgba(0,0,0,0.45), rgb
                     <!-- Badge certifié -->
                     @if($meilleurProf->is_verified)
                     <div class="absolute top-3 right-3">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" style="width:26px; height:26px;" fill="#1877F2">
-                            <path d="m344-60-76-128-144-32 14-148-98-112 98-112-14-148 144-32 76-128 136 58 136-58 76 128 144 32-14 148 98 112-98 112 14 148-144 32-76 128-136-58-136 58Zm34-102 102-44 104 44 56-96 110-26-10-112 74-84-74-86 10-112-110-24-58-96-102 44-104-44-56 96-110 24 10 112-74 86 74 84-10 114 110 24 58 96Zm102-318Zm-42 142 226-226-56-58-170 170-86-84-56 56 142 142Z"/>
-                        </svg>
+                        <x-verified-badge />
                     </div>
                     @endif
 

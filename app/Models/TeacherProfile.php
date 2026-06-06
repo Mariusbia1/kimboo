@@ -34,12 +34,30 @@ protected $casts = [
         return $this->hasMany(Course::class);
     }
 
+    public function approvedCourses()
+    {
+        return $this->hasMany(Course::class)->approved();
+    }
+
     public function reviews()
     {
         return $this->hasManyThrough(Review::class, Course::class);
     }
+
+    public function bookings()
+    {
+        return $this->hasManyThrough(Booking::class, Course::class);
+    }
+
+    public function nombreElevesUniques(): int
+    {
+        return (int) $this->bookings()
+            ->distinct('bookings.user_id')
+            ->count('bookings.user_id');
+    }
+
     public function favoritedBy()
-{
-    return $this->hasMany(Favorite::class);
-}
+    {
+        return $this->hasMany(Favorite::class);
+    }
 }

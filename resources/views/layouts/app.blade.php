@@ -6,7 +6,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Kimboo — @yield('title', 'Trouvez votre professeur')</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500&display=swap" rel="stylesheet">
-    
+
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body style="font-family:'Plus Jakarta Sans', sans-serif;" class="bg-white text-black">
@@ -20,24 +20,6 @@
             <a href="{{ url('/') }}" class="text-3xl font-bold shrink-0" style="color:#FCB315; font-family:'Poppins',sans-serif; letter-spacing:-1px;">
                 kimboo
             </a>
-
-            <!-- Menu desktop -->
-            <div class="hidden md:flex items-center gap-1">
-                <a href="{{ url('/') }}"
-                   class="text-sm font-medium px-4 py-2 rounded-xl transition
-                   {{ request()->is('/') ? 'text-black bg-gray-100' : 'text-gray-500 hover:text-black hover:bg-gray-50' }}">
-                    Accueil
-                </a>
-                <a href="{{ route('cours.index') }}"
-                   class="text-sm font-medium px-4 py-2 rounded-xl transition
-                   {{ request()->routeIs('cours.index') ? 'text-black bg-gray-100' : 'text-gray-500 hover:text-black hover:bg-gray-50' }}">
-                    Cours
-                </a>
-                <a href="#comment-ca-marche"
-                   class="text-sm font-medium px-4 py-2 rounded-xl transition text-gray-500 hover:text-black hover:bg-gray-50">
-                    Comment ça marche
-                </a>
-            </div>
 
             <!-- Auth buttons -->
             <div class="hidden md:flex items-center gap-3">
@@ -78,9 +60,6 @@
 
         <!-- Menu mobile -->
         <div class="md:hidden hidden pb-4 border-t border-gray-100 pt-3" id="mobile-menu">
-            <a href="{{ url('/') }}" class="block px-4 py-2.5 text-sm text-gray-600 rounded-xl hover:bg-gray-50 transition">Accueil</a>
-            <a href="{{ route('cours.index') }}" class="block px-4 py-2.5 text-sm text-gray-600 rounded-xl hover:bg-gray-50 transition">Cours</a>
-            <a href="#comment-ca-marche" class="block px-4 py-2.5 text-sm text-gray-600 rounded-xl hover:bg-gray-50 transition">Comment ça marche</a>
             @auth
                 <a href="{{ route('dashboard') }}" class="block px-4 py-2.5 text-sm text-gray-600 rounded-xl hover:bg-gray-50 transition">Tableau de bord</a>
                 <form method="POST" action="{{ route('logout') }}">
@@ -167,12 +146,15 @@
                     <p class="text-white font-semibold mb-4">Liens</p>
                     <a href="{{ url('/') }}" class="block text-white hover:text-yellow-400 transition mb-2">Accueil</a>
                     <a href="{{ route('cours.index') }}" class="block text-white hover:text-yellow-400 transition mb-2">Cours</a>
-                    <a href="#comment-ca-marche" class="block text-white hover:text-yellow-400 transition">Comment ça marche</a>
+                    <a href="{{ route('qui-sommes-nous') }}" class="block text-white hover:text-yellow-400 transition">Qui sommes-nous ?</a>
                 </div>
                 <div>
                     <p class="text-white font-semibold mb-4">Légal</p>
-                    <a href="#" class="block text-white hover:text-yellow-400 transition mb-2">Confidentialité</a>
-                    <a href="#" class="block text-white hover:text-yellow-400 transition">CGU</a>
+                    <div>
+                        <a href="{{ route('politique-confidentialite') }}" class="block text-white hover:text-yellow-400 transition mb-2">Confidentialité</a>
+                        <a href="#" class="block text-white hover:text-yellow-400 transition mb-2">CGU</a>
+
+                    </div>
                 </div>
             </div>
         </div>

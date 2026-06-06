@@ -88,10 +88,8 @@
 
                     <!-- Badge certifié haut à droite -->
                     @if($profile->is_verified)
-                    <div class="absolute top-3 right-3 w-7 h-7 rounded-full flex items-center justify-center" style="background:#1877F2;">
-                        <svg class="w-3.5 h-3.5 text-white" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414L8.414 15 3.293 9.879a1 1 0 011.414-1.414L8.414 12.172l6.879-6.879a1 1 0 011.414 0z" clip-rule="evenodd"/>
-                        </svg>
+                    <div class="absolute top-3 right-3">
+                        <x-verified-badge />
                     </div>
                     @endif
 

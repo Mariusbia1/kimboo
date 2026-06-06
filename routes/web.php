@@ -13,6 +13,13 @@ use App\Http\Controllers\NotificationController;
 
 
 Route::get('/', [HomeController::class, 'index']);
+Route::get('/qui-sommes-nous', function () {
+    return view('qui-sommes-nous');
+})->name('qui-sommes-nous');
+
+Route::get('/politique-confidentialite', function () {
+    return view('politique-confidentialite');
+})->name('politique-confidentialite');
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
@@ -29,6 +36,7 @@ Route::post('/notifications/read-all', [NotificationController::class, 'readAll'
         Route::post('/reservations/{id}/avis', [EleveController::class, 'storeAvis'])->name('booking.avis');
         Route::get('/profil', [EleveController::class, 'editProfil'])->name('edit-profil');
         Route::post('/profil', [EleveController::class, 'updateProfil'])->name('update-profil');
+        Route::delete('/profil', [EleveController::class, 'destroyAccount'])->name('delete-account');
         Route::get('/calendrier', [EleveController::class, 'calendrier'])->name('calendrier');
     });
 

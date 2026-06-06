@@ -179,6 +179,8 @@
                         @endif
                         @if($course->status === 'pending')
                         <span class="text-sm px-2 py-0.5 rounded-full bg-amber-100 text-amber-700">En attente</span>
+                        @elseif($course->status === 'approved')
+                        <span class="text-sm px-2 py-0.5 rounded-full bg-green-100 text-green-700">Approuvé</span>
                         @elseif($course->status === 'rejected')
                         <span class="text-sm px-2 py-0.5 rounded-full bg-red-100 text-red-700">Refusé</span>
                         @endif

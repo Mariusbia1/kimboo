@@ -11,7 +11,13 @@ class User extends Authenticatable
     use HasFactory, Notifiable;
 
     protected $fillable = [
-        'name', 'email', 'phone', 'avatar', 'role', 'ville', 'password', 'message_attempts', 'message_blocked_until',
+        'name', 'email', 'phone', 'avatar', 'role', 'ville', 'payment_method',
+        'password', 'message_attempts', 'message_blocked_until',
+    ];
+
+    public const PAYMENT_METHODS = [
+        'wave'         => 'Wave',
+        'orange_money' => 'Orange Money',
     ];
 
     protected $hidden = [

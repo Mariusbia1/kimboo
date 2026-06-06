@@ -161,6 +161,54 @@
             </div>
         </div>
 
+        {{-- Mode de paiement --}}
+        <div class="bg-white rounded-2xl p-6" style="box-shadow:0 4px 12px rgba(0,0,0,0.06);">
+            <h2 class="font-semibold text-black mb-1 flex items-center gap-2">
+                <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/>
+                </svg>
+                Mode de paiement
+            </h2>
+            <p class="text-sm text-gray-400 mb-5">
+                Choisissez votre moyen de paiement mobile pour les réservations (Wave ou Orange Money).
+            </p>
+
+            <div class="grid gap-3 sm:grid-cols-2">
+                @foreach(\App\Models\User::PAYMENT_METHODS as $value => $label)
+                <label class="flex items-center gap-3 p-4 rounded-xl border-2 cursor-pointer transition
+                    {{ old('payment_method', $user->payment_method) === $value ? 'border-yellow-400 bg-yellow-50' : 'border-gray-100 hover:border-gray-200' }}">
+                    <input type="radio" name="payment_method" value="{{ $value }}"
+                        {{ old('payment_method', $user->payment_method) === $value ? 'checked' : '' }}
+                        class="w-4 h-4 accent-yellow-500"/>
+                    <div>
+                        <p class="font-semibold text-black text-sm">{{ $label }}</p>
+                        <p class="text-sm text-gray-400 mt-0.5">
+                            @if($value === 'wave')
+                            Paiement via l'application Wave
+                            @else
+                            Paiement via Orange Money
+                            @endif
+                        </p>
+                    </div>
+                </label>
+                @endforeach
+            </div>
+
+            @error('payment_method')
+            <p class="text-sm text-red-600 mt-2">{{ $message }}</p>
+            @enderror
+
+            @if($user->phone)
+            <p class="text-sm text-gray-500 mt-4">
+                Numéro utilisé pour le paiement : <span class="font-medium text-black">{{ $user->phone }}</span>
+            </p>
+            @else
+            <p class="text-sm text-amber-700 bg-amber-50 rounded-xl px-4 py-2.5 mt-4">
+                Ajoutez votre numéro de téléphone ci-dessus pour finaliser vos paiements mobiles.
+            </p>
+            @endif
+        </div>
+
         {{-- Bouton sauvegarder --}}
         <div class="flex justify-end">
             <button type="submit"
@@ -177,6 +225,43 @@
 </div>
 
 </form>
+
+{{-- Suppression du compte --}}
+<div class="mt-6 bg-white rounded-2xl p-6 border-2 border-red-100" style="box-shadow:0 4px 12px rgba(0,0,0,0.06);">
+    <h2 class="font-semibold text-red-600 mb-1 flex items-center gap-2">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+        </svg>
+        Zone de danger
+    </h2>
+    <p class="text-sm text-gray-500 mb-5">
+        La suppression de votre compte est définitive. Vos réservations, favoris et messages seront effacés.
+    </p>
+
+    <form method="POST" action="{{ route('eleve.delete-account') }}"
+          onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est irréversible.');">
+        @csrf
+        @method('DELETE')
+
+        <div class="max-w-md">
+            <label class="block text-sm font-medium text-gray-600 mb-1.5">Confirmez avec votre mot de passe</label>
+            <input type="password" name="password" required
+                class="w-full border-2 border-gray-100 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-red-300 transition bg-gray-50"
+                placeholder="Votre mot de passe actuel"/>
+            @error('password')
+            <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
+            @enderror
+        </div>
+
+        <button type="submit"
+            class="mt-4 px-6 py-2.5 rounded-xl text-white font-semibold text-sm transition hover:opacity-90 bg-red-500 flex items-center gap-2">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+            </svg>
+            Supprimer mon compte
+        </button>
+    </form>
+</div>
 
 @endsection
 

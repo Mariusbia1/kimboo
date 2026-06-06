@@ -216,11 +216,9 @@
             <h3 class="font-bold text-black">{{ $user->name }}</h3>
             <p class="text-sm text-gray-400">{{ $user->ville }}</p>
             @if($profile->is_verified)
-            <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold text-white mt-2" style="background:#1877F2;">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" style="width:14px; height:14px;" fill="white">
-                    <path d="m344-60-76-128-144-32 14-148-98-112 98-112-14-148 144-32 76-128 136 58 136-58 76 128 144 32-14 148 98 112-98 112 14 148-144 32-76 128-136-58-136 58Zm34-102 102-44 104 44 56-96 110-26-10-112 74-84-74-86 10-112-110-24-58-96-102 44-104-44-56 96-110 24 10 112-74 86 74 84-10 114 110 24 58 96Zm102-318Zm-42 142 226-226-56-58-170 170-86-84-56 56 142 142Z"/>
-                </svg>
-                Profil certifié
+            <div class="inline-flex items-center gap-1.5 mt-2">
+                <x-verified-badge :size="22" />
+                <span class="text-xs font-semibold" style="color:#1877F2;">Profil certifié</span>
             </div>
             @endif
         </div>
