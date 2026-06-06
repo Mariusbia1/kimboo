@@ -1,15 +1,17 @@
 @extends('layouts.dashboard')
 
 @section('title', 'Paramètres du site')
+@section('page-title', 'Paramètres du site')
+@section('page-subtitle', 'Gérez les liens des réseaux sociaux affichés dans le footer.')
 
 @section('content')
 <div class="max-w-2xl mx-auto">
 
     <div class="mb-8">
-        <h1 class="text-2xl font-bold text-white" style="font-family:'Plus Jakarta Sans',sans-serif;">
+        <h1 class="text-2xl font-bold text-black" style="font-family:'Plus Jakarta Sans',sans-serif;">
             Paramètres du site
         </h1>
-        <p class="text-gray-400 text-sm mt-1">Gérez les liens des réseaux sociaux affichés dans le footer.</p>
+        <p class="text-gray-500 text-sm mt-1">Gérez les liens des réseaux sociaux affichés dans le footer.</p>
     </div>
 
     @if(session('success'))

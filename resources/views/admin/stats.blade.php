@@ -10,12 +10,24 @@
 <div class="flex items-center gap-2 mb-8 flex-wrap">
     <span class="text-sm text-gray-400 mr-1">Période :</span>
 
+    @php
+        $currentPeriode = (string) request('periode', $periode ?? '30');
+        if (!in_array($currentPeriode, ['3', '7', '30', '90', 'all'], true)) {
+            $currentPeriode = '30';
+        }
+    @endphp
+
     @foreach(['3' => '3 jours', '7' => '7 jours', '30' => '30 jours', '90' => '90 jours', 'all' => 'Depuis le début'] as $val => $label)
-    <a href="{{ route('admin.stats', ['periode' => $val]) }}"
-       class="px-4 py-2 rounded-xl text-sm font-semibold transition"
-       style="{{ $periode === $val
-           ? 'background:#FCB315; color:#000;'
-           : 'background:#fff; color:#666; box-shadow:0 2px 8px rgba(0,0,0,0.08);' }}">
+    @php
+        $filterValue = (string) $val;
+        $isActive = $currentPeriode === $filterValue;
+    @endphp
+    <a href="{{ route('admin.stats', ['periode' => $filterValue]) }}"
+       aria-current="{{ $isActive ? 'page' : 'false' }}"
+       class="px-4 py-2 rounded-xl text-sm font-semibold transition border-2"
+       style="{{ $isActive
+           ? 'background-color:#FCB315 !important; border-color:#FCB315 !important; color:#000 !important; box-shadow:0 8px 18px rgba(252,179,21,0.35);'
+           : 'background-color:#fff; border-color:#fff; color:#666; box-shadow:0 2px 8px rgba(0,0,0,0.08);' }}">
         {{ $label }}
     </a>
     @endforeach

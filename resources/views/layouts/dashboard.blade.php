@@ -322,6 +322,10 @@ function toggleNotifMenu(event) {
 }
 
 document.addEventListener('click', function(e) {
+    if (e.target.closest('a[href], button, input, select, textarea')) {
+        return;
+    }
+
     const profileMenu = document.getElementById('profile-menu');
     const notifMenu   = document.getElementById('notif-menu');
     if (!profileMenu.contains(e.target)) {
