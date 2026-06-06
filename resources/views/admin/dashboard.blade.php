@@ -17,7 +17,7 @@
 
 {{-- Stats globales --}}
 <p class="text-sm font-semibold text-gray-400 uppercase tracking-widest mb-3">Vue globale</p>
-<div style="display:grid; grid-template-columns: repeat(5, 1fr); gap:1rem;" class="mb-8">
+<div class="grid grid-cols-1 gap-4 mb-8 sm:grid-cols-2 xl:grid-cols-5">
 
     <div class="bg-white rounded-2xl p-5" style="box-shadow:0 4px 12px rgba(0,0,0,0.08);">
         <div class="flex items-center justify-between mb-3">
@@ -88,7 +88,7 @@
 
 {{-- Liens rapides --}}
 <p class="text-sm font-semibold text-gray-400 uppercase tracking-widest mb-3">Actions rapides</p>
-<div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:1rem;" class="mb-8">
+<div class="grid grid-cols-1 gap-4 mb-8 md:grid-cols-3">
 
     <a href="{{ route('admin.users') }}"
        class="bg-white rounded-2xl p-5 flex items-center gap-4 hover:shadow-lg transition"
@@ -134,8 +134,8 @@
 </div>
 
 {{-- Tableau professeurs --}}
-<div class="bg-white rounded-2xl p-6" style="box-shadow:0 4px 12px rgba(0,0,0,0.06);">
-    <div class="flex items-center justify-between mb-6">
+<div class="bg-white rounded-2xl p-4 sm:p-6" style="box-shadow:0 4px 12px rgba(0,0,0,0.06);">
+    <div class="flex flex-col gap-3 mb-6 sm:flex-row sm:items-center sm:justify-between">
         <div>
             <h2 class="font-semibold text-black">Professeurs inscrits</h2>
             <p class="text-sm text-gray-400 mt-0.5">{{ $totalProfesseurs }} professeurs au total</p>
@@ -151,7 +151,7 @@
     </div>
 
     <div class="overflow-x-auto">
-        <table class="w-full text-sm">
+        <table class="w-full min-w-[780px] text-sm">
             <thead>
                 <tr class="border-b border-gray-100">
                     <th class="text-left py-3 px-4 text-gray-400 font-medium text-sm uppercase tracking-wide">Professeur</th>

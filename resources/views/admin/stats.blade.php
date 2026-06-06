@@ -23,7 +23,7 @@
 
 {{-- Section 1 : Trafic --}}
 <p class="text-sm font-semibold text-gray-400 uppercase tracking-widest mb-3">Trafic</p>
-<div style="display:grid; grid-template-columns: repeat(4, 1fr); gap:1rem;" class="mb-8">
+<div class="grid grid-cols-1 gap-4 mb-8 sm:grid-cols-2 xl:grid-cols-4">
 
     {{-- Visiteurs uniques --}}
     <div class="bg-white rounded-2xl p-5" style="box-shadow:0 4px 12px rgba(0,0,0,0.08);">
@@ -85,7 +85,7 @@
 
 {{-- Section 2 : Conversion --}}
 <p class="text-sm font-semibold text-gray-400 uppercase tracking-widest mb-3">Conversion & Activité</p>
-<div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:1rem;" class="mb-8">
+<div class="grid grid-cols-1 gap-4 mb-8 md:grid-cols-3">
 
     <div class="bg-white rounded-2xl p-5" style="box-shadow:0 4px 12px rgba(0,0,0,0.08);">
         <div class="flex items-center justify-between mb-3">
@@ -129,12 +129,12 @@
 </div>
 
 {{-- Revenus --}}
-<div class="bg-white rounded-2xl p-6 mb-8 flex items-center justify-between" style="box-shadow:0 4px 12px rgba(0,0,0,0.08);">
-    <div>
+<div class="bg-white rounded-2xl p-5 sm:p-6 mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between" style="box-shadow:0 4px 12px rgba(0,0,0,0.08);">
+    <div class="min-w-0">
         <p class="text-sm text-gray-400 mb-1">Revenus totaux confirmés
             {{ $periode === 'all' ? 'depuis le début' : 'sur '.$periode.' jours' }}
         </p>
-        <p class="text-4xl font-bold text-green-500" style="font-family:'Poppins',sans-serif;">
+        <p class="text-3xl sm:text-4xl font-bold text-green-500 break-words" style="font-family:'Poppins',sans-serif;">
             {{ number_format($revenus, 0, ',', ' ') }} FCFA
         </p>
     </div>
@@ -147,29 +147,29 @@
 
 {{-- Graphiques principaux --}}
 <p class="text-sm font-semibold text-gray-400 uppercase tracking-widest mb-3">Évolution dans le temps</p>
-<div style="display:grid; grid-template-columns: 1fr 1fr; gap:1.5rem;" class="mb-8">
+<div class="grid grid-cols-1 gap-6 mb-8 xl:grid-cols-2">
 
-    <div class="bg-white rounded-2xl p-6" style="box-shadow:0 4px 12px rgba(0,0,0,0.06);">
+    <div class="bg-white rounded-2xl p-5 sm:p-6 min-w-0" style="box-shadow:0 4px 12px rgba(0,0,0,0.06);">
         <h2 class="font-semibold text-black mb-4 text-sm">Visiteurs uniques par jour</h2>
         <canvas id="chartVisiteurs" height="130"></canvas>
     </div>
 
-    <div class="bg-white rounded-2xl p-6" style="box-shadow:0 4px 12px rgba(0,0,0,0.06);">
+    <div class="bg-white rounded-2xl p-5 sm:p-6 min-w-0" style="box-shadow:0 4px 12px rgba(0,0,0,0.06);">
         <h2 class="font-semibold text-black mb-4 text-sm">Inscriptions par jour</h2>
         <canvas id="chartInscriptions" height="130"></canvas>
     </div>
 
 </div>
 
-<div style="display:grid; grid-template-columns: 1fr 1fr; gap:1.5rem;" class="mb-8">
+<div class="grid grid-cols-1 gap-6 mb-8 xl:grid-cols-2">
 
-    <div class="bg-white rounded-2xl p-6" style="box-shadow:0 4px 12px rgba(0,0,0,0.06);">
+    <div class="bg-white rounded-2xl p-5 sm:p-6 min-w-0" style="box-shadow:0 4px 12px rgba(0,0,0,0.06);">
         <h2 class="font-semibold text-black mb-4 text-sm">Réservations par jour</h2>
         <canvas id="chartReservations" height="130"></canvas>
     </div>
 
     {{-- Sources de trafic --}}
-    <div class="bg-white rounded-2xl p-6" style="box-shadow:0 4px 12px rgba(0,0,0,0.06);">
+    <div class="bg-white rounded-2xl p-5 sm:p-6 min-w-0" style="box-shadow:0 4px 12px rgba(0,0,0,0.06);">
         <h2 class="font-semibold text-black mb-4 text-sm">Sources de trafic</h2>
         @if($sources->isEmpty())
             <p class="text-sm text-gray-400">Pas encore de données.</p>
@@ -197,16 +197,16 @@
 
 {{-- Comportement : Devices, Browsers, OS --}}
 <p class="text-sm font-semibold text-gray-400 uppercase tracking-widest mb-3">Comportement des visiteurs</p>
-<div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:1.5rem;" class="mb-8">
+<div class="grid grid-cols-1 gap-6 mb-8 lg:grid-cols-3">
 
     {{-- Devices --}}
-    <div class="bg-white rounded-2xl p-6" style="box-shadow:0 4px 12px rgba(0,0,0,0.06);">
+    <div class="bg-white rounded-2xl p-5 sm:p-6 min-w-0" style="box-shadow:0 4px 12px rgba(0,0,0,0.06);">
         <h2 class="font-semibold text-black mb-4 text-sm">Appareils</h2>
         <canvas id="chartDevices" height="160"></canvas>
     </div>
 
     {{-- Browsers --}}
-    <div class="bg-white rounded-2xl p-6" style="box-shadow:0 4px 12px rgba(0,0,0,0.06);">
+    <div class="bg-white rounded-2xl p-5 sm:p-6 min-w-0" style="box-shadow:0 4px 12px rgba(0,0,0,0.06);">
         <h2 class="font-semibold text-black mb-4 text-sm">Navigateurs</h2>
         @if($browsers->isEmpty())
             <p class="text-sm text-gray-400">Pas encore de données.</p>
@@ -229,7 +229,7 @@
     </div>
 
     {{-- OS --}}
-    <div class="bg-white rounded-2xl p-6" style="box-shadow:0 4px 12px rgba(0,0,0,0.06);">
+    <div class="bg-white rounded-2xl p-5 sm:p-6 min-w-0" style="box-shadow:0 4px 12px rgba(0,0,0,0.06);">
         <h2 class="font-semibold text-black mb-4 text-sm">Systèmes d'exploitation</h2>
         @if($osList->isEmpty())
             <p class="text-sm text-gray-400">Pas encore de données.</p>
@@ -255,9 +255,9 @@
 
 {{-- Pages les plus vues --}}
 <p class="text-sm font-semibold text-gray-400 uppercase tracking-widest mb-3">Pages & Contenu</p>
-<div style="display:grid; grid-template-columns: 1fr 1fr; gap:1.5rem;">
+<div class="grid grid-cols-1 gap-6 xl:grid-cols-2">
 
-    <div class="bg-white rounded-2xl p-6" style="box-shadow:0 4px 12px rgba(0,0,0,0.06);">
+    <div class="bg-white rounded-2xl p-5 sm:p-6 min-w-0" style="box-shadow:0 4px 12px rgba(0,0,0,0.06);">
         <h2 class="font-semibold text-black mb-4 text-sm">Pages les plus visitées</h2>
         @if($pagesLesPlusVues->isEmpty())
             <p class="text-sm text-gray-400">Pas encore de données.</p>
@@ -279,7 +279,7 @@
         @endif
     </div>
 
-    <div class="bg-white rounded-2xl p-6" style="box-shadow:0 4px 12px rgba(0,0,0,0.06);">
+    <div class="bg-white rounded-2xl p-5 sm:p-6 min-w-0" style="box-shadow:0 4px 12px rgba(0,0,0,0.06);">
         <h2 class="font-semibold text-black mb-4 text-sm">Profils professeurs les plus visités</h2>
         @if($profsLesPlusVus->isEmpty())
             <p class="text-sm text-gray-400">Pas encore de données.</p>

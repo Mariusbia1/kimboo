@@ -8,12 +8,12 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="font-sans bg-gray-50">
+<body class="font-sans bg-gray-50 overflow-x-hidden">
 
-<div class="flex min-h-screen">
+<div class="flex min-h-screen max-w-full overflow-x-hidden">
 
     <!-- SIDEBAR -->
-    <aside class="flex flex-col w-64 min-h-screen shrink-0" style="background:#0f0f0f;">
+    <aside class="hidden lg:flex flex-col w-64 min-h-screen shrink-0" style="background:#0f0f0f;">
 
         <!-- Logo -->
         <div class="px-6 py-6 border-b border-white/10">
@@ -97,19 +97,19 @@
     </aside>
 
     <!-- CONTENU PRINCIPAL -->
-    <div class="flex flex-col flex-1 min-h-screen">
+    <div class="flex flex-col flex-1 min-w-0 min-h-screen">
 
         <!-- Topbar -->
-        <header class="flex items-center justify-between px-8 py-4 bg-white border-b border-gray-100">
-            <div>
+        <header class="flex items-center justify-between gap-4 px-4 py-4 bg-white border-b border-gray-100 sm:px-6 lg:px-8">
+            <div class="min-w-0">
                 <h1 class="text-lg font-bold text-black" style="font-family:'Poppins',sans-serif;">@yield('page-title')</h1>
                 <p class="text-sm text-gray-400">@yield('page-subtitle')</p>
             </div>
-            <div class="flex items-center gap-3">
+            <div class="flex items-center gap-2 sm:gap-3 shrink-0">
 
                 <!-- Cloche notifications -->
                 <div class="relative" id="notif-menu">
-                    <button onclick="toggleNotifMenu()"
+                    <button type="button" onclick="toggleNotifMenu(event)"
                         class="relative flex items-center justify-center transition bg-gray-100 w-9 h-9 rounded-xl hover:bg-gray-200">
                         <svg class="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6 6 0 10-12 0v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
@@ -124,8 +124,7 @@
 
                     <!-- Dropdown notifications -->
                     <div id="notif-dropdown"
-                         class="absolute right-0 z-50 hidden mt-2 bg-white border border-gray-100 shadow-xl rounded-2xl"
-                         style="width:340px;">
+                         class="absolute right-0 z-50 hidden mt-2 bg-white border border-gray-100 shadow-xl rounded-2xl w-[calc(100vw-2rem)] max-w-[340px]">
 
                         <div class="flex items-center justify-between px-4 py-3 border-b border-gray-100">
                             <p class="text-sm font-semibold text-black">Notifications</p>
@@ -220,7 +219,7 @@
 
                 <!-- Dropdown profil -->
                 <div class="relative" id="profile-menu">
-                    <button onclick="toggleProfileMenu()"
+                    <button type="button" onclick="toggleProfileMenu(event)"
                         class="flex items-center gap-2 px-3 py-2 transition rounded-xl hover:bg-gray-100">
                         <x-avatar :user="auth()->user()" size="8" rounded="full"/>
                         <div class="hidden text-left sm:block">
@@ -270,19 +269,54 @@ $profilRoute = match(auth()->user()->role) {
             </div>
         </header>
 
-        <main class="flex-1 p-8">
+        <nav class="lg:hidden bg-white border-b border-gray-100 max-w-full">
+            <div class="flex flex-wrap gap-2 px-4 py-3">
+                @if(auth()->user()->role === 'admin')
+                    <a href="{{ route('admin.dashboard') }}" class="px-3 py-2 rounded-xl text-sm font-medium whitespace-nowrap {{ request()->routeIs('admin.dashboard') ? 'text-black' : 'text-gray-500' }}" style="{{ request()->routeIs('admin.dashboard') ? 'background:#FCB315;' : 'background:#F3F4F6;' }}">Tableau de bord</a>
+                    <a href="{{ route('admin.users') }}" class="px-3 py-2 rounded-xl text-sm font-medium whitespace-nowrap {{ request()->routeIs('admin.users') ? 'text-black' : 'text-gray-500' }}" style="{{ request()->routeIs('admin.users') ? 'background:#FCB315;' : 'background:#F3F4F6;' }}">Utilisateurs</a>
+                    <a href="{{ route('admin.cours') }}" class="px-3 py-2 rounded-xl text-sm font-medium whitespace-nowrap {{ request()->routeIs('admin.cours*') ? 'text-black' : 'text-gray-500' }}" style="{{ request()->routeIs('admin.cours*') ? 'background:#FCB315;' : 'background:#F3F4F6;' }}">Cours</a>
+                    <a href="{{ route('admin.stats') }}" class="px-3 py-2 rounded-xl text-sm font-medium whitespace-nowrap {{ request()->routeIs('admin.stats') ? 'text-black' : 'text-gray-500' }}" style="{{ request()->routeIs('admin.stats') ? 'background:#FCB315;' : 'background:#F3F4F6;' }}">Stats</a>
+                    <a href="{{ route('admin.parametres') }}" class="px-3 py-2 rounded-xl text-sm font-medium whitespace-nowrap {{ request()->routeIs('admin.parametres') ? 'text-black' : 'text-gray-500' }}" style="{{ request()->routeIs('admin.parametres') ? 'background:#FCB315;' : 'background:#F3F4F6;' }}">Paramètres</a>
+                @elseif(auth()->user()->role === 'professeur')
+                    <a href="{{ route('professeur.dashboard') }}" class="px-3 py-2 rounded-xl text-sm font-medium whitespace-nowrap {{ request()->routeIs('professeur.dashboard') ? 'text-black' : 'text-gray-500' }}" style="{{ request()->routeIs('professeur.dashboard') ? 'background:#FCB315;' : 'background:#F3F4F6;' }}">Tableau de bord</a>
+                    <a href="{{ route('professeur.create-cours') }}" class="px-3 py-2 rounded-xl text-sm font-medium whitespace-nowrap {{ request()->routeIs('professeur.create-cours') ? 'text-black' : 'text-gray-500' }}" style="{{ request()->routeIs('professeur.create-cours') ? 'background:#FCB315;' : 'background:#F3F4F6;' }}">Mes cours</a>
+                    <a href="{{ route('professeur.reservations') }}" class="px-3 py-2 rounded-xl text-sm font-medium whitespace-nowrap {{ request()->routeIs('professeur.reservations') ? 'text-black' : 'text-gray-500' }}" style="{{ request()->routeIs('professeur.reservations') ? 'background:#FCB315;' : 'background:#F3F4F6;' }}">Réservations</a>
+                    <a href="{{ route('professeur.calendrier') }}" class="px-3 py-2 rounded-xl text-sm font-medium whitespace-nowrap {{ request()->routeIs('professeur.calendrier') ? 'text-black' : 'text-gray-500' }}" style="{{ request()->routeIs('professeur.calendrier') ? 'background:#FCB315;' : 'background:#F3F4F6;' }}">Calendrier</a>
+                    <a href="{{ route('messages.index') }}" class="px-3 py-2 rounded-xl text-sm font-medium whitespace-nowrap {{ request()->routeIs('messages.*') ? 'text-black' : 'text-gray-500' }}" style="{{ request()->routeIs('messages.*') ? 'background:#FCB315;' : 'background:#F3F4F6;' }}">Messages</a>
+                    <a href="{{ route('professeur.edit-profil') }}" class="px-3 py-2 rounded-xl text-sm font-medium whitespace-nowrap {{ request()->routeIs('professeur.edit-profil') ? 'text-black' : 'text-gray-500' }}" style="{{ request()->routeIs('professeur.edit-profil') ? 'background:#FCB315;' : 'background:#F3F4F6;' }}">Profil</a>
+                @else
+                    <a href="{{ route('eleve.dashboard') }}" class="px-3 py-2 rounded-xl text-sm font-medium whitespace-nowrap {{ request()->routeIs('eleve.dashboard') ? 'text-black' : 'text-gray-500' }}" style="{{ request()->routeIs('eleve.dashboard') ? 'background:#FCB315;' : 'background:#F3F4F6;' }}">Tableau de bord</a>
+                    <a href="{{ route('cours.index') }}" class="px-3 py-2 rounded-xl text-sm font-medium whitespace-nowrap {{ request()->routeIs('cours.index') ? 'text-black' : 'text-gray-500' }}" style="{{ request()->routeIs('cours.index') ? 'background:#FCB315;' : 'background:#F3F4F6;' }}">Trouver un prof</a>
+                    <a href="{{ route('eleve.mes-cours') }}" class="px-3 py-2 rounded-xl text-sm font-medium whitespace-nowrap {{ request()->routeIs('eleve.mes-cours') ? 'text-black' : 'text-gray-500' }}" style="{{ request()->routeIs('eleve.mes-cours') ? 'background:#FCB315;' : 'background:#F3F4F6;' }}">Mes cours</a>
+                    <a href="{{ route('eleve.reservations') }}" class="px-3 py-2 rounded-xl text-sm font-medium whitespace-nowrap {{ request()->routeIs('eleve.reservations') ? 'text-black' : 'text-gray-500' }}" style="{{ request()->routeIs('eleve.reservations') ? 'background:#FCB315;' : 'background:#F3F4F6;' }}">Réservations</a>
+                    <a href="{{ route('eleve.calendrier') }}" class="px-3 py-2 rounded-xl text-sm font-medium whitespace-nowrap {{ request()->routeIs('eleve.calendrier') ? 'text-black' : 'text-gray-500' }}" style="{{ request()->routeIs('eleve.calendrier') ? 'background:#FCB315;' : 'background:#F3F4F6;' }}">Calendrier</a>
+                    <a href="{{ route('favoris.index') }}" class="px-3 py-2 rounded-xl text-sm font-medium whitespace-nowrap {{ request()->routeIs('favoris.index') ? 'text-black' : 'text-gray-500' }}" style="{{ request()->routeIs('favoris.index') ? 'background:#FCB315;' : 'background:#F3F4F6;' }}">Favoris</a>
+                    <a href="{{ route('messages.index') }}" class="px-3 py-2 rounded-xl text-sm font-medium whitespace-nowrap {{ request()->routeIs('messages.*') ? 'text-black' : 'text-gray-500' }}" style="{{ request()->routeIs('messages.*') ? 'background:#FCB315;' : 'background:#F3F4F6;' }}">Messages</a>
+                    <a href="{{ route('eleve.edit-profil') }}" class="px-3 py-2 rounded-xl text-sm font-medium whitespace-nowrap {{ request()->routeIs('eleve.edit-profil') ? 'text-black' : 'text-gray-500' }}" style="{{ request()->routeIs('eleve.edit-profil') ? 'background:#FCB315;' : 'background:#F3F4F6;' }}">Profil</a>
+                @endif
+                <a href="{{ url('/') }}"
+                   class="px-3 py-2 rounded-xl text-sm font-semibold whitespace-nowrap text-white"
+                   style="background:#1A2B3C;">
+                    Retour au site
+                </a>
+            </div>
+        </nav>
+
+        <main class="flex-1 p-4 sm:p-6 lg:p-8 min-w-0 break-words">
             @yield('content')
         </main>
     </div>
 </div>
 
 <script>
-function toggleProfileMenu() {
+function toggleProfileMenu(event) {
+    if (event) event.stopPropagation();
     document.getElementById('profile-dropdown').classList.toggle('hidden');
     document.getElementById('notif-dropdown').classList.add('hidden');
 }
 
-function toggleNotifMenu() {
+function toggleNotifMenu(event) {
+    if (event) event.stopPropagation();
     document.getElementById('notif-dropdown').classList.toggle('hidden');
     document.getElementById('profile-dropdown').classList.add('hidden');
 }

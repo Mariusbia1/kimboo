@@ -12,20 +12,20 @@
 </div>
 @endif
 
-<div style="display:grid; grid-template-columns: 1fr 1fr; gap:1.5rem;">
+<div class="grid grid-cols-1 gap-6 xl:grid-cols-2">
 
     <!-- Formulaire -->
-    <div style="display:flex; flex-direction:column; gap:1.5rem;">
+    <div class="flex min-w-0 flex-col gap-6">
 
         <!-- Infos générales -->
-        <div class="bg-white rounded-2xl p-6" style="box-shadow:0 4px 12px rgba(0,0,0,0.06);">
+        <div class="bg-white rounded-2xl p-5 sm:p-6" style="box-shadow:0 4px 12px rgba(0,0,0,0.06);">
             <h2 class="font-bold text-black text-lg mb-5" style="font-family:'Plus Jakarta Sans',sans-serif;">
                 Informations générales
             </h2>
             <form method="POST" action="{{ route('professeur.update-profil') }}"  enctype="multipart/form-data">
                 @csrf
                 <!-- Photo de profil -->
-                <div class="flex items-center gap-5 mb-2">
+                <div class="flex flex-col gap-4 mb-2 sm:flex-row sm:items-center sm:gap-5">
                     <!-- Avatar actuel -->
                     <div class="shrink-0">
                         @if($user->avatar)
@@ -42,9 +42,9 @@
                     </div>
 
                     <!-- Upload -->
-                    <div class="flex-1">
+                    <div class="flex-1 min-w-0">
                         <label class="text-sm font-semibold text-gray-700 mb-1.5 block">Photo de profil</label>
-                        <label for="avatar-input" class="flex items-center gap-2 px-4 py-2.5 rounded-xl border-2 border-dashed border-gray-200 cursor-pointer hover:border-yellow-400 transition bg-gray-50 w-fit">
+                        <label for="avatar-input" class="inline-flex max-w-full items-center gap-2 px-4 py-2.5 rounded-xl border-2 border-dashed border-gray-200 cursor-pointer hover:border-yellow-400 transition bg-gray-50">
                             <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                             </svg>
@@ -71,7 +71,7 @@
                             placeholder="Décrivez vos méthodes d'enseignement...">{{ old('a_propos_cours', $profile->a_propos_cours) }}</textarea>
                     </div>
 
-                    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1rem;">
+                    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
                         <div>
                             <label class="text-sm font-semibold text-gray-700 mb-1.5 block">Tarif horaire (Fcfa)</label>
                             <input type="number" name="hourly_rate" value="{{ old('hourly_rate', $profile->hourly_rate) }}"
@@ -87,7 +87,7 @@
                         </div>
                     </div>
 
-                    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1rem;">
+                    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
                         <div>
                             <label class="text-sm font-semibold text-gray-700 mb-1.5 block">Ville</label>
                             <input type="text" name="ville" value="{{ old('ville', $user->ville) }}"
@@ -104,7 +104,7 @@
                     <!-- Lieu du cours -->
                     <div>
                         <label class="text-sm font-semibold text-gray-700 mb-3 block">Lieu du cours</label>
-                        <div style="display:flex; gap:0.75rem; flex-wrap:wrap;">
+                        <div class="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
                             @foreach([
                                 ['value' => 'chez_prof', 'label' => 'Chez le prof', 'icon' => '🏠'],
                                 ['value' => 'chez_eleve', 'label' => 'Chez l\'élève', 'icon' => '📍'],
@@ -153,21 +153,21 @@
         @php $parcours_list = is_array($profile->parcours_academique) ? $profile->parcours_academique : json_decode($profile->parcours_academique, true) ?? []; @endphp
 @if(count($parcours_list) > 0)
             @foreach($parcours_list as $index => $parcours)
-            <div class="parcours-item rounded-xl border-2 border-gray-100 p-4 bg-gray-50" style="display:grid; grid-template-columns: 1fr 1fr 1fr auto; gap:0.75rem; align-items:center;">
+            <div class="parcours-item grid grid-cols-1 gap-3 rounded-xl border-2 border-gray-100 p-4 bg-gray-50 sm:grid-cols-[1fr_1fr] xl:grid-cols-[1fr_1fr_1fr_auto] xl:items-center">
                 <input type="text" name="parcours_academique[{{ $index }}][annees]"
                     value="{{ $parcours['annees'] ?? '' }}"
                     placeholder="Ex: 2018 - 2020"
-                    class="border-2 border-gray-100 rounded-xl px-3 py-2 text-sm outline-none focus:border-yellow-400 bg-white"/>
+                    class="w-full border-2 border-gray-100 rounded-xl px-3 py-2 text-sm outline-none focus:border-yellow-400 bg-white"/>
                 <input type="text" name="parcours_academique[{{ $index }}][diplome]"
                     value="{{ $parcours['diplome'] ?? '' }}"
                     placeholder="Ex: Master en Physique"
-                    class="border-2 border-gray-100 rounded-xl px-3 py-2 text-sm outline-none focus:border-yellow-400 bg-white"/>
+                    class="w-full border-2 border-gray-100 rounded-xl px-3 py-2 text-sm outline-none focus:border-yellow-400 bg-white"/>
                 <input type="text" name="parcours_academique[{{ $index }}][etablissement]"
                     value="{{ $parcours['etablissement'] ?? '' }}"
                     placeholder="Ex: Université de..."
-                    class="border-2 border-gray-100 rounded-xl px-3 py-2 text-sm outline-none focus:border-yellow-400 bg-white"/>
+                    class="w-full border-2 border-gray-100 rounded-xl px-3 py-2 text-sm outline-none focus:border-yellow-400 bg-white"/>
                 <button type="button" onclick="this.closest('.parcours-item').remove()"
-                    class="w-8 h-8 rounded-lg flex items-center justify-center bg-red-100 text-red-500 hover:bg-red-200 transition shrink-0">
+                    class="w-full h-10 rounded-lg flex items-center justify-center bg-red-100 text-red-500 hover:bg-red-200 transition sm:col-span-2 xl:col-span-1 xl:w-8 xl:h-8 shrink-0">
                     ✕
                 </button>
             </div>
@@ -204,7 +204,7 @@
     </div>
 
     <!-- Aperçu -->
-    <div class="bg-white rounded-2xl p-6 sticky top-24" style="box-shadow:0 4px 12px rgba(0,0,0,0.06); height:fit-content;">
+    <div class="bg-white rounded-2xl p-5 sm:p-6 xl:sticky xl:top-24 min-w-0" style="box-shadow:0 4px 12px rgba(0,0,0,0.06); height:fit-content;">
         <h2 class="font-bold text-black text-lg mb-5" style="font-family:'Plus Jakarta Sans',sans-serif;">
             Aperçu de votre profil
         </h2>
@@ -238,7 +238,7 @@
         @endif
 
         <div class="rounded-xl p-4 text-center mb-4" style="background:#ffffff; border:2px solid #f0f0f0;">
-    <p class="text-4xl font-bold text-black" style="font-family:'Plus Jakarta Sans',sans-serif;">{{ number_format($profile->hourly_rate, 0, ',', ' ') }} Fcfa</p>
+    <p class="text-3xl sm:text-4xl font-bold text-black break-words" style="font-family:'Plus Jakarta Sans',sans-serif;">{{ number_format($profile->hourly_rate, 0, ',', ' ') }} Fcfa</p>
     <p class="text-sm text-gray-400 mt-0.5">par heure</p>
 </div>
 
@@ -303,20 +303,19 @@ function addParcours() {
     const container = document.getElementById('parcours-container');
     const index = parcoursCount++;
     const div = document.createElement('div');
-    div.className = 'parcours-item rounded-xl border-2 border-gray-100 p-4 bg-gray-50';
-    div.style.cssText = 'display:grid; grid-template-columns: 1fr 1fr 1fr auto; gap:0.75rem; align-items:center;';
+    div.className = 'parcours-item grid grid-cols-1 gap-3 rounded-xl border-2 border-gray-100 p-4 bg-gray-50 sm:grid-cols-[1fr_1fr] xl:grid-cols-[1fr_1fr_1fr_auto] xl:items-center';
     div.innerHTML = `
         <input type="text" name="parcours_academique[${index}][annees]"
             placeholder="Ex: 2018 - 2020"
-            class="border-2 border-gray-100 rounded-xl px-3 py-2 text-sm outline-none focus:border-yellow-400 bg-white"/>
+            class="w-full border-2 border-gray-100 rounded-xl px-3 py-2 text-sm outline-none focus:border-yellow-400 bg-white"/>
         <input type="text" name="parcours_academique[${index}][diplome]"
             placeholder="Ex: Master en Physique"
-            class="border-2 border-gray-100 rounded-xl px-3 py-2 text-sm outline-none focus:border-yellow-400 bg-white"/>
+            class="w-full border-2 border-gray-100 rounded-xl px-3 py-2 text-sm outline-none focus:border-yellow-400 bg-white"/>
         <input type="text" name="parcours_academique[${index}][etablissement]"
             placeholder="Ex: Université de..."
-            class="border-2 border-gray-100 rounded-xl px-3 py-2 text-sm outline-none focus:border-yellow-400 bg-white"/>
+            class="w-full border-2 border-gray-100 rounded-xl px-3 py-2 text-sm outline-none focus:border-yellow-400 bg-white"/>
         <button type="button" onclick="this.closest('.parcours-item').remove()"
-            class="w-8 h-8 rounded-lg flex items-center justify-center bg-red-100 text-red-500 hover:bg-red-200 transition shrink-0">
+            class="w-full h-10 rounded-lg flex items-center justify-center bg-red-100 text-red-500 hover:bg-red-200 transition sm:col-span-2 xl:col-span-1 xl:w-8 xl:h-8 shrink-0">
             ✕
         </button>
     `;

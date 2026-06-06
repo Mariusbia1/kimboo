@@ -12,11 +12,11 @@
 </div>
 @endif
 
-<div class="max-w-6xl mx-auto px-6 py-12">
-    <div style="display:grid; grid-template-columns: 340px 1fr; gap:2rem; align-items:start;">
+<div class="max-w-6xl mx-auto px-4 py-8 sm:px-6 lg:py-12">
+    <div class="grid grid-cols-1 gap-8 lg:grid-cols-[340px_minmax(0,1fr)] lg:items-start">
 
         <!-- Colonne gauche -->
-<div class="bg-white rounded-2xl p-6" style="position:sticky; top:90px;">
+<div class="bg-white rounded-2xl p-5 sm:p-6 lg:sticky lg:top-[90px]">
 
     <!-- Photo en carré centré -->
 <div class="relative mx-auto mb-4" style="width:120px; height:120px;">
@@ -61,7 +61,7 @@
     <!-- Nom + badge -->
     <div class="text-center mb-3">
         <div class="flex items-center justify-center gap-2 flex-wrap">
-            <h1 class="text-4xl font-bold text-black" style="font-family:'Plus Jakarta Sans',sans-serif;">
+            <h1 class="text-3xl sm:text-4xl font-bold text-black break-words" style="font-family:'Plus Jakarta Sans',sans-serif;">
                 {{ $profile->user->name }}
             </h1>
             @if($profile->is_verified)
@@ -91,7 +91,7 @@
 
     <!-- Tarif -->
     <div class="text-center mb-4">
-        <p class="text-4xl font-bold text-black" style="font-family:'Plus Jakarta Sans',sans-serif;">
+        <p class="text-3xl sm:text-4xl font-bold text-black" style="font-family:'Plus Jakarta Sans',sans-serif;">
             {{ number_format($profile->hourly_rate, 0, ',', ' ') }} FCFA / H
         </p>
         @if($profile->first_course_free)
@@ -179,10 +179,10 @@
 </div>
 
         <!-- Colonne droite -->
-        <div style="display:flex; flex-direction:column; gap:1.5rem;">
+        <div class="flex min-w-0 flex-col gap-6">
 
             <!-- À propos du prof -->
-            <div class="bg-white rounded-2xl p-6" style="box-shadow:0 4px 12px rgba(0,0,0,0.08);">
+            <div class="bg-white rounded-2xl p-5 sm:p-6" style="box-shadow:0 4px 12px rgba(0,0,0,0.08);">
                 <h2 class="font-bold text-black text-lg mb-3" style="font-family:'Plus Jakarta Sans',sans-serif;">
                     À propos de {{ explode(' ', $profile->user->name)[0] }}
                 </h2>
@@ -191,7 +191,7 @@
 
             <!-- À propos du cours -->
             @if($profile->a_propos_cours)
-            <div class="bg-white rounded-2xl p-6" style="box-shadow:0 4px 12px rgba(0,0,0,0.08);">
+            <div class="bg-white rounded-2xl p-5 sm:p-6" style="box-shadow:0 4px 12px rgba(0,0,0,0.08);">
                 <h2 class="font-bold text-black text-lg mb-3" style="font-family:'Plus Jakarta Sans',sans-serif;">
                     À propos du cours
                 </h2>
@@ -203,11 +203,11 @@
             <!-- Parcours académique -->
 @php $parcours_list = is_array($profile->parcours_academique) ? $profile->parcours_academique : json_decode($profile->parcours_academique, true) ?? []; @endphp
 @if(count($parcours_list) > 0)
-<div class="bg-white rounded-2xl p-6" style="box-shadow:0 4px 12px rgba(0,0,0,0.08);">
+<div class="bg-white rounded-2xl p-5 sm:p-6" style="box-shadow:0 4px 12px rgba(0,0,0,0.08);">
     <h2 class="font-bold text-black text-lg mb-5" style="font-family:'Plus Jakarta Sans',sans-serif;">
         Parcours académique
     </h2>
-    <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:1rem;">
+    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
         @foreach($parcours_list as $parcours)
         <div class="p-4 rounded-xl border-2 border-gray-100">
             <p class="text-sm mb-2" style="color:#2b2b2b;">{{ $parcours['annees'] }}</p>
@@ -221,7 +221,7 @@
 
             <!-- Vidéo de présentation -->
             @if($profile->video_url)
-            <div class="bg-white rounded-2xl p-6" style="box-shadow:0 4px 12px rgba(0,0,0,0.08);">
+            <div class="bg-white rounded-2xl p-5 sm:p-6" style="box-shadow:0 4px 12px rgba(0,0,0,0.08);">
                 <h2 class="font-bold text-black text-lg mb-4" style="font-family:'Plus Jakarta Sans',sans-serif;">
                     Vidéo de présentation
                 </h2>
@@ -242,14 +242,14 @@
             @endif
 
             <!-- Cours proposés -->
-<div class="bg-white rounded-2xl p-6" style="box-shadow:0 4px 12px rgba(0,0,0,0.08);">
+<div class="bg-white rounded-2xl p-5 sm:p-6" style="box-shadow:0 4px 12px rgba(0,0,0,0.08);">
     <h2 class="font-bold text-black text-lg mb-4" style="font-family:'Plus Jakarta Sans',sans-serif;">
         Cours proposés
     </h2>
-    <div style="display:grid; grid-template-columns: repeat(2, 1fr); gap:1rem;">
+    <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
         @forelse($profile->courses as $course)
         <div class="p-4 rounded-xl border-2 border-gray-100 hover:border-yellow-300 transition">
-            <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:8px;">
+            <div class="flex flex-col gap-2 mb-2 sm:flex-row sm:items-start sm:justify-between">
                 <p class="font-semibold text-black text-sm">{{ $course->title }}</p>
                 <div class="flex gap-1 shrink-0 ml-2">
                     @if($course->is_group)
@@ -287,7 +287,7 @@
 </div>
 
             <!-- Avis des élèves -->
-            <div class="bg-white rounded-2xl p-6" style="box-shadow:0 4px 12px rgba(0,0,0,0.08);">
+            <div class="bg-white rounded-2xl p-5 sm:p-6" style="box-shadow:0 4px 12px rgba(0,0,0,0.08);">
                 <h2 class="font-bold text-black text-lg mb-4" style="font-family:'Plus Jakarta Sans',sans-serif;">
                     Avis des élèves
                 </h2>
@@ -295,12 +295,12 @@
                     $reviews = $profile->reviews()->with('user')->latest()->take(5)->get();
                 @endphp
                 @forelse($reviews as $review)
-                <div class="flex gap-4 py-4 border-b border-gray-50 last:border-0">
+                <div class="flex flex-col gap-3 py-4 border-b border-gray-50 last:border-0 sm:flex-row sm:gap-4">
                     <div class="w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold text-black shrink-0" style="background:#FCB315;">
                         {{ strtoupper(substr($review->user->name, 0, 1)) }}
                     </div>
                     <div class="flex-1">
-                        <div class="flex items-center justify-between mb-1">
+                        <div class="flex flex-col gap-1 mb-1 sm:flex-row sm:items-center sm:justify-between">
                             <p class="font-semibold text-black text-sm">{{ $review->user->name }}</p>
                             <div class="flex gap-0.5">
                                 @for($i = 1; $i <= 5; $i++)
@@ -323,7 +323,7 @@
 
             <!-- Réservation -->
             @auth
-            <div id="reserver" class="bg-white rounded-2xl p-6" style="box-shadow:0 4px 12px rgba(0,0,0,0.08);">
+            <div id="reserver" class="bg-white rounded-2xl p-5 sm:p-6" style="box-shadow:0 4px 12px rgba(0,0,0,0.08);">
                 <h2 class="font-bold text-black text-lg mb-5" style="font-family:'Plus Jakarta Sans',sans-serif;">
                     Réserver un cours
                 </h2>
@@ -338,7 +338,7 @@
                                 @endforeach
                             </select>
                         </div>
-                        <div style="display:grid; grid-template-columns: repeat(2, 1fr); gap:1rem;">
+                        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
                             <div>
                                 <label class="text-sm font-semibold text-gray-700 mb-1.5 block">Date et heure</label>
                                 <input type="datetime-local" name="scheduled_at"
@@ -368,12 +368,12 @@
 </div>
 
 <!-- PROFILS SIMILAIRES -->
-<section class="py-12 px-6" style="background:#F7F7F7;">
+<section class="py-10 px-4 sm:px-6 lg:py-12" style="background:#F7F7F7;">
     <div class="max-w-6xl mx-auto">
         <h2 class="font-bold text-black text-xl mb-6" style="font-family:'Plus Jakarta Sans',sans-serif;">
             Professeurs similaires
         </h2>
-        <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:1.5rem;">
+        <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
             @foreach($similaires as $sim)
             <div class="bg-white rounded-2xl p-5 relative" style="box-shadow:0 4px 12px rgba(0,0,0,0.08);">
             @if($sim->is_verified)

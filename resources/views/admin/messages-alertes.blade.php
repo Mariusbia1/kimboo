@@ -16,7 +16,7 @@
 @endif
 
 {{-- Stats rapides --}}
-<div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:1rem;" class="mb-8">
+<div class="grid grid-cols-1 gap-4 mb-8 sm:grid-cols-2 lg:grid-cols-3">
     <div class="bg-white rounded-2xl p-5" style="box-shadow:0 4px 12px rgba(0,0,0,0.08);">
         <div class="flex items-center justify-between mb-3">
             <span class="text-sm text-gray-400">En attente</span>
@@ -64,14 +64,14 @@
 </div>
 
 {{-- Liste alertes --}}
-<div class="bg-white rounded-2xl p-6" style="box-shadow:0 4px 12px rgba(0,0,0,0.06);">
-    <div class="flex items-center justify-between mb-6">
+<div class="bg-white rounded-2xl p-5 sm:p-6" style="box-shadow:0 4px 12px rgba(0,0,0,0.06);">
+    <div class="flex flex-col gap-3 mb-6 sm:flex-row sm:items-center sm:justify-between">
         <div>
             <h2 class="font-semibold text-black">Alertes détectées</h2>
             <p class="text-sm text-gray-400 mt-0.5">{{ $alertes->total() }} alertes au total</p>
         </div>
         <a href="{{ route('admin.messages.conversations') }}"
-           class="text-sm font-semibold px-4 py-2 rounded-xl text-black transition hover:opacity-90 flex items-center gap-2"
+           class="text-sm font-semibold px-4 py-2 rounded-xl text-black transition hover:opacity-90 inline-flex items-center justify-center gap-2"
            style="background:#FCB315;">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
@@ -94,11 +94,11 @@
     <div class="space-y-4">
         @foreach($alertes as $alerte)
         <div class="border rounded-2xl p-5 {{ $alerte->status === 'pending' ? 'border-red-200 bg-red-50' : ($alerte->status === 'reviewed' ? 'border-green-200 bg-green-50' : 'border-gray-200 bg-gray-50') }}">
-            <div class="flex items-start justify-between gap-4">
+            <div class="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
 
                 {{-- Infos alerte --}}
-                <div class="flex-1">
-                    <div class="flex items-center gap-3 mb-3">
+                <div class="flex-1 min-w-0">
+                    <div class="flex flex-wrap items-center gap-3 mb-3">
 
                         {{-- Badge type --}}
                         @if($alerte->alert_type === 'phone')
@@ -242,21 +242,21 @@
                 <h3 class="font-semibold text-black text-sm">Comptes suspects</h3>
                 <p class="text-sm text-gray-400">Utilisateurs avec 2+ tentatives de messages bloqués</p>
             </div>
-            <span class="ml-auto px-2.5 py-1 rounded-full text-sm font-bold bg-red-100 text-red-700">
+            <span class="sm:ml-auto px-2.5 py-1 rounded-full text-sm font-bold bg-red-100 text-red-700">
                 {{ $comptesSuspects->total() }}
             </span>
         </div>
         <div class="space-y-2">
             @foreach($comptesSuspects as $suspect)
-            <div class="flex items-center justify-between p-3 rounded-xl bg-red-50">
-                <div class="flex items-center gap-3">
+            <div class="flex flex-col gap-3 p-3 rounded-xl sm:flex-row sm:items-center sm:justify-between bg-red-50">
+                <div class="flex items-center gap-3 min-w-0">
                     <x-avatar :user="$suspect" size="8" rounded="full"/>
                     <div>
                         <p class="font-medium text-black text-sm">{{ $suspect->name }}</p>
                         <p class="text-sm text-gray-500">{{ $suspect->email }}</p>
                     </div>
                 </div>
-                <div class="flex items-center gap-3">
+                <div class="flex flex-wrap items-center gap-3">
                     <span class="text-sm font-bold text-red-600">{{ $suspect->message_attempts }} tentative(s)</span>
                     @if($suspect->message_blocked_until && now()->lt($suspect->message_blocked_until))
                     <span class="px-2 py-0.5 rounded-full text-sm bg-red-100 text-red-700">
@@ -293,14 +293,14 @@
                 <h3 class="font-semibold text-black text-sm">Cours en attente depuis 48h+</h3>
                 <p class="text-sm text-gray-400">Ces cours attendent votre validation depuis plus de 2 jours</p>
             </div>
-            <span class="ml-auto px-2.5 py-1 rounded-full text-sm font-bold bg-amber-100 text-amber-700">
+            <span class="sm:ml-auto px-2.5 py-1 rounded-full text-sm font-bold bg-amber-100 text-amber-700">
                 {{ $coursEnAttente48h->total() }}
             </span>
         </div>
         <div class="space-y-2">
             @foreach($coursEnAttente48h as $cours)
-            <div class="flex items-center justify-between p-3 rounded-xl bg-amber-50">
-                <div class="flex items-center gap-3">
+            <div class="flex flex-col gap-3 p-3 rounded-xl sm:flex-row sm:items-center sm:justify-between bg-amber-50">
+                <div class="flex items-center gap-3 min-w-0">
                     <x-avatar :user="$cours->teacherProfile->user" size="8" rounded="full"/>
                     <div>
                         <p class="font-medium text-black text-sm">{{ $cours->title }}</p>
@@ -336,14 +336,14 @@
                 <h3 class="font-semibold text-black text-sm">Professeurs non certifiés depuis 7j+</h3>
                 <p class="text-sm text-gray-400">Ces professeurs attendent leur certification depuis plus d'une semaine</p>
             </div>
-            <span class="ml-auto px-2.5 py-1 rounded-full text-sm font-bold bg-indigo-100 text-indigo-700">
+            <span class="sm:ml-auto px-2.5 py-1 rounded-full text-sm font-bold bg-indigo-100 text-indigo-700">
                 {{ $profsNonVerifies->total() }}
             </span>
         </div>
         <div class="space-y-2">
             @foreach($profsNonVerifies as $profile)
-            <div class="flex items-center justify-between p-3 rounded-xl bg-indigo-50">
-                <div class="flex items-center gap-3">
+            <div class="flex flex-col gap-3 p-3 rounded-xl sm:flex-row sm:items-center sm:justify-between bg-indigo-50">
+                <div class="flex items-center gap-3 min-w-0">
                     <x-avatar :user="$profile->user" size="8" rounded="full"/>
                     <div>
                         <p class="font-medium text-black text-sm">{{ $profile->user->name }}</p>
@@ -379,14 +379,14 @@
                 <h3 class="font-semibold text-black text-sm">Annulations en masse (7 derniers jours)</h3>
                 <p class="text-sm text-gray-400">Utilisateurs avec 3+ réservations annulées cette semaine</p>
             </div>
-            <span class="ml-auto px-2.5 py-1 rounded-full text-sm font-bold bg-green-100 text-green-700">
+            <span class="sm:ml-auto px-2.5 py-1 rounded-full text-sm font-bold bg-green-100 text-green-700">
                 {{ $reservationsAnnulees->total() }}
             </span>
         </div>
         <div class="space-y-2">
             @foreach($reservationsAnnulees as $user)
-            <div class="flex items-center justify-between p-3 rounded-xl bg-green-50">
-                <div class="flex items-center gap-3">
+            <div class="flex flex-col gap-3 p-3 rounded-xl sm:flex-row sm:items-center sm:justify-between bg-green-50">
+                <div class="flex items-center gap-3 min-w-0">
                     <x-avatar :user="$user" size="8" rounded="full"/>
                     <div>
                         <p class="font-medium text-black text-sm">{{ $user->name }}</p>
@@ -420,14 +420,14 @@
                 <h3 class="font-semibold text-black text-sm">Professeurs inactifs depuis 30j+</h3>
                 <p class="text-sm text-gray-400">Aucune activité ni mise à jour de cours depuis 30 jours</p>
             </div>
-            <span class="ml-auto px-2.5 py-1 rounded-full text-sm font-bold bg-gray-100 text-gray-600">
+            <span class="sm:ml-auto px-2.5 py-1 rounded-full text-sm font-bold bg-gray-100 text-gray-600">
                 {{ $profsInactifs->total() }}
             </span>
         </div>
         <div class="space-y-2">
             @foreach($profsInactifs as $profile)
-            <div class="flex items-center justify-between p-3 rounded-xl bg-gray-50">
-                <div class="flex items-center gap-3">
+            <div class="flex flex-col gap-3 p-3 rounded-xl sm:flex-row sm:items-center sm:justify-between bg-gray-50">
+                <div class="flex items-center gap-3 min-w-0">
                     <x-avatar :user="$profile->user" size="8" rounded="full"/>
                     <div>
                         <p class="font-medium text-black text-sm">{{ $profile->user->name }}</p>

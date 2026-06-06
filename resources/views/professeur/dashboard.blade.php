@@ -17,7 +17,7 @@
 
 {{-- Stats --}}
 <p class="text-sm font-semibold text-gray-400 uppercase tracking-widest mb-3">Aperçu</p>
-<div style="display:grid; grid-template-columns: repeat(5, 1fr); gap:1rem;" class="mb-8">
+<div class="grid grid-cols-1 gap-4 mb-8 sm:grid-cols-2 xl:grid-cols-5">
 
     <div class="bg-white rounded-2xl p-5" style="box-shadow:0 4px 12px rgba(0,0,0,0.08);">
         <div class="flex items-center justify-between mb-3">
@@ -87,10 +87,10 @@
 </div>
 
 {{-- Calendrier + Cours --}}
-<div style="display:grid; grid-template-columns: 1fr 1fr; gap:1.5rem;" class="mb-8">
+<div class="grid grid-cols-1 gap-6 mb-8 xl:grid-cols-2">
 
     {{-- Calendrier --}}
-    <div class="bg-white rounded-2xl p-6" style="box-shadow:0 4px 12px rgba(0,0,0,0.08);">
+    <div class="bg-white rounded-2xl p-4 sm:p-6" style="box-shadow:0 4px 12px rgba(0,0,0,0.08);">
         <h2 class="font-semibold text-black mb-4 flex items-center gap-2">
             <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
@@ -110,13 +110,13 @@
         @else
         <div class="space-y-3">
             @foreach($reservationsSemaine as $booking)
-            <div class="flex items-center gap-4 p-3 rounded-xl bg-gray-50">
+            <div class="flex flex-col gap-3 p-3 rounded-xl bg-gray-50 sm:flex-row sm:items-center sm:gap-4">
                 <x-avatar :user="$booking->user" size="10" rounded="full"/>
                 <div class="flex-1">
                     <p class="font-semibold text-black text-sm">{{ $booking->user->name }}</p>
                     <p class="text-sm text-gray-500">{{ $booking->course->title }}</p>
                 </div>
-                <div class="text-right">
+                <div class="text-left sm:text-right">
                     <p class="text-sm font-bold text-black">
                         {{ \Carbon\Carbon::parse($booking->scheduled_at)->format('d/m') }}
                     </p>
@@ -138,8 +138,8 @@
     </div>
 
     {{-- Mes cours --}}
-    <div class="bg-white rounded-2xl p-6" style="box-shadow:0 4px 12px rgba(0,0,0,0.08);">
-        <div class="flex items-center justify-between mb-4">
+    <div class="bg-white rounded-2xl p-4 sm:p-6" style="box-shadow:0 4px 12px rgba(0,0,0,0.08);">
+        <div class="flex flex-col gap-3 mb-4 sm:flex-row sm:items-center sm:justify-between">
             <h2 class="font-semibold text-black flex items-center gap-2">
                 <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
@@ -168,9 +168,9 @@
         @else
         <div class="space-y-3">
             @foreach($courses as $course)
-            <div class="flex items-center justify-between p-4 rounded-xl border border-gray-100 bg-gray-50">
+            <div class="flex flex-col gap-3 p-4 rounded-xl border border-gray-100 bg-gray-50 sm:flex-row sm:items-center sm:justify-between">
                 <div class="flex-1">
-                    <div class="flex items-center gap-2 mb-1">
+                    <div class="flex flex-wrap items-center gap-2 mb-1">
                         <p class="font-medium text-black text-sm">{{ $course->title }}</p>
                         @if($course->is_group)
                         <span class="text-sm px-2 py-0.5 rounded-full font-medium" style="background:#FFF8E7; color:#FCB315;">
@@ -187,7 +187,7 @@
                     </div>
                     <p class="text-sm text-gray-500">{{ $course->category }} · {{ $course->level }} · {{ $course->format }}</p>
                 </div>
-                <div class="text-right shrink-0">
+                <div class="text-left sm:text-right shrink-0">
                     <p class="font-bold text-sm text-black">{{ number_format($course->price_per_hour, 0, ',', ' ') }} FCFA/h</p>
                     <span class="text-sm px-2 py-0.5 rounded-full {{ $course->is_active ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500' }}">
                         {{ $course->is_active ? 'Actif' : 'Inactif' }}
@@ -203,7 +203,7 @@
 
 {{-- Avis reçus --}}
 <p class="text-sm font-semibold text-gray-400 uppercase tracking-widest mb-3">Avis reçus</p>
-<div class="bg-white rounded-2xl p-6" style="box-shadow:0 4px 12px rgba(0,0,0,0.06);">
+<div class="bg-white rounded-2xl p-4 sm:p-6" style="box-shadow:0 4px 12px rgba(0,0,0,0.06);">
 
     @if($avisParCours->isEmpty())
     <div class="text-center py-10">
@@ -241,7 +241,7 @@
     <div id="cours-{{ $courseId }}" class="avis-content {{ $loop->first ? '' : 'hidden' }}">
 
         {{-- En-tête cours --}}
-        <div class="flex items-center justify-between mb-4 p-4 rounded-xl bg-gray-50">
+        <div class="flex flex-col gap-3 mb-4 p-4 rounded-xl bg-gray-50 sm:flex-row sm:items-center sm:justify-between">
             <div>
                 <p class="font-semibold text-black">{{ $cours->title }}</p>
                 <p class="text-sm text-gray-500">{{ $cours->category }} · {{ $totalAvis }} avis</p>
@@ -263,10 +263,10 @@
         <div id="avis-list-{{ $courseId }}">
             @foreach($avis as $index => $review)
             <div class="avis-item-{{ $courseId }} {{ $index >= 3 ? 'hidden' : '' }} mb-4">
-                <div class="flex items-start gap-4 p-4 rounded-xl border border-gray-100">
+                <div class="flex flex-col gap-3 p-4 rounded-xl border border-gray-100 sm:flex-row sm:items-start sm:gap-4">
                     <x-avatar :user="$review->user" size="10" rounded="full"/>
                     <div class="flex-1">
-                        <div class="flex items-center justify-between mb-1">
+                        <div class="flex flex-col gap-1 mb-1 sm:flex-row sm:items-center sm:justify-between">
                             <p class="font-semibold text-black text-sm">{{ $review->user->name }}</p>
                             <span class="text-sm text-gray-400">{{ $review->created_at->diffForHumans() }}</span>
                         </div>
@@ -291,7 +291,7 @@
 
         {{-- Pagination avis --}}
         @if($totalAvis > 3)
-        <div class="flex items-center justify-between mt-4 pt-4 border-t border-gray-100">
+        <div class="flex flex-col gap-3 mt-4 pt-4 border-t border-gray-100 sm:flex-row sm:items-center sm:justify-between">
             <p class="text-sm text-gray-400">
                 <span id="avis-showing-{{ $courseId }}">1–3</span> sur {{ $totalAvis }} avis
             </p>

@@ -12,8 +12,8 @@
 </div>
 @endif
 
-<div class="max-w-2xl">
-    <div class="bg-white rounded-2xl p-6" style="box-shadow:0 4px 12px rgba(0,0,0,0.06);">
+<div class="max-w-2xl min-w-0">
+    <div class="bg-white rounded-2xl p-5 sm:p-6" style="box-shadow:0 4px 12px rgba(0,0,0,0.06);">
         <form method="POST" action="{{ route('professeur.store-cours') }}">
             @csrf
 
@@ -34,7 +34,7 @@
                         placeholder="Décrivez le contenu du cours...">{{ old('description') }}</textarea>
                 </div>
 
-                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1rem;">
+                <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
                     <div>
                         <label class="text-sm font-semibold text-gray-700 mb-1.5 block">Catégorie</label>
                         <select name="category" class="w-full border-2 border-gray-100 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-yellow-400 transition bg-gray-50">
@@ -57,7 +57,7 @@
                     </div>
                 </div>
 
-                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1rem;">
+                <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
                     <div>
                         <label class="text-sm font-semibold text-gray-700 mb-1.5 block">Format</label>
                         <select name="format" class="w-full border-2 border-gray-100 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-yellow-400 transition bg-gray-50">
@@ -80,7 +80,7 @@
                 <!-- Lieu du cours -->
                 <div>
                     <label class="text-sm font-semibold text-gray-700 mb-3 block">Lieu du cours</label>
-                    <div style="display:flex; gap:0.75rem; flex-wrap:wrap;">
+                    <div class="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
                         @foreach([
                             ['value' => 'chez_prof', 'label' => 'Chez le prof', 'icon' => '🏠'],
                             ['value' => 'chez_eleve', 'label' => 'Chez l\'élève', 'icon' => '📍'],
@@ -108,8 +108,8 @@
 
                 <!-- Cours de groupe -->
                 <div class="rounded-2xl border-2 border-gray-100 p-5" style="background:#F9FAFB;">
-                    <div class="flex items-center justify-between mb-3">
-                        <div>
+                    <div class="flex flex-col gap-3 mb-3 sm:flex-row sm:items-center sm:justify-between">
+                        <div class="min-w-0">
                             <p class="text-sm font-semibold text-gray-700">Cours de groupe</p>
                             <p class="text-sm mt-0.5" style="color:#2b2b2b;">Permettre à plusieurs élèves de rejoindre ce cours</p>
                         </div>
@@ -131,7 +131,7 @@
                     </div>
                 </div>
 
-                <div style="display:flex; gap:0.75rem; margin-top:0.5rem;">
+                <div class="flex flex-col gap-3 mt-2 sm:flex-row">
                     <button type="submit"
                         class="flex-1 py-3 rounded-xl text-black font-semibold transition hover:opacity-90"
                         style="background:#FCB315;">

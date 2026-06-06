@@ -48,7 +48,7 @@
     </div>
     @else
     <div class="overflow-x-auto">
-        <table class="w-full text-sm">
+        <table class="w-full min-w-[760px] text-sm">
             <thead>
                 <tr class="border-b border-gray-100">
                     <th class="text-left py-3 px-4 text-gray-400 font-medium text-sm uppercase tracking-wide">Professeur</th>

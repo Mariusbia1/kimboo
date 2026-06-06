@@ -26,10 +26,10 @@
 <form method="POST" action="{{ route('eleve.update-profil') }}" enctype="multipart/form-data">
 @csrf
 
-<div style="display:grid; grid-template-columns: 300px 1fr; gap:1.5rem; align-items:start;">
+<div class="grid grid-cols-1 gap-6 lg:grid-cols-[300px_minmax(0,1fr)] lg:items-start">
 
     {{-- Carte photo --}}
-    <div class="bg-white rounded-2xl p-6 text-center" style="box-shadow:0 4px 12px rgba(0,0,0,0.06);">
+    <div class="bg-white rounded-2xl p-5 sm:p-6 text-center min-w-0" style="box-shadow:0 4px 12px rgba(0,0,0,0.06);">
 
         {{-- Avatar preview --}}
         <div class="relative inline-block mb-4">
@@ -67,10 +67,10 @@
     </div>
 
     {{-- Formulaire infos --}}
-    <div class="space-y-4">
+    <div class="space-y-4 min-w-0">
 
         {{-- Infos personnelles --}}
-        <div class="bg-white rounded-2xl p-6" style="box-shadow:0 4px 12px rgba(0,0,0,0.06);">
+        <div class="bg-white rounded-2xl p-5 sm:p-6" style="box-shadow:0 4px 12px rgba(0,0,0,0.06);">
             <h2 class="font-semibold text-black mb-5 flex items-center gap-2">
                 <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
@@ -78,7 +78,7 @@
                 Informations personnelles
             </h2>
 
-            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1rem;">
+            <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
 
                 <div>
                     <label class="block text-sm font-medium text-gray-600 mb-1.5">Nom complet</label>
@@ -123,7 +123,7 @@
         </div>
 
         {{-- Sécurité --}}
-        <div class="bg-white rounded-2xl p-6" style="box-shadow:0 4px 12px rgba(0,0,0,0.06);">
+        <div class="bg-white rounded-2xl p-5 sm:p-6" style="box-shadow:0 4px 12px rgba(0,0,0,0.06);">
             <h2 class="font-semibold text-black mb-1 flex items-center gap-2">
                 <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
@@ -132,7 +132,7 @@
             </h2>
             <p class="text-sm text-gray-400 mb-5">Laissez vide si vous ne souhaitez pas changer de mot de passe.</p>
 
-            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1rem;">
+            <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
 
                 <div>
                     <label class="block text-sm font-medium text-gray-600 mb-1.5">Nouveau mot de passe</label>
@@ -162,7 +162,7 @@
         </div>
 
         {{-- Mode de paiement --}}
-        <div class="bg-white rounded-2xl p-6" style="box-shadow:0 4px 12px rgba(0,0,0,0.06);">
+        <div class="bg-white rounded-2xl p-5 sm:p-6" style="box-shadow:0 4px 12px rgba(0,0,0,0.06);">
             <h2 class="font-semibold text-black mb-1 flex items-center gap-2">
                 <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/>
@@ -210,9 +210,9 @@
         </div>
 
         {{-- Bouton sauvegarder --}}
-        <div class="flex justify-end">
+        <div class="flex justify-stretch sm:justify-end">
             <button type="submit"
-                class="px-8 py-3 rounded-xl text-black font-semibold text-sm transition hover:opacity-90 flex items-center gap-2"
+                class="w-full sm:w-auto justify-center px-8 py-3 rounded-xl text-black font-semibold text-sm transition hover:opacity-90 flex items-center gap-2"
                 style="background:#FCB315;">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
@@ -227,7 +227,7 @@
 </form>
 
 {{-- Suppression du compte --}}
-<div class="mt-6 bg-white rounded-2xl p-6 border-2 border-red-100" style="box-shadow:0 4px 12px rgba(0,0,0,0.06);">
+<div class="mt-6 bg-white rounded-2xl p-5 sm:p-6 border-2 border-red-100" style="box-shadow:0 4px 12px rgba(0,0,0,0.06);">
     <h2 class="font-semibold text-red-600 mb-1 flex items-center gap-2">
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
@@ -254,7 +254,7 @@
         </div>
 
         <button type="submit"
-            class="mt-4 px-6 py-2.5 rounded-xl text-white font-semibold text-sm transition hover:opacity-90 bg-red-500 flex items-center gap-2">
+            class="mt-4 w-full sm:w-auto justify-center px-6 py-2.5 rounded-xl text-white font-semibold text-sm transition hover:opacity-90 bg-red-500 flex items-center gap-2">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
             </svg>

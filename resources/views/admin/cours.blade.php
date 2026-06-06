@@ -208,7 +208,7 @@
     </div>
     @else
     <div class="bg-white rounded-2xl p-6" style="box-shadow:0 4px 12px rgba(0,0,0,0.06);">
-        <table class="w-full text-sm">
+        <table class="w-full min-w-[820px] text-sm">
             <thead>
                 <tr class="border-b border-gray-100">
                     <th class="text-left py-3 px-4 text-gray-400 font-medium text-sm uppercase tracking-wide">Cours</th>
@@ -266,7 +266,7 @@
     </div>
     @else
     <div class="bg-white rounded-2xl p-6" style="box-shadow:0 4px 12px rgba(0,0,0,0.06);">
-        <table class="w-full text-sm">
+        <table class="w-full min-w-[820px] text-sm">
             <thead>
                 <tr class="border-b border-gray-100">
                     <th class="text-left py-3 px-4 text-gray-400 font-medium text-sm uppercase tracking-wide">Cours</th>

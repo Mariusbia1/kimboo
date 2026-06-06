@@ -17,7 +17,7 @@
 
 {{-- Stats --}}
 <p class="text-sm font-semibold text-gray-400 uppercase tracking-widest mb-3">Aperçu</p>
-<div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:1rem;" class="mb-8">
+<div class="grid grid-cols-1 gap-4 mb-8 sm:grid-cols-2 lg:grid-cols-3">
 
     <div class="bg-white rounded-2xl p-5" style="box-shadow:0 4px 12px rgba(0,0,0,0.08);">
         <div class="flex items-center justify-between mb-3">
@@ -61,14 +61,14 @@
 </div>
 
 {{-- Recherche rapide --}}
-<div class="bg-white rounded-2xl p-6 mb-8" style="box-shadow:0 4px 12px rgba(0,0,0,0.06);">
+<div class="bg-white rounded-2xl p-4 mb-8 sm:p-6" style="box-shadow:0 4px 12px rgba(0,0,0,0.06);">
     <h2 class="font-semibold text-black mb-4 flex items-center gap-2">
         <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0z"/>
         </svg>
         Trouver un cours
     </h2>
-    <form action="{{ route('cours.index') }}" method="GET" class="flex gap-3">
+    <form action="{{ route('cours.index') }}" method="GET" class="flex flex-col gap-3 sm:flex-row">
         <input type="text" name="q" placeholder="Maths, cuisine, anglais..."
             class="flex-1 border-2 border-gray-100 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-yellow-400 transition bg-gray-50"/>
         <button type="submit"
@@ -80,8 +80,8 @@
 </div>
 
 {{-- Prochains cours --}}
-<div class="bg-white rounded-2xl p-6" style="box-shadow:0 4px 12px rgba(0,0,0,0.06);">
-    <div class="flex items-center justify-between mb-6">
+<div class="bg-white rounded-2xl p-4 sm:p-6" style="box-shadow:0 4px 12px rgba(0,0,0,0.06);">
+    <div class="flex flex-col gap-2 mb-6 sm:flex-row sm:items-center sm:justify-between">
         <h2 class="font-semibold text-black flex items-center gap-2">
             <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
@@ -113,13 +113,13 @@
     @else
     <div class="space-y-3">
         @foreach($prochainsCoours as $booking)
-        <div class="flex items-center gap-4 p-4 rounded-xl bg-gray-50 border border-gray-100">
+        <div class="flex flex-col gap-3 p-4 rounded-xl bg-gray-50 border border-gray-100 sm:flex-row sm:items-center sm:gap-4">
             <x-avatar :user="$booking->course->teacherProfile->user" size="12" rounded="full"/>
             <div class="flex-1">
                 <p class="font-semibold text-black text-sm">{{ $booking->course->title }}</p>
                 <p class="text-sm text-gray-500">avec {{ $booking->course->teacherProfile->user->name }}</p>
             </div>
-            <div class="text-right">
+            <div class="text-left sm:text-right">
                 <p class="font-bold text-black text-sm">
                     {{ \Carbon\Carbon::parse($booking->scheduled_at)->format('d/m/Y') }}
                 </p>
@@ -127,7 +127,7 @@
                     {{ \Carbon\Carbon::parse($booking->scheduled_at)->format('H:i') }}
                 </p>
             </div>
-            <div class="text-right shrink-0">
+            <div class="text-left sm:text-right shrink-0">
                 <p class="font-bold text-sm" style="color:#FCB315;">
                     {{ number_format($booking->total_price, 0, ',', ' ') }} FCFA
                 </p>
