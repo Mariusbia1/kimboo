@@ -1118,7 +1118,7 @@ test('assistance kimboo peut diffuser un message a tous les professeurs, eleves 
     expect(Message::where('sender_id', $admin->id)->where('content', 'Message diffusé même si le serveur SMTP est indisponible.')->count())->toBe(2);
 });
 
-test('admin peut suspendre un compte utilisateur avec un motif et envoyer un email de notification', function () {
+test('admin peut suspendre un compte utilisateur, envoyer un email et un message in-app de l assistance', function () {
     Mail::fake();
 
     $admin = User::factory()->create(['role' => 'admin']);
@@ -1145,44 +1145,83 @@ test('admin peut suspendre un compte utilisateur avec un motif et envoyer un ema
     Mail::assertSent(\App\Mail\CompteSuspendu::class, function ($mail) use ($user) {
         return $mail->hasTo($user->email) && $mail->reason === 'Signalements répétitifs pour comportement inapproprié.';
     });
+
+    // Vérifier la réception du message in-app de l'Assistance Kimboo
+    $inboxMessage = Message::where('sender_id', $admin->id)->where('receiver_id', $user->id)->latest()->first();
+    expect($inboxMessage)->not->toBeNull();
+    expect($inboxMessage->content)->toContain('Votre compte Kimboo a été suspendu par l\'administration.');
+    expect($inboxMessage->content)->toContain('Signalements répétitifs pour comportement inapproprié.');
 });
 
-test('un utilisateur suspendu ne peut pas se connecter et sa session active est invalidee', function () {
+test('un utilisateur suspendu conserve l acces a son compte mais ne peut contacter que l assistance kimboo', function () {
     $password = 'password123';
-    $user = User::factory()->create([
+    $admin = User::factory()->create(['role' => 'admin', 'name' => 'Assistance Kimboo']);
+    $otherUser = User::factory()->create(['role' => 'professeur', 'name' => 'Professeur Destinataire']);
+    
+    $suspendedUser = User::factory()->create([
         'role' => 'eleve',
-        'email' => 'bloque@example.com',
+        'email' => 'suspendu@example.com',
         'password' => \Illuminate\Support\Facades\Hash::make($password),
         'is_suspended' => true,
         'suspended_at' => now(),
-        'suspension_reason' => 'Compte suspendu par l administration.',
+        'suspension_reason' => 'Vérification de compte en cours.',
     ]);
 
-    // 1. Tentative de connexion bloquée
+    // 1. L'utilisateur suspendu PEUT se connecter normalement à son compte
     $loginResponse = $this->post('/login', [
-        'email' => 'bloque@example.com',
+        'email' => 'suspendu@example.com',
         'password' => $password,
     ]);
+    $loginResponse->assertRedirect(route('dashboard'));
+    $this->assertAuthenticatedAs($suspendedUser);
 
-    $loginResponse->assertSessionHasErrors('email');
-    $this->assertGuest();
+    // 2. Le tableau de bord affiche le bandeau d'alerte de suspension avec bouton Assistance
+    $dashboardRes = $this->actingAs($suspendedUser)->get(route('eleve.dashboard'));
+    $dashboardRes->assertOk();
+    $dashboardRes->assertSee('Compte actuellement suspendu');
+    $dashboardRes->assertSee('Vérification de compte en cours.');
+    $dashboardRes->assertSee('Contacter l\'Assistance', false);
 
-    // 2. Session en cours automatiquement déconnectée par le middleware CheckUserSuspended
-    $activeUser = User::factory()->create([
-        'role' => 'professeur',
-        'is_suspended' => false,
+    // 3. L'utilisateur NE PEUT PAS envoyer de message à un autre membre
+    $msgOtherRes = $this->actingAs($suspendedUser)->post(route('messages.send', $otherUser->id), [
+        'content' => 'Bonjour professeur je souhaite un cours',
+    ]);
+    $msgOtherRes->assertRedirect(route('messages.show', $admin->id));
+    $msgOtherRes->assertSessionHas('error');
+    expect(Message::where('sender_id', $suspendedUser->id)->where('receiver_id', $otherUser->id)->exists())->toBeFalse();
+
+    // 4. L'utilisateur PEUT envoyer un message à l'Assistance Kimboo (Admin)
+    $msgAdminRes = $this->actingAs($suspendedUser)->post(route('messages.send', $admin->id), [
+        'content' => 'Bonjour assistance, voici les pièces justificatives demandées.',
+    ]);
+    $msgAdminRes->assertRedirect(route('messages.show', $admin->id));
+    expect(Message::where('sender_id', $suspendedUser->id)->where('receiver_id', $admin->id)->where('content', 'Bonjour assistance, voici les pièces justificatives demandées.')->exists())->toBeTrue();
+
+    // 5. L'utilisateur suspendu NE PEUT PAS réserver un cours
+    $profProfile = TeacherProfile::create([
+        'user_id' => $otherUser->id,
+        'hourly_rate' => 10000,
+        'bio' => 'Bio test',
+    ]);
+    $course = Course::create([
+        'teacher_profile_id' => $profProfile->id,
+        'title' => 'Maths Sup',
+        'category' => 'Mathématiques',
+        'level' => 'Lycée',
+        'format' => 'En ligne',
+        'price_per_hour' => 10000,
+        'status' => 'approved',
+        'is_active' => true,
     ]);
 
-    // L'utilisateur navigue normalement
-    $this->actingAs($activeUser)->get('/professeur/dashboard')->assertOk();
-
-    // Suspension du compte
-    $activeUser->suspend('Non respect des CGU');
-
-    // Dès la requête suivante, la session est invalidée
-    $blockedBrowse = $this->actingAs($activeUser)->get('/professeur/dashboard');
-    $blockedBrowse->assertRedirect(route('login'));
-    $this->assertGuest();
+    $bookingRes = $this->actingAs($suspendedUser)->post(route('booking.store', $profProfile->id), [
+        'course_id' => $course->id,
+        'scheduled_at' => now()->addDays(2)->format('Y-m-d H:i:s'),
+        'duration_hours' => 2,
+    ]);
+    $bookingRes->assertRedirect(route('messages.show', $admin->id));
+    $bookingRes->assertSessionHas('error');
+    expect(Booking::where('user_id', $suspendedUser->id)->exists())->toBeFalse();
 });
 
 test('admin peut lever la suspension d un compte utilisateur et le reactiver', function () {
@@ -1212,6 +1251,11 @@ test('admin peut lever la suspension d un compte utilisateur et le reactiver', f
     Mail::assertSent(\App\Mail\CompteReactive::class, function ($mail) use ($user) {
         return $mail->hasTo($user->email);
     });
+
+    // Vérifier l'envoi du message in-app confirmant la réactivation
+    $reactivationMessage = Message::where('sender_id', $admin->id)->where('receiver_id', $user->id)->latest()->first();
+    expect($reactivationMessage)->not->toBeNull();
+    expect($reactivationMessage->content)->toContain('Bonne nouvelle ! La suspension de votre compte Kimboo a été levée');
 });
 
 test('admin ne peut pas suspendre un autre compte administrateur', function () {

@@ -6,6 +6,7 @@ use App\Models\Booking;
 use App\Models\Course;
 use App\Models\Favorite;
 use App\Models\TeacherProfile;
+use App\Models\User;
 use Illuminate\Http\Request;
 use App\Models\Notification;
 use Illuminate\Support\Facades\Log;
@@ -95,6 +96,12 @@ class HomeController extends Controller
     {
         if (!auth()->check()) {
             return redirect()->route('login')->with('error', 'Veuillez vous connecter pour réserver un cours.');
+        }
+
+        if (auth()->user()->is_suspended) {
+            $adminUser = User::where('role', 'admin')->first();
+            $redirectRoute = $adminUser ? route('messages.show', $adminUser->id) : route('dashboard');
+            return redirect($redirectRoute)->with('error', 'Votre compte est actuellement suspendu. Vous ne pouvez pas réserver de cours. Veuillez contacter l\'Assistance Kimboo.');
         }
 
         $request->validate([

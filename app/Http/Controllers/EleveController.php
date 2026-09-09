@@ -139,6 +139,10 @@ public function mesCours()
 
     public function storeAvis(Request $request, $id)
     {
+        if (auth()->user()->is_suspended) {
+            return back()->with('error', 'Votre compte est actuellement suspendu. Veuillez contacter l\'Assistance Kimboo.');
+        }
+
         $booking = Booking::with('course.teacherProfile')->findOrFail($id);
 
         if ($booking->user_id !== auth()->id() && auth()->user()->role !== 'admin') {

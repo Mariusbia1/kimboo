@@ -149,7 +149,33 @@ class AdminController extends Controller
         $reason = $request->input('reason', $request->input('suspension_reason'));
         $user->suspend($reason);
 
-        // Envoi email de notification
+        $admin = auth()->user();
+
+        // 1. Envoi message in-app de l'assistance Kimboo dans la conversation de l'utilisateur
+        $reasonDetail = $reason ? "\n\nMotif de la suspension : {$reason}" : "";
+        $messageContent = "Bonjour {$user->name},\n\nVotre compte Kimboo a été suspendu par l'administration.{$reasonDetail}\n\nPendant la durée de cette suspension, vos fonctionnalités de réservation, de publication de cours et de contact avec les autres membres sont restreintes.\n\nVous pouvez nous répondre directement ici via cette messagerie d'assistance pour toute explication ou demande de réactivation.\n\nL'équipe Assistance Kimboo.";
+
+        try {
+            Message::create([
+                'sender_id'       => $admin->id,
+                'receiver_id'     => $user->id,
+                'content'         => $messageContent,
+                'is_read'         => false,
+                'is_blocked'      => false,
+            ]);
+
+            Notification::notifier(
+                userId: $user->id,
+                type:   'account_suspended',
+                title:  'Notification de suspension de compte',
+                body:   'Votre compte a été suspendu par l\'Assistance Kimboo.' . ($reason ? ' Motif : ' . $reason : ''),
+                link:   route('messages.show', $admin->id)
+            );
+        } catch (\Throwable $e) {
+            Log::warning('Échec création message in-app suspension', ['user_id' => $user->id, 'error' => $e->getMessage()]);
+        }
+
+        // 2. Envoi email de notification
         try {
             if ($user->email) {
                 Mail::to($user->email)->send(new \App\Mail\CompteSuspendu($user, $reason));
@@ -158,7 +184,7 @@ class AdminController extends Controller
             Log::warning('Échec envoi mail suspension utilisateur', ['user_id' => $user->id, 'error' => $e->getMessage()]);
         }
 
-        return back()->with('success', "Le compte de {$user->name} a été suspendu.");
+        return back()->with('success', "Le compte de {$user->name} a été suspendu. Le message d'assistance et l'email lui ont été transmis.");
     }
 
     public function reactivateUser($id)
@@ -166,7 +192,32 @@ class AdminController extends Controller
         $user = User::findOrFail($id);
         $user->reactivate();
 
-        // Envoi email de notification
+        $admin = auth()->user();
+
+        // 1. Envoi message in-app de confirmation de réactivation
+        $reactivationContent = "Bonjour {$user->name},\n\nBonne nouvelle ! La suspension de votre compte Kimboo a été levée par l'administration.\n\nToutes les fonctionnalités de la plateforme (réservations, cours, messagerie) vous sont de nouveau pleinement accessibles.\n\nMerci pour votre confiance,\nL'équipe Assistance Kimboo.";
+
+        try {
+            Message::create([
+                'sender_id'       => $admin->id,
+                'receiver_id'     => $user->id,
+                'content'         => $reactivationContent,
+                'is_read'         => false,
+                'is_blocked'      => false,
+            ]);
+
+            Notification::notifier(
+                userId: $user->id,
+                type:   'account_reactivated',
+                title:  'Suspension de compte levée',
+                body:   'Votre compte Kimboo est de nouveau actif avec toutes ses fonctionnalités.',
+                link:   route('messages.show', $admin->id)
+            );
+        } catch (\Throwable $e) {
+            Log::warning('Échec création message in-app réactivation', ['user_id' => $user->id, 'error' => $e->getMessage()]);
+        }
+
+        // 2. Envoi email de notification
         try {
             if ($user->email) {
                 Mail::to($user->email)->send(new \App\Mail\CompteReactive($user));

@@ -157,9 +157,6 @@
             <h2 class="font-bold text-black text-base" style="font-family:'Poppins',sans-serif;">Conversations en direct</h2>
             <p class="text-xs text-gray-400 mt-0.5">{{ $conversations->count() }} conversation(s) affichée(s)</p>
         </div>
-        <span class="text-xs text-gray-400 bg-gray-50 px-3 py-1.5 rounded-lg border border-gray-200">
-            Cliquez sur un participant pour ouvrir sa fiche détaillée
-        </span>
     </div>
 
     @if($conversations->isEmpty())

@@ -27,17 +27,6 @@ class AuthenticatedSessionController extends Controller
         $request->authenticate();
 
         if ($user = Auth::user()) {
-            if ($user->is_suspended && ! $user->isAdmin()) {
-                $reason = $user->suspension_reason;
-                Auth::guard('web')->logout();
-                $request->session()->invalidate();
-                $request->session()->regenerateToken();
-
-                throw \Illuminate\Validation\ValidationException::withMessages([
-                    'email' => 'Votre compte a été suspendu par l\'administration' . ($reason ? ' (Motif : ' . $reason . ')' : '.') . ' Veuillez contacter le support à support@kimboo.net.',
-                ]);
-            }
-
             $user->update(['last_login_at' => now()]);
             session(['user_last_active_at' => now()]);
         }

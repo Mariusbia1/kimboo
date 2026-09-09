@@ -153,6 +153,16 @@ class MessageController extends Controller
             return redirect()->route('login');
         }
 
+        $recipient = User::findOrFail($userId);
+
+        // Si le compte est suspendu, l'utilisateur peut UNIQUEMENT envoyer des messages à l'Assistance Kimboo (Admin)
+        if ($user->is_suspended && !$recipient->isAdmin()) {
+            $adminUser = User::where('role', 'admin')->first();
+            $redirectRoute = $adminUser ? route('messages.show', $adminUser->id) : route('messages.index');
+
+            return redirect($redirectRoute)->with('error', "Votre compte est actuellement suspendu. Vous pouvez uniquement contacter l'Assistance Kimboo.");
+        }
+
         $content = $request->input('content');
 
         // Vérifier si l'utilisateur est bloqué pour 24h

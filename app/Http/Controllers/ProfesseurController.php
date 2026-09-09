@@ -127,6 +127,11 @@ class ProfesseurController extends Controller
 
     public function storeCours(StoreCourseRequest $request)
     {
+        if (auth()->user()->is_suspended) {
+            return redirect()->route('professeur.dashboard')
+                ->with('error', 'Votre compte est actuellement suspendu. Vous ne pouvez pas publier de cours. Veuillez contacter l\'Assistance Kimboo.');
+        }
+
         $profile = auth()->user()->teacherProfile;
         if (!$profile) {
             return redirect()->route('professeur.dashboard')
@@ -208,6 +213,11 @@ class ProfesseurController extends Controller
 
     public function updateCours(StoreCourseRequest $request, $id)
     {
+        if (auth()->user()->is_suspended) {
+            return redirect()->route('professeur.dashboard')
+                ->with('error', 'Votre compte est actuellement suspendu. Vous ne pouvez pas modifier de cours. Veuillez contacter l\'Assistance Kimboo.');
+        }
+
         $course = Course::findOrFail($id);
 
         if ($course->teacherProfile->user_id !== auth()->id() && auth()->user()->role !== 'admin') {
@@ -289,32 +299,36 @@ class ProfesseurController extends Controller
     }
 
     public function confirmBooking($id)
-{
-    $booking = Booking::with(['user', 'course.teacherProfile.user'])->findOrFail($id);
-    $booking->update(['status' => 'confirmé']);
+    {
+        if (auth()->user()->is_suspended) {
+            return back()->with('error', 'Votre compte est actuellement suspendu. Veuillez contacter l\'Assistance Kimboo.');
+        }
 
-    // Notifier l'élève
-    Notification::notifier(
-        userId: $booking->user_id,
-        type:   'course_approved',
-        title:  'Réservation confirmée',
-        body:   'Votre réservation pour "' . $booking->course->title . '" a été confirmée.',
-        link:   route('eleve.reservations')
-    );
+        $booking = Booking::with(['user', 'course.teacherProfile.user'])->findOrFail($id);
+        $booking->update(['status' => 'confirmé']);
 
-    // Envoi mail à l'élève
-    try {
-        Mail::to($booking->user->email)->send(new ReservationConfirmee($booking));
-    } catch (\Throwable $e) {
-        Log::error('Échec de l\'envoi du mail de confirmation de réservation', [
-            'exception' => $e,
-            'booking_id' => $booking->id,
-            'user_id' => $booking->user_id,
-        ]);
+        // Notifier l'élève
+        Notification::notifier(
+            userId: $booking->user_id,
+            type:   'course_approved',
+            title:  'Réservation confirmée',
+            body:   'Votre réservation pour "' . $booking->course->title . '" a été confirmée.',
+            link:   route('eleve.reservations')
+        );
+
+        // Envoi mail à l'élève
+        try {
+            Mail::to($booking->user->email)->send(new ReservationConfirmee($booking));
+        } catch (\Throwable $e) {
+            Log::error('Échec de l\'envoi du mail de confirmation de réservation', [
+                'exception' => $e,
+                'booking_id' => $booking->id,
+                'user_id' => $booking->user_id,
+            ]);
+        }
+
+        return back()->with('success', 'Réservation confirmée !');
     }
-
-    return back()->with('success', 'Réservation confirmée !');
-}
 
     public function cancelBooking($id)
 {
