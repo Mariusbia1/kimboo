@@ -1297,6 +1297,68 @@ test('vue admin utilisateurs filtre par statut tous, actifs et suspendus', funct
     $resSuspended->assertDontSee('Eleve Actif Unique');
 });
 
+test('professeur suspendu n apparait plus sur la page accueil, le catalogue ni son profil public et reapparait des la reactivation', function () {
+    \Illuminate\Support\Facades\Cache::flush();
+
+    $admin = User::factory()->create(['role' => 'admin']);
+    $profUser = User::factory()->create([
+        'role' => 'professeur',
+        'name' => 'Professeur Masque Test',
+        'is_suspended' => false,
+    ]);
+    $profile = TeacherProfile::create([
+        'user_id' => $profUser->id,
+        'hourly_rate' => 15000,
+        'bio' => 'Bio professeur masque',
+        'is_verified' => true,
+    ]);
+    Course::create([
+        'teacher_profile_id' => $profile->id,
+        'title' => 'Cours Unique Chimie Quantique',
+        'category' => 'Chimie',
+        'level' => 'Université',
+        'format' => 'En ligne',
+        'price_per_hour' => 15000,
+        'status' => 'approved',
+        'is_active' => true,
+    ]);
+
+    // 1. Avant suspension : visible partout
+    \Illuminate\Support\Facades\Cache::flush();
+    $this->get('/')->assertSee('Professeur Masque Test');
+    $this->get('/cours?q=Chimie')->assertSee('Professeur Masque Test');
+    $this->get(route('professeur.profil', $profile->id))->assertOk()->assertSee('Cours Unique Chimie Quantique');
+
+    // 2. Suspension par l'admin
+    $this->actingAs($admin)->patch(route('admin.suspend-user', $profUser->id), [
+        'reason' => 'Vérification administrative',
+    ]);
+    $profUser->refresh();
+    expect($profUser->is_suspended)->toBeTrue();
+
+    // 3. Après suspension : invisible sur l'accueil, dans le catalogue et profil public inaccessible pour les visiteurs/élèves
+    \Illuminate\Support\Facades\Cache::flush();
+    $this->app['auth']->logout();
+
+    $this->get('/')->assertDontSee('Professeur Masque Test');
+    $this->get('/cours?q=Chimie')->assertDontSee('Professeur Masque Test');
+    
+    $profilPublic = $this->get(route('professeur.profil', $profile->id));
+    $profilPublic->assertRedirect(route('cours.index'));
+    $profilPublic->assertSessionHas('error');
+
+    // 4. Réactivation par l'admin
+    $this->actingAs($admin)->patch(route('admin.reactivate-user', $profUser->id));
+    $profUser->refresh();
+    expect($profUser->is_suspended)->toBeFalse();
+
+    // 5. Après réactivation : redevient visible immédiatement
+    \Illuminate\Support\Facades\Cache::flush();
+    $this->get('/')->assertSee('Professeur Masque Test');
+    $this->get('/cours?q=Chimie')->assertSee('Professeur Masque Test');
+    $this->get(route('professeur.profil', $profile->id))->assertOk()->assertSee('Cours Unique Chimie Quantique');
+});
+
 
 
 

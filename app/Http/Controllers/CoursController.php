@@ -28,6 +28,7 @@ class CoursController extends Controller
             'user',
             'courses' => fn ($q) => $q->approved(),
         ])
+            ->whereHas('user', fn ($u) => $u->where('is_suspended', false))
             ->whereHas('courses', fn ($q) => $q->approved())
             ->withCount(['courses as cours_donnes' => function ($query) {
                 $query->approved()->whereHas('bookings', function ($q2) {

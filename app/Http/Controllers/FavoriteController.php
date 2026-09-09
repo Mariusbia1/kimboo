@@ -41,6 +41,7 @@ class FavoriteController extends Controller
         }
 
         $favoris = Favorite::where('user_id', $user->id)
+            ->whereHas('teacherProfile.user', fn ($u) => $u->where('is_suspended', false))
             ->with(['teacherProfile.user', 'teacherProfile.courses'])
             ->get()
             ->pluck('teacherProfile');

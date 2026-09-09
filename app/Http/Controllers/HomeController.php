@@ -21,6 +21,7 @@ class HomeController extends Controller
                 'user',
                 'courses' => fn ($q) => $q->approved(),
             ])
+                ->whereHas('user', fn ($u) => $u->where('is_suspended', false))
                 ->whereHas('courses', fn ($q) => $q->approved())
                 ->withCount(['courses as cours_donnes' => function ($q) {
                     $q->approved()->whereHas('bookings', function ($q2) {
@@ -40,6 +41,7 @@ class HomeController extends Controller
                 'user',
                 'courses' => fn ($q) => $q->approved(),
             ])
+                ->whereHas('user', fn ($u) => $u->where('is_suspended', false))
                 ->where('is_verified', true)
                 ->whereHas('courses', fn ($q) => $q->approved())
                 ->orderBy('rating', 'desc')
@@ -70,6 +72,11 @@ class HomeController extends Controller
             'reviews.user',
         ])->findOrFail($id);
 
+        // Si le professeur est suspendu et que le visiteur n'est pas admin, bloquer l'accès public
+        if ($profile->user && $profile->user->is_suspended && (!auth()->check() || !auth()->user()->isAdmin())) {
+            return redirect()->route('cours.index')->with('error', 'Ce profil enseignant n\'est pas accessible actuellement.');
+        }
+
         $categorie = $profile->courses->first()->category ?? null;
 
         $similaires = TeacherProfile::with([
@@ -77,6 +84,7 @@ class HomeController extends Controller
             'courses' => fn ($q) => $q->approved(),
         ])
             ->where('id', '!=', $id)
+            ->whereHas('user', fn ($u) => $u->where('is_suspended', false))
             ->whereHas('courses', fn ($q) => $q->approved())
             ->when($categorie, function ($q) use ($categorie) {
                 $q->whereHas('courses', function ($q2) use ($categorie) {

@@ -101,6 +101,9 @@ class User extends Authenticatable
             'suspended_at'      => now(),
             'suspension_reason' => $reason,
         ]);
+
+        \Illuminate\Support\Facades\Cache::forget('homepage_professeurs');
+        \Illuminate\Support\Facades\Cache::forget('homepage_meilleur_prof');
     }
 
     public function reactivate(): void
@@ -112,10 +115,25 @@ class User extends Authenticatable
             'message_attempts'      => 0,
             'message_blocked_until' => null,
         ]);
+
+        \Illuminate\Support\Facades\Cache::forget('homepage_professeurs');
+        \Illuminate\Support\Facades\Cache::forget('homepage_meilleur_prof');
     }
 
     public function favorites()
     {
         return $this->hasMany(Favorite::class);
+    }
+
+    protected static function booted()
+    {
+        static::saved(function () {
+            \Illuminate\Support\Facades\Cache::forget('homepage_professeurs');
+            \Illuminate\Support\Facades\Cache::forget('homepage_meilleur_prof');
+        });
+        static::deleted(function () {
+            \Illuminate\Support\Facades\Cache::forget('homepage_professeurs');
+            \Illuminate\Support\Facades\Cache::forget('homepage_meilleur_prof');
+        });
     }
 }
