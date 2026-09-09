@@ -15,37 +15,43 @@ class HomeController extends Controller
 {
     public function index()
     {
-        $professeurs = TeacherProfile::with([
-            'user',
-            'courses' => fn ($q) => $q->approved(),
-        ])
-            ->whereHas('courses', fn ($q) => $q->approved())
-            ->withCount(['courses as cours_donnes' => function ($q) {
-                $q->approved()->whereHas('bookings', function ($q2) {
-                    $q2->where('status', 'terminé');
-                });
-            }])
-            ->orderBy('cours_donnes', 'desc')
-            ->orderBy('rating', 'desc')
-            ->take(4)
-            ->get();
+        $professeurs = \Illuminate\Support\Facades\Cache::remember('homepage_professeurs', 180, function () {
+            return TeacherProfile::with([
+                'user',
+                'courses' => fn ($q) => $q->approved(),
+            ])
+                ->whereHas('courses', fn ($q) => $q->approved())
+                ->withCount(['courses as cours_donnes' => function ($q) {
+                    $q->approved()->whereHas('bookings', function ($q2) {
+                        $q2->where('status', 'terminé');
+                    });
+                }])
+                ->orderByDesc('is_featured')
+                ->orderByDesc('is_verified')
+                ->orderBy('cours_donnes', 'desc')
+                ->orderBy('rating', 'desc')
+                ->take(9)
+                ->get();
+        });
 
-        $meilleurProf = TeacherProfile::with([
-            'user',
-            'courses' => fn ($q) => $q->approved(),
-        ])
-            ->where('is_verified', true)
-            ->whereHas('courses', fn ($q) => $q->approved())
-            ->orderBy('rating', 'desc')
-            ->first();
+        $meilleurProf = \Illuminate\Support\Facades\Cache::remember('homepage_meilleur_prof', 180, function () {
+            return TeacherProfile::with([
+                'user',
+                'courses' => fn ($q) => $q->approved(),
+            ])
+                ->where('is_verified', true)
+                ->whereHas('courses', fn ($q) => $q->approved())
+                ->orderBy('rating', 'desc')
+                ->first();
+        });
 
         $categories = [
-            ['emoji' => '📐', 'label' => 'Mathématiques'],
-            ['emoji' => '🍳', 'label' => 'Cuisine'],
-            ['emoji' => '⚽', 'label' => 'Sport'],
-            ['emoji' => '🌍', 'label' => 'Langues'],
-            ['emoji' => '🎵', 'label' => 'Musique'],
-            ['emoji' => '💻', 'label' => 'Informatique'],
+            ['label' => 'Mathématiques'],
+            ['label' => 'Cuisine'],
+            ['label' => 'Sport'],
+            ['label' => 'Langues'],
+            ['label' => 'Musique'],
+            ['label' => 'Informatique'],
         ];
 
         $favorisIds = auth()->check()
@@ -87,6 +93,10 @@ class HomeController extends Controller
 
     public function storeBooking(Request $request, $id)
     {
+        if (!auth()->check()) {
+            return redirect()->route('login')->with('error', 'Veuillez vous connecter pour réserver un cours.');
+        }
+
         $request->validate([
             'course_id' => ['required', 'exists:courses,id'],
             'scheduled_at' => ['required', 'date', 'after:now'],
@@ -101,7 +111,7 @@ class HomeController extends Controller
 
         $totalPrice = $course->price_per_hour * $request->duration_hours;
 
-        Booking::create([
+        $booking = Booking::create([
             'user_id'        => auth()->id(),
             'course_id'      => $course->id,
             'scheduled_at'   => $request->scheduled_at,
@@ -109,6 +119,8 @@ class HomeController extends Controller
             'total_price'    => $totalPrice,
             'status'         => 'en_attente',
         ]);
+
+        $booking->load(['user', 'course.teacherProfile.user']);
 
         // Notifier le professeur
         $profUser = $profile->user;
@@ -120,13 +132,16 @@ class HomeController extends Controller
             link:   route('professeur.reservations')
         );
 
-        // Envoi mail au professeur
-        $booking = \App\Models\Booking::with(['user', 'course.teacherProfile.user'])
-            ->where('user_id', auth()->id())
-            ->where('course_id', $course->id)
-            ->latest()
-            ->first();
+        // Notifier l'élève
+        Notification::notifier(
+            userId: auth()->id(),
+            type:   'course_pending',
+            title:  'Demande de réservation envoyée',
+            body:   'Votre demande pour "' . $course->title . '" a bien été transmise à ' . $profUser->name . '.',
+            link:   route('eleve.reservations')
+        );
 
+        // Envoi mail au professeur
         try {
             Mail::to($profUser->email)->send(new \App\Mail\NouvelleReservation($booking));
         } catch (\Throwable $e) {
@@ -137,7 +152,25 @@ class HomeController extends Controller
             ]);
         }
 
-        return redirect()->route('eleve.reservations')
-            ->with('success', 'Réservation enregistrée avec succès. Le professeur va la confirmer bientôt.');
+        // Envoi mail récapitulatif à l'élève
+        try {
+            Mail::to(auth()->user()->email)->send(new \App\Mail\DemandeReservationEleve($booking));
+        } catch (\Throwable $e) {
+            Log::error('Échec de l\'envoi du mail de confirmation réservation élève', [
+                'exception' => $e,
+                'booking_id' => $booking->id,
+                'user_id' => auth()->id(),
+            ]);
+        }
+
+        $userRole = auth()->user()->role;
+        $redirectRoute = match ($userRole) {
+            'professeur' => 'professeur.reservations',
+            'admin'      => 'admin.dashboard',
+            default      => 'eleve.reservations',
+        };
+
+        return redirect()->route($redirectRoute)
+            ->with('success', 'Votre demande de réservation a été envoyée avec succès. Un récapitulatif vous a été envoyé par email.');
     }
 }

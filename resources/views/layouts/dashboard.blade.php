@@ -6,35 +6,44 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Kimboo — @yield('title')</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="{{ asset('favicon.svg') }}?v=3">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('favicon-32x32.png') }}?v=3">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('favicon-16x16.png') }}?v=3">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('apple-touch-icon.png') }}?v=3">
+    <link rel="shortcut icon" href="{{ asset('favicon.ico') }}?v=3">
+
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="font-sans bg-gray-50 overflow-x-hidden">
+<body class="font-sans bg-gray-50 h-screen overflow-hidden">
 
-<div class="flex min-h-screen max-w-full overflow-x-hidden">
+<div class="flex h-screen w-full overflow-hidden">
 
-    <!-- SIDEBAR -->
-    <aside class="hidden lg:flex flex-col w-64 min-h-screen shrink-0" style="background:#0f0f0f;">
+    <!-- SIDEBAR FIXE -->
+    <aside class="hidden lg:flex flex-col w-64 h-screen shrink-0 border-r border-white/[0.08] overflow-y-auto z-30" style="background:#0B0F19;">
 
         <!-- Logo -->
-        <div class="px-6 py-6 border-b border-white/10">
-            <a href="{{ url('/') }}" class="text-4xl font-bold" style="color:#FCB315; font-family:'Poppins',sans-serif;">
-                kimboo
-            </a>
-            <p class="mt-1 text-sm text-gray-500">
-                @if(auth()->user()->role === 'admin') Administration
-                @elseif(auth()->user()->role === 'professeur') Espace professeur
-                @else Espace élève
-                @endif
-            </p>
+        <div class="px-6 py-6 border-b border-white/[0.08]">
+            <x-application-logo size="lg" />
+            <div class="mt-2.5 flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full" style="background:#FCB315;"></span>
+                <p class="text-[11px] font-bold uppercase tracking-wider text-gray-400">
+                    @if(auth()->user()->role === 'admin') Administration
+                    @elseif(auth()->user()->role === 'professeur') Espace professeur
+                    @else Espace élève
+                    @endif
+                </p>
+            </div>
         </div>
 
         <!-- Avatar utilisateur -->
-        <div class="px-6 py-5 border-b border-white/10">
+        <div class="p-3.5 m-3 rounded-2xl bg-white/[0.04] border border-white/[0.06]">
             <div class="flex items-center gap-3">
-                <x-avatar :user="auth()->user()" size="10" rounded="full"/>
-                <div class="overflow-hidden">
-                    <p class="text-sm font-semibold text-white truncate">{{ auth()->user()->name }}</p>
-                    <p class="text-sm text-gray-400 truncate">{{ auth()->user()->email }}</p>
+                <x-avatar :user="auth()->user()" size="10" rounded="xl"/>
+                <div class="overflow-hidden min-w-0 flex-1">
+                    <p class="text-sm font-bold text-white truncate">{{ auth()->user()->name }}</p>
+                    <p class="text-xs text-gray-400 truncate">{{ auth()->user()->email }}</p>
                 </div>
             </div>
         </div>
@@ -44,18 +53,17 @@
 
             @if(auth()->user()->role === 'admin')
                 @php
-                $pendingCours = \App\Models\Course::where('status', 'pending')->count();
-                $unreadNotifs = \App\Models\Notification::where('user_id', auth()->id())->where('is_read', false)->count();
+                $pendingCours   = \App\Models\Course::where('status', 'pending')->count();
+                $pendingAlertes = \App\Models\MessageAlert::where('status', 'pending')->count();
+                $unreadNotifs   = \App\Models\Notification::where('user_id', auth()->id())->where('is_read', false)->count();
                 @endphp
                 <x-sidebar-link href="{{ route('admin.dashboard') }}" icon="grid" label="Tableau de bord"/>
                 <x-sidebar-link href="{{ route('admin.users') }}" icon="users" label="Utilisateurs"/>
                 <x-sidebar-link href="{{ route('admin.cours') }}" icon="book" label="Cours" :badge="$pendingCours ?: null"/>
                 <x-sidebar-link href="{{ route('admin.stats') }}" icon="bar-chart" label="Statistiques"/>
+                <x-sidebar-link href="{{ route('admin.messages.conversations') }}" icon="message-square" label="Conversations" :badge="$pendingAlertes ?: null" :active="request()->routeIs('admin.messages.*')"/>
                 <x-sidebar-link href="{{ route('admin.parametres') }}" icon="settings" label="Paramètres" :active="request()->routeIs('admin.parametres')" />
-                @php
-                $pendingAlertes = \App\Models\MessageAlert::where('status', 'pending')->count();
-                @endphp
-                <x-sidebar-link href="{{ route('admin.messages.alertes') }}" icon="message-circle" label="Alertes messages" :badge="$pendingAlertes ?: null"/>
+                <x-sidebar-link href="{{ route('admin.profil') }}" icon="user" label="Mon profil" :active="request()->routeIs('admin.profil')" />
 
             @elseif(auth()->user()->role === 'professeur')
                 @php
@@ -67,6 +75,7 @@
                 <x-sidebar-link href="{{ route('professeur.reservations') }}" icon="calendar" label="Réservations"/>
                 <x-sidebar-link href="{{ route('professeur.calendrier') }}" icon="calendar" label="Calendrier"/>
                 <x-sidebar-link href="{{ route('messages.index') }}" icon="message-circle" label="Messages" :badge="$unreadMessages > 0 ? $unreadMessages : null"/>
+                <x-sidebar-link href="{{ route('messages.assistance') }}" icon="support" label="Assistance Kimboo"/>
                 <x-sidebar-link href="{{ route('professeur.edit-profil') }}" icon="user" label="Mon profil"/>
 
             @else
@@ -81,31 +90,41 @@
                 <x-sidebar-link href="{{ route('eleve.calendrier') }}" icon="calendar" label="Calendrier"/>
                 <x-sidebar-link href="{{ route('favoris.index') }}" icon="heart" label="Mes favoris"/>
                 <x-sidebar-link href="{{ route('messages.index') }}" icon="message-circle" label="Messages" :badge="$unreadMessages > 0 ? $unreadMessages : null"/>
+                <x-sidebar-link href="{{ route('messages.assistance') }}" icon="support" label="Assistance Kimboo"/>
                 <x-sidebar-link href="{{ route('eleve.edit-profil') }}" icon="user" label="Mon profil"/>
             @endif
         </nav>
 
-        <!-- Retour site -->
-        <div class="px-4 py-6 border-t border-white/10">
-            <a href="{{ url('/') }}" class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-gray-400 hover:text-white hover:bg-white/10 transition text-sm">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <!-- Footer Sidebar (Retour site & Déconnexion) -->
+        <div class="px-4 py-5 border-t border-white/10 space-y-1 mt-auto">
+            <a href="{{ url('/') }}" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-gray-400 hover:text-white hover:bg-white/10 transition text-sm font-medium">
+                <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
                 </svg>
-                Retour au site
+                <span>Retour au site</span>
             </a>
+            <form method="POST" action="{{ route('logout') }}">
+                @csrf
+                <button type="submit" class="flex items-center gap-3 w-full px-3.5 py-2.5 rounded-xl text-red-400 hover:text-white hover:bg-red-500/20 transition text-sm font-medium text-left">
+                    <svg class="w-4 h-4 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h6a2 2 0 012 2v1"/>
+                    </svg>
+                    <span>Déconnexion</span>
+                </button>
+            </form>
         </div>
     </aside>
 
-    <!-- CONTENU PRINCIPAL -->
-    <div class="flex flex-col flex-1 min-w-0 min-h-screen">
+    <!-- CONTENU PRINCIPAL (SEUL LE CONTENU SCROLLE) -->
+    <div class="flex flex-col flex-1 min-w-0 h-screen overflow-y-auto overflow-x-hidden">
 
         <!-- Topbar -->
-        <header class="flex items-center justify-between gap-4 px-4 py-4 bg-white border-b border-gray-100 sm:px-6 lg:px-8">
+        <header class="sticky top-0 z-20 flex items-center justify-between gap-4 px-4 py-3.5 bg-white/95 backdrop-blur-md border-b border-gray-100 sm:px-6 lg:px-8 shrink-0">
             <div class="min-w-0">
-                <h1 class="text-lg font-bold text-black" style="font-family:'Poppins',sans-serif;">@yield('page-title')</h1>
-                <p class="text-sm text-gray-400">@yield('page-subtitle')</p>
+                <h1 class="text-lg font-bold text-gray-900 tracking-tight" style="font-family:'Poppins',sans-serif;">@yield('page-title')</h1>
+                <p class="text-xs text-gray-400">@yield('page-subtitle')</p>
             </div>
-            <div class="flex items-center gap-2 sm:gap-3 shrink-0">
+            <div class="flex items-center gap-3 shrink-0">
 
                 <!-- Cloche notifications -->
                 <div class="relative" id="notif-menu">
@@ -239,18 +258,19 @@
                         </div>
                         <div class="py-2">
                             @php
-$profilRoute = match(auth()->user()->role) {
-    'professeur' => route('professeur.edit-profil'),
-    'eleve'      => route('eleve.edit-profil'),
-    default      => '#',
-};
-@endphp
-<a href="{{ $profilRoute }}" class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-600 hover:bg-gray-50 hover:text-black transition">
-    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
-    </svg>
-    Mon profil
-</a>
+                            $profilRoute = match(auth()->user()->role) {
+                                'admin'      => route('admin.profil'),
+                                'professeur' => route('professeur.edit-profil'),
+                                'eleve'      => route('eleve.edit-profil'),
+                                default      => url('/'),
+                            };
+                            @endphp
+                            <a href="{{ $profilRoute }}" class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-amber-50 hover:text-amber-900 transition font-medium">
+                                <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                                </svg>
+                                Mon profil
+                            </a>
                         </div>
                         <div class="pt-2 border-t border-gray-100">
                             <form method="POST" action="{{ route('logout') }}">
@@ -299,6 +319,12 @@ $profilRoute = match(auth()->user()->role) {
                    style="background:#1A2B3C;">
                     Retour au site
                 </a>
+                <form method="POST" action="{{ route('logout') }}" class="inline">
+                    @csrf
+                    <button type="submit" class="px-3 py-2 rounded-xl text-sm font-semibold whitespace-nowrap text-red-600 bg-red-50 hover:bg-red-100 transition">
+                        Déconnexion
+                    </button>
+                </form>
             </div>
         </nav>
 
@@ -322,17 +348,13 @@ function toggleNotifMenu(event) {
 }
 
 document.addEventListener('click', function(e) {
-    if (e.target.closest('a[href], button, input, select, textarea')) {
-        return;
-    }
-
     const profileMenu = document.getElementById('profile-menu');
     const notifMenu   = document.getElementById('notif-menu');
-    if (!profileMenu.contains(e.target)) {
-        document.getElementById('profile-dropdown').classList.add('hidden');
+    if (profileMenu && !profileMenu.contains(e.target)) {
+        document.getElementById('profile-dropdown')?.classList.add('hidden');
     }
-    if (!notifMenu.contains(e.target)) {
-        document.getElementById('notif-dropdown').classList.add('hidden');
+    if (notifMenu && !notifMenu.contains(e.target)) {
+        document.getElementById('notif-dropdown')?.classList.add('hidden');
     }
 });
 
@@ -345,6 +367,21 @@ function markRead(id, el) {
         }
     });
 }
+
+(function() {
+    function sendHeartbeat() {
+        if (document.visibilityState === 'visible') {
+            fetch('{{ route("user.heartbeat") }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content || ''
+                }
+            }).catch(() => {});
+        }
+    }
+    setInterval(sendHeartbeat, 60000);
+})();
 </script>
 @stack('scripts')
 </body>

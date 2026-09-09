@@ -26,10 +26,9 @@
             <div style="background:#FEF2F2; border-radius:12px; padding:20px; margin-bottom:28px; border-left:4px solid #EF4444;">
                 <p style="margin:0 0 8px; font-size:13px; color:#EF4444; font-weight:700; text-transform:uppercase;">
                     Type de violation :
-                    @if($alert->alert_type === 'phone') Numéro de téléphone détecté
-                    @elseif($alert->alert_type === 'bank') Coordonnées bancaires détectées
+                    @if($alert->alert_type === 'bank') Coordonnées bancaires ou carte de paiement
                     @elseif($alert->alert_type === 'link') Lien externe détecté
-                    @else Contenu suspect
+                    @else Contenu suspect non autorisé
                     @endif
                 </p>
                 <p style="margin:0; font-size:14px; color:#666; line-height:1.6;">

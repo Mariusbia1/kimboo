@@ -20,7 +20,7 @@ class Notification extends Model
     }
 
     // Helper statique pour créer une notif facilement
-    public static function notifier(int $userId, string $type, string $title, string $body, string $link = null): void
+    public static function notifier(int $userId, string $type, string $title, string $body, ?string $link = null): void
     {
         static::create([
             'user_id' => $userId,

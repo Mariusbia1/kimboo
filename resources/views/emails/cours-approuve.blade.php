@@ -13,9 +13,10 @@
         </div>
 
         <!-- Body -->
-        <div style="padding:40px 32px;">
-            <div style="width:56px; height:56px; background:#F0FFF4; border-radius:14px; display:flex; align-items:center; justify-content:center; margin-bottom:24px;">
-                <span style="font-size:28px;">✅</span>
+            <div style="width:56px; height:56px; background:#DCFCE7; border-radius:14px; text-align:center; line-height:56px; margin-bottom:24px;">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#16A34A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle; display:inline-block;">
+                    <path d="M20 6L9 17l-5-5"/>
+                </svg>
             </div>
 
             <h2 style="margin:0 0 8px; font-size:22px; font-weight:800; color:#000;">

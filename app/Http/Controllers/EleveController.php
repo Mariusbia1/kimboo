@@ -58,7 +58,7 @@ public function mesCours()
     $user = auth()->user();
 
     $cours = Booking::where('user_id', $user->id)
-        ->whereIn('status', ['confirmé', 'terminé'])
+        ->whereIn('status', ['en_attente', 'confirmé', 'terminé'])
         ->with(['course.teacherProfile.user'])
         ->orderBy('scheduled_at', 'desc')
         ->paginate(9);
@@ -69,8 +69,8 @@ public function mesCours()
     {
         $booking = Booking::with(['course.teacherProfile.user'])->findOrFail($id);
 
-        if ($booking->user_id !== auth()->id()) {
-            abort(403);
+        if ($booking->user_id !== auth()->id() && auth()->user()->role !== 'admin') {
+            return back()->with('error', 'Action non autorisée sur cette réservation.');
         }
 
         $booking->update(['status' => 'annulé']);
@@ -103,8 +103,8 @@ public function mesCours()
     {
         $booking = Booking::with('course.teacherProfile.user')->findOrFail($id);
 
-        if ($booking->user_id !== auth()->id()) {
-            abort(403);
+        if ($booking->user_id !== auth()->id() && auth()->user()->role !== 'admin') {
+            return back()->with('error', 'Action non autorisée sur cette réservation.');
         }
 
         if ($booking->status !== 'confirmé') {
@@ -141,8 +141,8 @@ public function mesCours()
     {
         $booking = Booking::with('course.teacherProfile')->findOrFail($id);
 
-        if ($booking->user_id !== auth()->id()) {
-            abort(403);
+        if ($booking->user_id !== auth()->id() && auth()->user()->role !== 'admin') {
+            return back()->with('error', 'Action non autorisée.');
         }
 
         if ($booking->status !== 'terminé') {
@@ -191,8 +191,17 @@ public function mesCours()
             link:   route('professeur.dashboard')
         );
         // Envoi mail au professeur
-        $review = \App\Models\Review::where('booking_id', $booking->id)->latest()->first();
-        Mail::to($profile->user->email)->send(new NouvelAvis($review->load('user')));
+        try {
+            $review = \App\Models\Review::where('booking_id', $booking->id)->latest()->first();
+            if ($review && $profile->user && $profile->user->email) {
+                Mail::to($profile->user->email)->send(new NouvelAvis($review->load('user')));
+            }
+        } catch (\Throwable $e) {
+            \Illuminate\Support\Facades\Log::warning('Échec de l\'envoi du mail de nouvel avis', [
+                'error' => $e->getMessage(),
+                'booking_id' => $booking->id,
+            ]);
+        }
 
         return back()->with('success', 'Avis publié avec succès ! Merci pour votre retour.');
     }
@@ -267,8 +276,12 @@ public function destroyAccount(Request $request)
 public function calendrier(Request $request)
 {
     $user = auth()->user();
-    $mois = $request->get('mois', now()->month);
-    $annee = $request->get('annee', now()->year);
+    $validated = $request->validate([
+        'mois'  => ['nullable', 'integer', 'min:1', 'max:12'],
+        'annee' => ['nullable', 'integer', 'min:2020', 'max:2100'],
+    ]);
+    $mois  = $validated['mois'] ?? now()->month;
+    $annee = $validated['annee'] ?? now()->year;
 
     // Cours du mois sélectionné
     $coursduMois = Booking::where('user_id', $user->id)

@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+    <!-- Fond Blanc Pur (#FFFFFF) avec coins arrondis -->
+    <rect width="64" height="64" rx="16" fill="#FFFFFF"/>
+    
+    <!-- Lettre K Kimboo stylisée en Orange Kimboo (#FCB315) -->
+    <!-- Barre verticale -->
+    <rect x="15" y="13" width="8" height="38" rx="4" fill="#FCB315"/>
+    
+    <!-- Branche diagonale haute -->
+    <path d="M21 32 L37.5 15.5 C38.8 14.2 41 15.1 41 17 L41 19.5 C41 20.5 40.5 21.5 39.7 22.2 L28 33.5 Z" fill="#FCB315"/>
+    
+    <!-- Branche diagonale basse -->
+    <path d="M26.5 30.5 L39.5 43.5 C40.5 44.5 41 45.5 41 46.8 L41 49 C41 50.8 38.8 51.7 37.5 50.4 L21 34 Z" fill="#FCB315"/>
+    
+    <!-- Pastille Orange Kimboo -->
+    <circle cx="48" cy="16" r="4" fill="#FCB315"/>
+</svg>

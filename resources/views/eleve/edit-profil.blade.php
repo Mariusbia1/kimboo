@@ -34,15 +34,8 @@
         {{-- Avatar preview --}}
         <div class="relative inline-block mb-4">
             <div id="avatar-preview"
-                 class="w-28 h-28 rounded-2xl overflow-hidden mx-auto flex items-center justify-center text-4xl font-bold text-black"
-                 style="{{ $user->avatar ? '' : 'background:#FCB315;' }}">
-                @if($user->avatar)
-                <img src="{{ Storage::url($user->avatar) }}"
-                     id="avatar-img"
-                     class="w-full h-full object-cover"/>
-                @else
-                <span id="avatar-initiale">{{ strtoupper(substr($user->name, 0, 1)) }}</span>
-                @endif
+                 class="w-28 h-28 rounded-2xl overflow-hidden mx-auto shadow-sm">
+                <x-avatar :user="$user" full="true" rounded="2xl" />
             </div>
 
             {{-- Bouton changer photo --}}
@@ -278,8 +271,9 @@ function previewAvatar(input) {
             if (!img) {
                 img = document.createElement('img');
                 img.id = 'avatar-img';
-                img.className = 'w-full h-full object-cover';
-                preview.innerHTML = '';
+                img.className = 'w-full h-full object-cover object-top';
+                img.style.objectPosition = 'center top';
+                preview.textContent = '';
                 preview.appendChild(img);
                 preview.style.background = '';
             }

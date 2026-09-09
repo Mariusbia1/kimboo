@@ -6,14 +6,14 @@
 
 <!-- HERO -->
 <section class="w-full px-4 flex items-center justify-center relative"
-style="min-height: calc(80vh); background: linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.45)), url('https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=1600&q=80') center/cover no-repeat;">
+style="min-height: calc(80vh); background: linear-gradient(rgba(0,0,0,0.50), rgba(0,0,0,0.50)), url('{{ asset('images/hero-home.webp') }}') center/cover no-repeat;">
     <div class="max-w-4xl mx-auto text-center">
         <h1 class="text-4xl md:text-5xl font-bold text-white mb-4" style="font-family:'Plus Jakarta Sans',sans-serif; line-height:1.2;">
-    Que voulez-vous <span class="text-white">apprendre</span> aujourd'hui ?
-</h1>
-<p class="text-lg mb-10" style="color:rgba(255,255,255,0.85);">
-    Trouvez un professeur qualifié près de chez vous en quelques secondes.
-</p>
+            {{ \App\Models\SiteSetting::get('hero_title', 'Trouvez le professeur idéal en Côte d’Ivoire') }}
+        </h1>
+        <p class="text-lg mb-10" style="color:rgba(255,255,255,0.85);">
+            {{ \App\Models\SiteSetting::get('hero_subtitle', 'Des cours particuliers à domicile ou en ligne avec les meilleurs enseignants sélectionnés pour votre réussite.') }}
+        </p>
         <!-- Barre de recherche -->
         <form action="{{ route('cours.index') }}" method="GET" class="flex flex-col sm:flex-row items-center gap-3 bg-white rounded-xl p-3 max-w-2xl mx-auto" style="box-shadow: 0 8px 30px rgba(0,0,0,0.15);">
             <div class="flex items-center gap-2 flex-1 w-full">
@@ -29,184 +29,54 @@ style="min-height: calc(80vh); background: linear-gradient(rgba(0,0,0,0.45), rgb
                 />
             </div>
             <button type="submit"
-                class="w-full sm:w-auto px-6 py-3 rounded-xl text-black font-semibold text-sm transition hover:opacity-90"
+                class="w-full sm:w-auto px-8 py-3.5 rounded-full text-black font-semibold text-sm transition hover:opacity-90 shadow-sm"
                 style="background:#FCB315;">
-                Rechercher
+                {{ \App\Models\SiteSetting::get('hero_cta_text', 'Rechercher') }}
             </button>
         </form>
 
         <!-- Suggestions -->
         <div class="flex flex-wrap justify-center gap-2 mt-5 text-[rgb(43,43,43)]">
             @foreach(['Mathématiques', 'Cuisine', 'Anglais', 'Sport', 'Lingala', 'Informatique'] as $suggestion)
-            <button onclick="document.getElementById('search-input').value='{{ $suggestion }}'"
-                class="text-sm px-4 py-1.5 rounded-lg border border-gray-200 bg-white text-[rgb(43,43,43)] hover:border-yellow-400 hover:text-yellow-500 transition">
+            <a href="{{ route('cours.index', ['q' => $suggestion]) }}"
+               class="text-sm px-5 py-2 rounded-full border border-gray-200 bg-white text-[rgb(43,43,43)] hover:border-yellow-400 hover:text-yellow-600 transition shadow-xs font-medium inline-block">
                 {{ $suggestion }}
-            </button>
+            </a>
             @endforeach
         </div>
     </div>
 
 </section>
 
-<!-- STATS -->
-<section class="py-16 bg-white border-b border-gray-100">
-    <div class="max-w-5xl mx-auto px-4">
-
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
-
-            <!-- Stat 1 -->
-            <div class="relative text-center group">
-                <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl mb-4" style="background:#FFF8E7;">
-                    <svg class="w-7 h-7" style="color:#FCB315;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a4 4 0 00-3-3.87M9 20H4v-2a4 4 0 013-3.87m9-4a4 4 0 11-8 0 4 4 0 018 0zm6 4a2 2 0 100-4 2 2 0 000 4zM3 16a2 2 0 100-4 2 2 0 000 4z"/>
-                    </svg>
-                </div>
-                <div class="flex items-center justify-center gap-1 mb-2">
-                    <span class="text-3xl font-black" style="color:#FCB315;">+</span>
-                    <span class="text-5xl font-black text-[#FCB315] counter" data-target="10" style="font-family:'Plus Jakarta Sans',sans-serif;">0</span>
-
-                </div>
-                <p class="font-semibold text-black mb-1">Professeurs</p>
-                <p class="text-sm" style="color:#2b2b2b;">Des experts passionnés prêts à vous accompagner</p>
-            </div>
-
-            <!-- Séparateur vertical -->
-            <div class="relative text-center group" style="border-left: 1px solid #f0f0f0; border-right: 1px solid #f0f0f0;">
-                <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl mb-4" style="background:#FFF8E7;">
-                    <svg class="w-7 h-7" style="color:#FCB315;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
-                    </svg>
-                </div>
-                <div class="flex items-center justify-center gap-1 mb-2">
-                    <span class="text-3xl font-black" style="color:#FCB315;">+</span>
-                    <span class="text-5xl font-black text-[#FCB315] counter" data-target="20" style="font-family:'Plus Jakarta Sans',sans-serif;">0</span>
-
-                </div>
-                <p class="font-semibold text-black mb-1">Matières</p>
-                <p class="text-sm" style="color:#2b2b2b;">Des disciplines variées pour tous vos objectifs</p>
-            </div>
-
-            <!-- Stat 3 -->
-            <div class="relative text-center group">
-                <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl mb-4" style="background:#FFF8E7;">
-                    <svg class="w-7 h-7" style="color:#FCB315;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/>
-                    </svg>
-                </div>
-                <div class="flex items-center justify-center gap-1 mb-2">
-                    <span class="text-3xl font-black" style="color:#FCB315;">+</span>
-                    <span class="text-5xl font-black text-[#FCB315] counter" data-target="50" style="font-family:'Plus Jakarta Sans',sans-serif;">0</span>
-
-                </div>
-                <p class="font-semibold text-black mb-1">Élèves satisfaits</p>
-                <p class="text-sm" style="color:#2b2b2b;">Des apprenants qui progressent chaque jour</p>
-            </div>
-
-        </div>
-    </div>
-</section>
-
-
-<!-- CATÉGORIES -->
-<section class="py-16 px-4 bg-white">
-    <div class="max-w-6xl mx-auto">
-        <h2 class="text-4xl font-bold text-black mb-2" style="font-family:'Poppins',sans-serif;">Explorez par catégorie</h2>
-        <p class="text-gray-400 text-sm mb-8">Des cours pour tous les goûts et tous les niveaux</p>
-
-        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-4">
-
-    <a href="{{ route('cours.index', ['categorie' => 'Mathématiques']) }}"
-       class="flex flex-col items-center gap-2 p-4 rounded-2xl border border-gray-100 bg-gray-50 hover:border-yellow-400 hover:bg-yellow-50 transition group">
-        <div class="w-10 h-10 flex items-center justify-center rounded-xl" style="background:#FFF8E7;">
-            <svg class="w-5 h-5" style="color:#FCB315;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>
-            </svg>
-        </div>
-        <span class="text-sm font-medium text-gray-700 group-hover:text-yellow-600">Mathématiques</span>
-    </a>
-
-    <a href="{{ route('cours.index', ['categorie' => 'Cuisine']) }}"
-       class="flex flex-col items-center gap-2 p-4 rounded-2xl border border-gray-100 bg-gray-50 hover:border-yellow-400 hover:bg-yellow-50 transition group">
-        <div class="w-10 h-10 flex items-center justify-center rounded-xl" style="background:#FFF8E7;">
-            <svg class="w-5 h-5" style="color:#FCB315;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"/>
-            </svg>
-        </div>
-        <span class="text-sm font-medium text-gray-700 group-hover:text-yellow-600">Cuisine</span>
-    </a>
-
-    <a href="{{ route('cours.index', ['categorie' => 'Sport']) }}"
-       class="flex flex-col items-center gap-2 p-4 rounded-2xl border border-gray-100 bg-gray-50 hover:border-yellow-400 hover:bg-yellow-50 transition group">
-        <div class="w-10 h-10 flex items-center justify-center rounded-xl" style="background:#FFF8E7;">
-            <svg class="w-5 h-5" style="color:#FCB315;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-            </svg>
-        </div>
-        <span class="text-sm font-medium text-gray-700 group-hover:text-yellow-600">Sport</span>
-    </a>
-
-    <a href="{{ route('cours.index', ['categorie' => 'Langues']) }}"
-       class="flex flex-col items-center gap-2 p-4 rounded-2xl border border-gray-100 bg-gray-50 hover:border-yellow-400 hover:bg-yellow-50 transition group">
-        <div class="w-10 h-10 flex items-center justify-center rounded-xl" style="background:#FFF8E7;">
-            <svg class="w-5 h-5" style="color:#FCB315;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"/>
-            </svg>
-        </div>
-        <span class="text-sm font-medium text-gray-700 group-hover:text-yellow-600">Langues</span>
-    </a>
-
-    <a href="{{ route('cours.index', ['categorie' => 'Musique']) }}"
-       class="flex flex-col items-center gap-2 p-4 rounded-2xl border border-gray-100 bg-gray-50 hover:border-yellow-400 hover:bg-yellow-50 transition group">
-        <div class="w-10 h-10 flex items-center justify-center rounded-xl" style="background:#FFF8E7;">
-            <svg class="w-5 h-5" style="color:#FCB315;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"/>
-            </svg>
-        </div>
-        <span class="text-sm font-medium text-gray-700 group-hover:text-yellow-600">Musique</span>
-    </a>
-
-    <a href="{{ route('cours.index', ['categorie' => 'Informatique']) }}"
-       class="flex flex-col items-center gap-2 p-4 rounded-2xl border border-gray-100 bg-gray-50 hover:border-yellow-400 hover:bg-yellow-50 transition group">
-        <div class="w-10 h-10 flex items-center justify-center rounded-xl" style="background:#FFF8E7;">
-            <svg class="w-5 h-5" style="color:#FCB315;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
-            </svg>
-        </div>
-        <span class="text-sm font-medium text-gray-700 group-hover:text-yellow-600">Informatique</span>
-    </a>
-
-</div>
-    </div>
-</section>
-
 <!-- PROFESSEURS RECOMMANDÉS -->
 <section class="py-16 px-4 bg-white">
     <div class="max-w-6xl mx-auto">
         <h2 class="text-4xl font-bold text-black mb-2" style="font-family:'Plus Jakarta Sans',sans-serif;">
-            Les meilleurs profs de Côte d'Ivoire sont sur Kimboo
+            {{ \App\Models\SiteSetting::get('home_teachers_title', 'Les meilleurs profs de Côte d\'Ivoire sont sur Kimboo') }}
         </h2>
-        <p class="text-sm mb-8" style="color:#2b2b2b;">Vérifiés par l'équipe Kimboo</p>
+        <p class="text-sm mb-8" style="color:#2b2b2b;">
+            {{ \App\Models\SiteSetting::get('home_teachers_subtitle', 'Vérifiés par l\'équipe Kimboo') }}
+        </p>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
             @forelse($professeurs as $profile)
             <a href="{{ route('professeur.profil', $profile->id) }}" class="block group">
                 <div class="relative mb-3">
     <!-- Photo cliquable -->
-    <div class="w-full aspect-square rounded-xl overflow-hidden bg-gray-100">
-        @if($profile->user->avatar)
-        <img src="{{ Storage::url($profile->user->avatar) }}"
-             alt="{{ $profile->user->name }}"
-             class="w-full h-full object-cover group-hover:scale-105 transition duration-300"/>
-        @else
-        <div class="w-full h-full flex items-center justify-center text-5xl font-bold text-black" style="background:#FCB315;">
-            {{ strtoupper(substr($profile->user->name, 0, 1)) }}
-        </div>
-        @endif
+    <div class="w-full aspect-square rounded-2xl overflow-hidden bg-gray-100 shadow-sm relative">
+        <x-avatar :user="$profile->user" full="true" rounded="2xl" />
     </div>
+
+    <!-- Badge en vedette haut à gauche -->
+    @if($profile->is_featured)
+    <div class="absolute top-3 left-3 z-10">
+        <x-featured-badge />
+    </div>
+    @endif
 
     <!-- Badge certifié haut à droite -->
     @if($profile->is_verified)
-    <div class="absolute top-3 right-3">
+    <div class="absolute top-3 right-3 z-10">
         <x-verified-badge />
     </div>
     @endif
@@ -214,8 +84,8 @@ style="min-height: calc(80vh); background: linear-gradient(rgba(0,0,0,0.45), rgb
     <!-- Bouton like bas à droite -->
     @auth
     <button onclick="toggleFavori({{ $profile->id }}, this)"
-        class="absolute bottom-3 right-3 w-8 h-8 rounded-full flex items-center justify-center transition hover:scale-110"
-        style="background:rgba(255,255,255,0.9);">
+        class="absolute bottom-3 right-3 w-9 h-9 rounded-full flex items-center justify-center transition hover:scale-110 shadow-sm z-10"
+        style="background:rgba(255,255,255,0.95);">
         <svg class="w-4 h-4 favori-icon" fill="{{ in_array($profile->id, $favorisIds) ? '#e53e3e' : 'none' }}"
              stroke="{{ in_array($profile->id, $favorisIds) ? '#e53e3e' : '#666' }}"
              viewBox="0 0 24 24">
@@ -231,14 +101,16 @@ style="min-height: calc(80vh); background: linear-gradient(rgba(0,0,0,0.45), rgb
                 <p class="text-sm mb-1" style="color:#2b2b2b;">{{ $profile->courses->first()->category ?? 'Cours divers' }}</p>
 
                 <!-- Note -->
-                <div class="flex items-center gap-1 mb-2">
-                    <span style="color:#FCB315;">★</span>
-                    <span class="text-sm font-medium text-black">{{ $profile->rating }}</span>
-                    <span class="text-sm" style="color:#2b2b2b;">({{ $profile->reviews_count }} avis)</span>
+                <div class="flex items-center gap-1.5 mb-2">
+                    <svg class="w-4 h-4 text-[#FCB315] fill-current" viewBox="0 0 20 20">
+                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                    </svg>
+                    <span class="text-sm font-bold text-black">{{ $profile->rating }}</span>
+                    <span class="text-xs text-gray-500 font-medium">({{ $profile->reviews_count }} avis)</span>
                 </div>
 
                 <!-- Bio -->
-                <p class="text-sm leading-relaxed mb-2" style="color:#2b2b2b;">{{ Str::limit($profile->bio, 60) }}</p>
+                <p class="text-sm leading-relaxed mb-2" style="color:#2b2b2b;">{{ Str::limit($profile->bio, 75) }}</p>
 
                 <!-- Prix + 1er cours -->
                 <div class="flex items-center justify-between">
@@ -249,7 +121,7 @@ style="min-height: calc(80vh); background: linear-gradient(rgba(0,0,0,0.45), rgb
                 </div>
             </a>
             @empty
-            <p class="col-span-4 text-center py-10" style="color:#2b2b2b;">Aucun professeur disponible.</p>
+            <p class="col-span-1 sm:col-span-2 md:col-span-3 text-center py-10" style="color:#2b2b2b;">Aucun professeur disponible.</p>
             @endforelse
         </div>
     </div>
@@ -343,7 +215,7 @@ style="min-height: calc(80vh); background: linear-gradient(rgba(0,0,0,0.45), rgb
         <div class="text-center mt-14">
             <a href="#"
                onclick="document.getElementById('search-input').scrollIntoView({behavior:'smooth'}); document.getElementById('search-input').focus(); return false;"
-               class="inline-flex items-center gap-3 px-8 py-4 rounded-2xl text-black font-bold text-base transition hover:opacity-90"
+               class="inline-flex items-center gap-3 px-8 py-4 rounded-full text-black font-bold text-base transition hover:opacity-90 shadow-md"
                style="background:#FCB315;">
                 Trouver mon prof !
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -413,7 +285,7 @@ style="min-height: calc(80vh); background: linear-gradient(rgba(0,0,0,0.45), rgb
 </div>
 
                 <a href="{{ route('register') }}?role=professeur"
-                   class="inline-flex items-center gap-3 px-8 py-4 rounded-2xl text-black font-bold text-sm transition hover:opacity-90"
+                   class="inline-flex items-center gap-3 px-8 py-4 rounded-full text-black font-bold text-sm transition hover:opacity-90 shadow-md"
                    style="background:#FCB315;">
                     Donner des cours
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -432,15 +304,7 @@ style="min-height: calc(80vh); background: linear-gradient(rgba(0,0,0,0.45), rgb
 
                     <!-- Photo -->
                     <div class="mx-auto mb-4" style="width:100px; height:100px;">
-                        @if($meilleurProf->user->avatar)
-                        <img src="{{ Storage::url($meilleurProf->user->avatar) }}"
-                             alt="{{ $meilleurProf->user->name }}"
-                             class="w-full h-full object-cover rounded-2xl"/>
-                        @else
-                        <div class="w-full h-full rounded-2xl flex items-center justify-center text-4xl font-bold text-black" style="background:#FCB315;">
-                            {{ strtoupper(substr($meilleurProf->user->name, 0, 1)) }}
-                        </div>
-                        @endif
+                        <x-avatar :user="$meilleurProf->user" full="true" rounded="2xl" />
                     </div>
 
                     <!-- Badge certifié -->
@@ -460,12 +324,8 @@ style="min-height: calc(80vh); background: linear-gradient(rgba(0,0,0,0.45), rgb
 
                     <!-- Note -->
                     <div class="flex items-center justify-center gap-2 mb-4">
-                        <div class="flex gap-0.5">
-                            @for($i = 1; $i <= 5; $i++)
-                            <span style="color: {{ $i <= round($meilleurProf->rating) ? '#FCB315' : '#E5E7EB' }}; font-size:18px;">★</span>
-                            @endfor
-                        </div>
-                        <span class="font-bold text-black">{{ $meilleurProf->rating }}</span>
+                        <x-star-rating :rating="$meilleurProf->rating" size="4" />
+                        <span class="font-bold text-black text-sm">{{ $meilleurProf->rating }}</span>
                     </div>
 
                     <!-- Stats prof -->
@@ -567,10 +427,8 @@ style="min-height: calc(80vh); background: linear-gradient(rgba(0,0,0,0.45), rgb
                     <div class="rounded-3xl p-7 shrink-0" style="width:340px; background:#F9FAFB; border: 2px solid #F0F0F0;">
 
                         <!-- Étoiles -->
-                        <div class="flex gap-0.5 mb-4">
-                            @for($i = 1; $i <= $t['note']; $i++)
-                            <span style="color:#FCB315; font-size:18px;">★</span>
-                            @endfor
+                        <div class="mb-4">
+                            <x-star-rating :rating="$t['note']" size="4" />
                         </div>
 
                         <!-- Texte -->
@@ -580,9 +438,7 @@ style="min-height: calc(80vh); background: linear-gradient(rgba(0,0,0,0.45), rgb
 
                         <!-- Auteur -->
                         <div class="flex items-center gap-3">
-                            <div class="w-11 h-11 rounded-full flex items-center justify-center text-base font-bold text-black shrink-0" style="background:#FCB315;">
-                                {{ $t['avatar'] }}
-                            </div>
+                            <x-avatar :name="$t['nom']" size="11" />
                             <div>
                                 <p class="font-bold text-black text-sm">{{ $t['nom'] }}</p>
                                 <p class="text-sm" style="color:#2b2b2b;">{{ $t['role'] }} · {{ $t['ville'] }}</p>

@@ -11,3 +11,9 @@
         touch-action: manipulation;
     }
 }
+
+/* Cadrage intelligent des photos de profil : préserver la tête et le visage même sur les photos complètes */
+img.object-cover {
+    object-position: center top;
+}
+

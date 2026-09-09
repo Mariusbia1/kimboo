@@ -14,11 +14,19 @@ class StatsController extends Controller
 {
     public function index(Request $request)
     {
-        $periode = $request->get('periode', '30');
-        $periodes = ['3', '7', '30', '90', 'all'];
+        $validated = $request->validate([
+            'periode' => ['nullable', 'string', 'in:3,7,30,90,all'],
+        ]);
 
-        if (!in_array($periode, $periodes)) $periode = '30';
+        $periodes = [
+            '3'   => '3 derniers jours',
+            '7'   => '7 derniers jours',
+            '30'  => '30 derniers jours',
+            '90'  => '90 derniers jours',
+            'all' => 'Tout l\'historique',
+        ];
 
+        $periode = $validated['periode'] ?? '30';
         $debut = $periode === 'all' ? null : now()->subDays((int)$periode);
 
         // Helper query
@@ -85,14 +93,125 @@ class StatsController extends Controller
                 DB::raw('COUNT(DISTINCT ip) as total')
             )->groupBy('date')->orderBy('date')->get();
 
-        // --- Pages les plus vues ---
-        $pagesLesPlusVues = $pv()->select('url', DB::raw('COUNT(*) as total'))
-            ->groupBy('url')->orderByDesc('total')->limit(8)->get();
+        // --- Pages les plus vues (normalisées et nommées avec précision) ---
+        $rawPageViews = $pv()
+            ->select('url', DB::raw('COUNT(*) as total'))
+            ->where('url', 'not like', 'storage%')
+            ->where('url', 'not like', 'images%')
+            ->where('url', 'not like', 'build%')
+            ->where('url', 'not like', 'api%')
+            ->where('url', 'not like', 'user/heartbeat%')
+            ->where('url', 'not like', 'admin%')
+            ->where('url', 'not like', '%.php')
+            ->groupBy('url')
+            ->get();
 
-        // --- Professeurs les plus visités ---
-        $profsLesPlusVus = $pv()->select('url', DB::raw('COUNT(*) as total'))
-            ->where('url', 'like', 'professeur/%')
-            ->groupBy('url')->orderByDesc('total')->limit(5)->get();
+        $groupedPages = [];
+        foreach ($rawPageViews as $item) {
+            $clean = trim($item->url, '/');
+            // Les profils individuels sont affichés dans la carte dédiée
+            if (preg_match('/^professeur\/[0-9]+$/', $clean)) {
+                continue;
+            }
+            $groupedPages[$clean] = ($groupedPages[$clean] ?? 0) + (int) $item->total;
+        }
+        arsort($groupedPages);
+        $topPages = array_slice($groupedPages, 0, 8, true);
+
+        $pageNamesMap = [
+            ''                           => ['name' => 'Accueil', 'category' => 'Général'],
+            'cours'                      => ['name' => 'Recherche de cours', 'category' => 'Catalogue'],
+            'login'                      => ['name' => 'Connexion', 'category' => 'Authentification'],
+            'register'                   => ['name' => 'Inscription', 'category' => 'Authentification'],
+            'dashboard'                  => ['name' => 'Tableau de bord', 'category' => 'Espace membre'],
+            'eleve/dashboard'            => ['name' => 'Espace Élève', 'category' => 'Élève'],
+            'professeur/dashboard'       => ['name' => 'Espace Professeur', 'category' => 'Professeur'],
+            'politique-confidentialite'  => ['name' => 'Politique de confidentialité', 'category' => 'Légal'],
+            'qui-sommes-nous'            => ['name' => 'Qui sommes-nous', 'category' => 'À propos'],
+            'comment-ca-marche'          => ['name' => 'Comment ça marche', 'category' => 'À propos'],
+            'devenir-professeur'         => ['name' => 'Devenir professeur', 'category' => 'Recrutement'],
+            'contact'                    => ['name' => 'Contact & Support', 'category' => 'Support'],
+            'conditions-generales'       => ['name' => 'Conditions générales', 'category' => 'Légal'],
+            'mentions-legales'           => ['name' => 'Mentions légales', 'category' => 'Légal'],
+            'eleve/reservations'         => ['name' => 'Mes réservations (Élève)', 'category' => 'Élève'],
+            'eleve/mes-cours'            => ['name' => 'Mes cours suivis', 'category' => 'Élève'],
+            'eleve/favoris'              => ['name' => 'Professeurs favoris', 'category' => 'Élève'],
+            'eleve/profil'               => ['name' => 'Mon profil élève', 'category' => 'Élève'],
+            'eleve/calendrier'           => ['name' => 'Planning élève', 'category' => 'Élève'],
+            'professeur/cours/ajouter'   => ['name' => 'Ajouter un cours', 'category' => 'Professeur'],
+            'professeur/profil/modifier' => ['name' => 'Modifier mon profil', 'category' => 'Professeur'],
+            'professeur/reservations'    => ['name' => 'Réservations reçues', 'category' => 'Professeur'],
+            'professeur/calendrier'      => ['name' => 'Planning professeur', 'category' => 'Professeur'],
+            'messages'                   => ['name' => 'Messagerie interne', 'category' => 'Communication'],
+            'favoris'                    => ['name' => 'Liste des favoris', 'category' => 'Élève'],
+            'forgot-password'            => ['name' => 'Mot de passe oublié', 'category' => 'Authentification'],
+        ];
+
+        $pagesLesPlusVues = collect();
+        foreach ($topPages as $clean => $total) {
+            $info = $pageNamesMap[$clean] ?? null;
+
+            if ($info) {
+                $name = $info['name'];
+                $category = $info['category'];
+            } elseif (str_starts_with($clean, 'messages/')) {
+                $name = 'Discussion privée';
+                $category = 'Communication';
+            } else {
+                $name = ucfirst(str_replace(['-', '_', '/'], ' ', $clean ?: 'Accueil'));
+                $category = 'Page';
+            }
+
+            $pagesLesPlusVues->push((object) [
+                'name'      => $name,
+                'path'      => '/' . ltrim($clean, '/'),
+                'category'  => $category,
+                'total'     => (int) $total,
+            ]);
+        }
+
+        // --- Professeurs les plus visités (uniquement vrais profils publics avec noms et données réelles) ---
+        $rawProfsQuery = $pv()
+            ->select('url', DB::raw('COUNT(*) as total'))
+            ->where('url', 'like', '%professeur/%')
+            ->groupBy('url')
+            ->get();
+
+        $teacherVisits = [];
+        foreach ($rawProfsQuery as $item) {
+            $clean = trim($item->url, '/');
+            if (preg_match('/^professeur\/([0-9]+)$/', $clean, $m)) {
+                $id = (int) $m[1];
+                $teacherVisits[$id] = ($teacherVisits[$id] ?? 0) + (int) $item->total;
+            }
+        }
+        arsort($teacherVisits);
+
+        $teacherProfiles = \App\Models\TeacherProfile::with(['user', 'courses'])
+            ->whereIn('id', array_keys($teacherVisits))
+            ->get()
+            ->keyBy('id');
+
+        $profsLesPlusVus = collect();
+        foreach ($teacherVisits as $id => $total) {
+            $profile = $teacherProfiles->get($id);
+            if (!$profile || !$profile->user) {
+                continue;
+            }
+            $profsLesPlusVus->push((object) [
+                'id'          => $profile->id,
+                'name'        => $profile->user->name,
+                'avatar'      => $profile->user->avatar,
+                'category'    => $profile->courses->first()?->category ?? 'Professeur certifié',
+                'url'         => route('professeur.profil', $profile->id),
+                'path'        => '/professeur/' . $profile->id,
+                'total'       => (int) $total,
+                'is_verified' => (bool) $profile->is_verified,
+            ]);
+            if ($profsLesPlusVus->count() >= 8) {
+                break;
+            }
+        }
 
         // --- Inscriptions ---
         $inscriptions = $uq()->count();
@@ -112,6 +231,12 @@ class StatsController extends Controller
         // --- Messages ---
         $messages = $mq()->count();
 
+        // --- Temps passé & Activité utilisateurs ---
+        $totalTempsSecondes = User::sum('time_spent_seconds');
+        $heuresTotalesPassees = round($totalTempsSecondes / 3600, 1);
+        $utilisateursConnectesRecemment = User::where('last_login_at', '>=', now()->subDays(7))->count();
+        $topUtilisateursTemps = User::orderByDesc('time_spent_seconds')->where('time_spent_seconds', '>', 0)->limit(5)->get();
+
         return view('admin.stats', compact(
             'visiteursUniques', 'pagesVues', 'nouveauxVisiteurs',
             'revisiteurs', 'tauxConversion', 'pagesParSession',
@@ -119,7 +244,9 @@ class StatsController extends Controller
             'visiteursParJour', 'pagesLesPlusVues', 'profsLesPlusVus',
             'inscriptions', 'inscriptionsParJour',
             'reservations', 'revenus', 'reservationsParJour',
-            'messages', 'periode', 'periodes'
+            'messages', 'periode', 'periodes',
+            'totalTempsSecondes', 'heuresTotalesPassees',
+            'utilisateursConnectesRecemment', 'topUtilisateursTemps'
         ));
     }
 }

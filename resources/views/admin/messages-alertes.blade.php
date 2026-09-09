@@ -138,17 +138,17 @@
 
                     {{-- Expéditeur → Destinataire --}}
                     <div class="flex items-center gap-3 mb-3">
-                        <div class="flex items-center gap-2">
+                        <button type="button" onclick="openAdminUserModal(@json($alerte->sender))" class="flex items-center gap-2 hover:opacity-80 transition cursor-pointer text-left group">
                             <x-avatar :user="$alerte->sender" size="7" rounded="full"/>
-                            <span class="text-sm font-medium text-black">{{ $alerte->sender->name }}</span>
-                        </div>
+                            <span class="text-sm font-medium text-black group-hover:text-amber-600 underline underline-offset-2">{{ $alerte->sender->name }}</span>
+                        </button>
                         <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
                         </svg>
-                        <div class="flex items-center gap-2">
+                        <button type="button" onclick="openAdminUserModal(@json($alerte->receiver))" class="flex items-center gap-2 hover:opacity-80 transition cursor-pointer text-left group">
                             <x-avatar :user="$alerte->receiver" size="7" rounded="full"/>
-                            <span class="text-sm font-medium text-black">{{ $alerte->receiver->name }}</span>
-                        </div>
+                            <span class="text-sm font-medium text-black group-hover:text-amber-600 underline underline-offset-2">{{ $alerte->receiver->name }}</span>
+                        </button>
                     </div>
 
                     {{-- Contenu suspect --}}
@@ -464,5 +464,9 @@
     @endif
 
 </div>
+
+{{-- Composants Modals Détails --}}
+<x-admin-user-modal />
+<x-admin-course-modal />
 
 @endsection

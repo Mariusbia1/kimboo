@@ -13,12 +13,15 @@ class CompteSuspendu extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public function __construct(public User $user) {}
+    public function __construct(
+        public User $user,
+        public ?string $reason = null
+    ) {}
 
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Votre compte a été suspendu — Kimboo',
+            subject: 'Suspension de votre compte — Kimboo',
         );
     }
 

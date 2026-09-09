@@ -7,8 +7,16 @@
 @section('content')
 
 @if(session('success'))
-<div class="mb-6 px-4 py-3 rounded-xl text-sm font-medium text-green-700 bg-green-100">
-    ✓ {{ session('success') }}
+<div class="mb-6 p-4 rounded-xl bg-green-50 border border-green-200 text-green-700 text-sm flex items-center gap-2">
+    <svg class="w-4 h-4 text-green-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+    <span>{{ session('success') }}</span>
+</div>
+@endif
+
+@if(session('error'))
+<div class="mb-6 p-4 rounded-xl bg-red-50 border border-red-200 text-red-700 text-sm flex items-center gap-2">
+    <svg class="w-4 h-4 text-red-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+    <span>{{ session('error') }}</span>
 </div>
 @endif
 
@@ -27,18 +35,16 @@
                 <!-- Photo de profil -->
                 <div class="flex flex-col gap-4 mb-2 sm:flex-row sm:items-center sm:gap-5">
                     <!-- Avatar actuel -->
-                    <div class="shrink-0">
-                        @if($user->avatar)
-                        <img src="{{ Storage::url($user->avatar) }}"
-                             alt="Photo de profil"
-                             class="w-20 h-20 rounded-2xl object-cover"
-                             id="avatar-preview"/>
-                        @else
-                        <div class="mx-auto mb-3" style="width:fit-content;">
-                            <x-avatar :user="$user" size="20" rounded="2xl"/>
+                    <div class="shrink-0 relative w-20 h-20">
+                        <div id="avatar-placeholder" class="w-20 h-20 rounded-2xl overflow-hidden shadow-sm {{ $user->avatar ? 'hidden' : '' }}">
+                            <x-avatar :user="$user" full="true" rounded="2xl"/>
                         </div>
-                        <img src="" alt="" class="w-20 h-20 rounded-2xl object-cover hidden" id="avatar-preview"/>
-                        @endif
+                        <img src="{{ $user->avatar ? Storage::url($user->avatar) : '' }}"
+                             alt="Photo de profil"
+                             class="w-20 h-20 rounded-2xl object-cover object-top {{ $user->avatar ? '' : 'hidden' }}"
+                             style="object-position: center top;"
+                             id="avatar-preview"
+                             onerror="this.classList.add('hidden'); document.getElementById('avatar-placeholder')?.classList.remove('hidden');"/>
                     </div>
 
                     <!-- Upload -->
@@ -54,149 +60,137 @@
                         <p class="text-sm text-gray-400 mt-1">JPG, PNG ou WEBP · Max 2MB</p>
                     </div>
                 </div>
-                <div style="display:flex; flex-direction:column; gap:1rem;">
+                <div style="display:flex; flex-direction:column; gap:1.25rem;">
 
+                    <!-- Nom complet -->
                     <div>
-                        <label class="text-sm font-semibold text-gray-700 mb-1.5 block">À propos de vous (parcours, diplômes)</label>
-                        <textarea name="bio" rows="4"
-                            class="w-full border-2 border-gray-100 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-yellow-400 transition bg-gray-50 resize-none"
-                            placeholder="Parlez de votre parcours universitaire, vos diplômes...">{{ old('bio', $profile->bio) }}</textarea>
-                        @error('bio') <p class="text-red-500 text-sm mt-1">{{ $message }}</p> @enderror
+                        <label class="text-sm font-semibold text-gray-700 mb-1.5 block">Nom complet <span class="text-red-500">*</span></label>
+                        <input type="text" name="name" value="{{ old('name', $user->name) }}" required
+                            class="w-full border-2 border-gray-100 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-yellow-400 transition bg-gray-50 font-medium"
+                            placeholder="Ex: Kouamé Jean"/>
+                        @error('name') <p class="text-red-500 text-xs mt-1 font-semibold">{{ $message }}</p> @enderror
                     </div>
 
+                    <!-- À propos de vous -->
                     <div>
-                        <label class="text-sm font-semibold text-gray-700 mb-1.5 block">À propos du cours (méthodes, approche)</label>
-                        <textarea name="a_propos_cours" rows="3"
-                            class="w-full border-2 border-gray-100 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-yellow-400 transition bg-gray-50 resize-none"
-                            placeholder="Décrivez vos méthodes d'enseignement...">{{ old('a_propos_cours', $profile->a_propos_cours) }}</textarea>
+                        <div class="flex items-center justify-between mb-1.5">
+                            <label class="text-sm font-semibold text-gray-700 block">À propos de vous (parcours, diplômes) <span class="text-red-500">*</span></label>
+                            <span class="text-xs text-gray-400">Obligatoire</span>
+                        </div>
+                        <textarea name="bio" rows="4" required
+                            class="w-full border-2 border-gray-100 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-yellow-400 transition bg-gray-50 resize-none font-medium"
+                            placeholder="Présentez-vous en quelques lignes : votre formation, vos compétences, vos diplômes et vos passions...">{{ old('bio', $profile->bio) }}</textarea>
+                        @error('bio') <p class="text-red-500 text-xs mt-1 font-semibold">{{ $message }}</p> @enderror
                     </div>
 
-                    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                        <div>
-                            <label class="text-sm font-semibold text-gray-700 mb-1.5 block">Tarif horaire (Fcfa)</label>
-                            <input type="number" name="hourly_rate" value="{{ old('hourly_rate', $profile->hourly_rate) }}"
-                                class="w-full border-2 border-gray-100 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-yellow-400 transition bg-gray-50"/>
-                            @error('hourly_rate') <p class="text-red-500 text-sm mt-1">{{ $message }}</p> @enderror
-                        </div>
-                        <div>
-                            <label class="text-sm font-semibold text-gray-700 mb-1.5 block">Années d'expérience</label>
-                            <input type="text" name="experience_years" value="{{ old('experience_years', $profile->experience_years) }}"
-                                class="w-full border-2 border-gray-100 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-yellow-400 transition bg-gray-50"
-                                placeholder="Ex: 5 ans"/>
-                            @error('experience_years') <p class="text-red-500 text-sm mt-1">{{ $message }}</p> @enderror
-                        </div>
-                    </div>
-
-                    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                        <div>
-                            <label class="text-sm font-semibold text-gray-700 mb-1.5 block">Ville</label>
-                            <input type="text" name="ville" value="{{ old('ville', $user->ville) }}"
-                                class="w-full border-2 border-gray-100 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-yellow-400 transition bg-gray-50"/>
-                            @error('ville') <p class="text-red-500 text-sm mt-1">{{ $message }}</p> @enderror
-                        </div>
-                        <div>
-                            <label class="text-sm font-semibold text-gray-700 mb-1.5 block">Téléphone</label>
-                            <input type="text" name="phone" value="{{ old('phone', $user->phone) }}"
-                                class="w-full border-2 border-gray-100 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-yellow-400 transition bg-gray-50"/>
-                        </div>
-                    </div>
-
-                    <!-- Lieu du cours -->
+                    <!-- À propos du cours -->
                     <div>
-                        <label class="text-sm font-semibold text-gray-700 mb-3 block">Lieu du cours</label>
-                        <div class="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-                            @foreach([
-                                ['value' => 'chez_prof', 'label' => 'Chez le prof', 'icon' => '🏠'],
-                                ['value' => 'chez_eleve', 'label' => 'Chez l\'élève', 'icon' => '📍'],
-                                ['value' => 'webcam', 'label' => 'En webcam', 'icon' => '💻'],
-                            ] as $lieu)
-                            <label class="flex items-center gap-2 px-4 py-2.5 rounded-xl border-2 cursor-pointer transition"
-                                   style="border-color: {{ in_array($lieu['value'], old('lieu_cours', $profile->lieu_cours ?? [])) ? '#FCB315' : '#F3F4F6' }}; background: {{ in_array($lieu['value'], old('lieu_cours', $profile->lieu_cours ?? [])) ? '#FFF8E7' : '#F9FAFB' }}">
-                                <input type="checkbox" name="lieu_cours[]" value="{{ $lieu['value'] }}"
-                                    {{ in_array($lieu['value'], old('lieu_cours', $profile->lieu_cours ?? [])) ? 'checked' : '' }}
-                                    class="hidden">
-                                <span>{{ $lieu['icon'] }}</span>
-                                <span class="text-sm font-medium text-gray-700">{{ $lieu['label'] }}</span>
-                            </label>
-                            @endforeach
+                        <div class="flex items-center justify-between mb-1.5">
+                            <label class="text-sm font-semibold text-gray-700 block">À propos du cours (méthodologie, approche) <span class="text-red-500">*</span></label>
+                            <span class="text-xs text-gray-400">Obligatoire</span>
+                        </div>
+                        <textarea name="a_propos_cours" rows="3" required
+                            class="w-full border-2 border-gray-100 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-yellow-400 transition bg-gray-50 resize-none font-medium"
+                            placeholder="Décrivez votre pédagogie, comment se déroule une séance type, votre méthode d'évaluation et de suivi...">{{ old('a_propos_cours', $profile->a_propos_cours) }}</textarea>
+                        @error('a_propos_cours') <p class="text-red-500 text-xs mt-1 font-semibold">{{ $message }}</p> @enderror
+                    </div>
+
+                    <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
+                        <div>
+                            <label class="text-sm font-semibold text-gray-700 mb-1.5 block">Années d'expérience <span class="text-red-500">*</span></label>
+                            <input type="text" name="experience_years" value="{{ old('experience_years', $profile->experience_years) }}" required
+                                class="w-full border-2 border-gray-100 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-yellow-400 transition bg-gray-50 font-medium"
+                                placeholder="Ex: 5 ans d'expérience"/>
+                            @error('experience_years') <p class="text-red-500 text-xs mt-1 font-semibold">{{ $message }}</p> @enderror
+                        </div>
+                        <div>
+                            <label class="text-sm font-semibold text-gray-700 mb-1.5 block">Ville de résidence <span class="text-red-500">*</span></label>
+                            <input type="text" name="ville" value="{{ old('ville', $user->ville) }}" required
+                                class="w-full border-2 border-gray-100 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-yellow-400 transition bg-gray-50 font-medium"
+                                placeholder="Ex: Abidjan, Cocody, Bouaké..."/>
+                            @error('ville') <p class="text-red-500 text-xs mt-1 font-semibold">{{ $message }}</p> @enderror
+                        </div>
+                        <div>
+                            <label class="text-sm font-semibold text-gray-700 mb-1.5 block">Numéro de téléphone <span class="text-red-500">*</span></label>
+                            <input type="text" name="phone" value="{{ old('phone', $user->phone) }}" required
+                                class="w-full border-2 border-gray-100 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-yellow-400 transition bg-gray-50 font-medium"
+                                placeholder="Ex: 07 00 00 00 00"/>
+                            @error('phone') <p class="text-red-500 text-xs mt-1 font-semibold">{{ $message }}</p> @enderror
                         </div>
                     </div>
 
                     <!-- Zone de déplacement -->
-                    <div>
-                        <label class="text-sm font-semibold text-gray-700 mb-1.5 block">Zone de déplacement (km)</label>
-                        <input type="text" name="zone_deplacement" value="{{ old('zone_deplacement', $profile->zone_deplacement) }}"
-                            class="w-full border-2 border-gray-100 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-yellow-400 transition bg-gray-50"
-                            placeholder="Ex: 10 km autour d'Abidjan"/>
-                    </div>
+                    <x-zone-deplacement-input :value="$profile->zone_deplacement" idPrefix="profil_zone" />
 
                     <!-- Vidéo -->
                     <div>
                         <label class="text-sm font-semibold text-gray-700 mb-1.5 block">Lien vidéo de présentation (YouTube)</label>
                         <input type="url" name="video_url" value="{{ old('video_url', $profile->video_url) }}"
-                            class="w-full border-2 border-gray-100 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-yellow-400 transition bg-gray-50"
-                            placeholder="https://youtube.com/..."/>
+                            class="w-full border-2 border-gray-100 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-yellow-400 transition bg-gray-50 font-medium"
+                            placeholder="https://youtube.com/watch?v=..."/>
                     </div>
 
-                    <div class="flex items-center gap-3">
-                        <input type="checkbox" name="first_course_free" id="first_course_free" value="1"
-                               {{ $profile->first_course_free ? 'checked' : '' }}
-                               class="w-4 h-4 rounded" style="accent-color:#FCB315;">
-                        <label for="first_course_free" class="text-sm font-medium text-gray-700">
-                            Offrir le premier cours gratuitement
-                        </label>
-                    </div>
                     <!-- Parcours académique -->
-<div>
-    <label class="text-sm font-semibold text-gray-700 mb-3 block">Parcours académique</label>
-    <div id="parcours-container" style="display:flex; flex-direction:column; gap:0.75rem;">
-        @php $parcours_list = is_array($profile->parcours_academique) ? $profile->parcours_academique : json_decode($profile->parcours_academique, true) ?? []; @endphp
-@if(count($parcours_list) > 0)
-            @foreach($parcours_list as $index => $parcours)
-            <div class="parcours-item grid grid-cols-1 gap-3 rounded-xl border-2 border-gray-100 p-4 bg-gray-50 sm:grid-cols-[1fr_1fr] xl:grid-cols-[1fr_1fr_1fr_auto] xl:items-center">
-                <input type="text" name="parcours_academique[{{ $index }}][annees]"
-                    value="{{ $parcours['annees'] ?? '' }}"
-                    placeholder="Ex: 2018 - 2020"
-                    class="w-full border-2 border-gray-100 rounded-xl px-3 py-2 text-sm outline-none focus:border-yellow-400 bg-white"/>
-                <input type="text" name="parcours_academique[{{ $index }}][diplome]"
-                    value="{{ $parcours['diplome'] ?? '' }}"
-                    placeholder="Ex: Master en Physique"
-                    class="w-full border-2 border-gray-100 rounded-xl px-3 py-2 text-sm outline-none focus:border-yellow-400 bg-white"/>
-                <input type="text" name="parcours_academique[{{ $index }}][etablissement]"
-                    value="{{ $parcours['etablissement'] ?? '' }}"
-                    placeholder="Ex: Université de..."
-                    class="w-full border-2 border-gray-100 rounded-xl px-3 py-2 text-sm outline-none focus:border-yellow-400 bg-white"/>
-                <button type="button" onclick="this.closest('.parcours-item').remove()"
-                    class="w-full h-10 rounded-lg flex items-center justify-center bg-red-100 text-red-500 hover:bg-red-200 transition sm:col-span-2 xl:col-span-1 xl:w-8 xl:h-8 shrink-0">
-                    ✕
-                </button>
-            </div>
-            @endforeach
-        @endif
-    </div>
-    <button type="button" onclick="addParcours()"
-        class="mt-3 text-sm px-4 py-2 rounded-xl border-2 border-dashed border-gray-200 hover:border-yellow-400 transition w-full"
-        style="color:#2b2b2b;">
-        + Ajouter un diplôme
-    </button>
-</div>
+                    <div>
+                        <label class="text-sm font-semibold text-gray-700 mb-3 block">Parcours académique & Diplômes</label>
+                        <div id="parcours-container" style="display:flex; flex-direction:column; gap:0.75rem;">
+                            @php $parcours_list = is_array($profile->parcours_academique) ? $profile->parcours_academique : json_decode($profile->parcours_academique, true) ?? []; @endphp
+                            @if(count($parcours_list) > 0)
+                                @foreach($parcours_list as $index => $parcours)
+                                <div class="parcours-item grid grid-cols-1 gap-3 rounded-xl border-2 border-gray-100 p-4 bg-gray-50 sm:grid-cols-[1fr_1fr] xl:grid-cols-[1fr_1fr_1fr_auto] xl:items-center">
+                                    <input type="text" name="parcours_academique[{{ $index }}][annees]"
+                                        value="{{ $parcours['annees'] ?? '' }}"
+                                        placeholder="Ex: 2018 - 2020"
+                                        class="w-full border-2 border-gray-100 rounded-xl px-3 py-2 text-sm outline-none focus:border-yellow-400 bg-white"/>
+                                    <input type="text" name="parcours_academique[{{ $index }}][diplome]"
+                                        value="{{ $parcours['diplome'] ?? '' }}"
+                                        placeholder="Ex: Master en Physique"
+                                        class="w-full border-2 border-gray-100 rounded-xl px-3 py-2 text-sm outline-none focus:border-yellow-400 bg-white"/>
+                                    <input type="text" name="parcours_academique[{{ $index }}][etablissement]"
+                                        value="{{ $parcours['etablissement'] ?? '' }}"
+                                        placeholder="Ex: Université de..."
+                                        class="w-full border-2 border-gray-100 rounded-xl px-3 py-2 text-sm outline-none focus:border-yellow-400 bg-white"/>
+                                    <button type="button" onclick="this.closest('.parcours-item').remove()"
+                                        class="w-full h-10 rounded-lg flex items-center justify-center bg-red-50 text-red-500 hover:bg-red-100 transition sm:col-span-2 xl:col-span-1 xl:w-8 xl:h-8 shrink-0" title="Supprimer">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                                    </button>
+                                </div>
+                                @endforeach
+                            @endif
+                        </div>
+                        <button type="button" onclick="addParcours()"
+                            class="mt-3 text-sm px-4 py-2.5 rounded-xl border-2 border-dashed border-gray-200 hover:border-yellow-400 transition w-full font-semibold text-gray-700 bg-gray-50/50">
+                            + Ajouter un diplôme / certification
+                        </button>
+                    </div>
 
-<!-- Temps de réponse -->
-<div>
-    <label class="text-sm font-semibold text-gray-700 mb-1.5 block">Temps de réponse moyen (minutes)</label>
-    <select name="response_time" class="w-full border-2 border-gray-100 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-yellow-400 transition bg-gray-50">
-        <option value="">Choisir...</option>
-        <option value="30" {{ $profile->response_time == 30 ? 'selected' : '' }}>30 minutes</option>
-        <option value="60" {{ $profile->response_time == 60 ? 'selected' : '' }}>1 heure</option>
-        <option value="120" {{ $profile->response_time == 120 ? 'selected' : '' }}>2 heures</option>
-        <option value="240" {{ $profile->response_time == 240 ? 'selected' : '' }}>4 heures</option>
-        <option value="1440" {{ $profile->response_time == 1440 ? 'selected' : '' }}>24 heures</option>
-    </select>
-</div>
+                    <!-- Temps de réponse -->
+                    <div>
+                        <div class="flex items-center justify-between mb-1.5">
+                            <label class="text-sm font-semibold text-gray-700 block">Temps de réponse moyen <span class="text-red-500">*</span></label>
+                            <span class="text-xs text-gray-400">Obligatoire</span>
+                        </div>
+                        <select name="response_time" required class="w-full border-2 border-gray-100 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-yellow-400 transition bg-gray-50 font-medium text-gray-800">
+                            <option value="">Choisir un délai...</option>
+                            <option value="15" {{ old('response_time', $profile->response_time) == 15 ? 'selected' : '' }}>15 minutes (Très rapide)</option>
+                            <option value="30" {{ old('response_time', $profile->response_time) == 30 ? 'selected' : '' }}>30 minutes (Rapide)</option>
+                            <option value="60" {{ old('response_time', $profile->response_time) == 60 ? 'selected' : '' }}>1 heure</option>
+                            <option value="120" {{ old('response_time', $profile->response_time) == 120 ? 'selected' : '' }}>2 heures</option>
+                            <option value="240" {{ old('response_time', $profile->response_time) == 240 ? 'selected' : '' }}>4 heures</option>
+                            <option value="720" {{ old('response_time', $profile->response_time) == 720 ? 'selected' : '' }}>12 heures</option>
+                            <option value="1440" {{ old('response_time', $profile->response_time) == 1440 ? 'selected' : '' }}>24 heures (1 jour)</option>
+                        </select>
+                        @error('response_time') <p class="text-red-500 text-xs mt-1 font-semibold">{{ $message }}</p> @enderror
+                        <p class="text-xs text-gray-400 mt-1">Indiquez aux élèves à quelle rapidité vous répondez généralement aux demandes.</p>
+                    </div>
+
                     <button type="submit"
-                        class="w-full py-3 rounded-xl text-black font-semibold transition hover:opacity-90"
+                        class="w-full py-3.5 rounded-full text-black font-bold text-sm transition hover:opacity-90 shadow-md flex items-center justify-center gap-2"
                         style="background:#FCB315;">
-                        Enregistrer les modifications
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                        </svg>
+                        <span>Enregistrer les modifications</span>
                     </button>
                 </div>
             </form>
@@ -210,8 +204,8 @@
         </h2>
 
         <div class="text-center mb-5">
-            <div class="w-20 h-20 rounded-2xl mx-auto mb-3 flex items-center justify-center text-3xl font-bold text-black" style="background:#FCB315;">
-                {{ strtoupper(substr($user->name, 0, 1)) }}
+            <div class="w-20 h-20 rounded-2xl mx-auto mb-3 overflow-hidden shadow-sm">
+                <x-avatar :user="$user" full="true" rounded="2xl"/>
             </div>
             <h3 class="font-bold text-black">{{ $user->name }}</h3>
             <p class="text-sm text-gray-400">{{ $user->ville }}</p>
@@ -223,29 +217,26 @@
             @endif
         </div>
 
-        <!-- Lieu du cours -->
-        @if($profile->lieu_cours && count($profile->lieu_cours) > 0)
-        <div class="mb-4">
-            <p class="text-sm font-semibold text-gray-400 mb-2">LIEU DU COURS</p>
-            <div class="flex flex-wrap gap-2">
-                @foreach($profile->lieu_cours as $lieu)
-                <span class="text-sm px-3 py-1 rounded-full font-medium" style="background:#FFF8E7; color:#FCB315;">
-                    {{ $lieu === 'chez_prof' ? '🏠 Chez le prof' : ($lieu === 'chez_eleve' ? '📍 Chez l\'élève' : '💻 Webcam') }}
-                </span>
-                @endforeach
-            </div>
+        @php
+            $displayRate = $profile->courses->min('price_per_hour') ?? $profile->hourly_rate;
+        @endphp
+        @if($displayRate && $displayRate > 0)
+        <div class="rounded-xl p-4 text-center mb-4" style="background:#ffffff; border:2px solid #f0f0f0;">
+            <p class="text-xs text-gray-400 font-semibold mb-1 uppercase tracking-wider">Tarif à partir de</p>
+            <p class="text-3xl sm:text-4xl font-bold text-black break-words" style="font-family:'Plus Jakarta Sans',sans-serif;">{{ number_format($displayRate, 0, ',', ' ') }} Fcfa</p>
+            <p class="text-sm text-gray-400 mt-0.5">par heure</p>
         </div>
         @endif
-
-        <div class="rounded-xl p-4 text-center mb-4" style="background:#ffffff; border:2px solid #f0f0f0;">
-    <p class="text-3xl sm:text-4xl font-bold text-black break-words" style="font-family:'Plus Jakarta Sans',sans-serif;">{{ number_format($profile->hourly_rate, 0, ',', ' ') }} Fcfa</p>
-    <p class="text-sm text-gray-400 mt-0.5">par heure</p>
-</div>
 
         <div class="text-sm space-y-2 mb-5">
             <div class="flex justify-between py-2 border-b border-gray-50">
                 <span class="text-gray-400">Note</span>
-                <span class="font-medium">★ {{ $profile->rating }}</span>
+                <span class="font-medium flex items-center gap-1">
+                    <svg class="w-3.5 h-3.5 text-[#FCB315] fill-current" viewBox="0 0 20 20">
+                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                    </svg>
+                    {{ $profile->rating }}
+                </span>
             </div>
             <div class="flex justify-between py-2 border-b border-gray-50">
                 <span class="text-gray-400">Avis</span>
@@ -265,21 +256,7 @@
     </div>
 </div>
 
-<!-- Script pour les checkboxes lieu -->
 <script>
-document.querySelectorAll('input[name="lieu_cours[]"]').forEach(checkbox => {
-    checkbox.addEventListener('change', function() {
-        const label = this.closest('label');
-        if (this.checked) {
-            label.style.borderColor = '#FCB315';
-            label.style.background = '#FFF8E7';
-        } else {
-            label.style.borderColor = '#F3F4F6';
-            label.style.background = '#F9FAFB';
-        }
-    });
-});
-
 // Prévisualisation de la photo
 document.getElementById('avatar-input').addEventListener('change', function(e) {
     const file = e.target.files[0];
@@ -304,21 +281,49 @@ function addParcours() {
     const index = parcoursCount++;
     const div = document.createElement('div');
     div.className = 'parcours-item grid grid-cols-1 gap-3 rounded-xl border-2 border-gray-100 p-4 bg-gray-50 sm:grid-cols-[1fr_1fr] xl:grid-cols-[1fr_1fr_1fr_auto] xl:items-center';
-    div.innerHTML = `
-        <input type="text" name="parcours_academique[${index}][annees]"
-            placeholder="Ex: 2018 - 2020"
-            class="w-full border-2 border-gray-100 rounded-xl px-3 py-2 text-sm outline-none focus:border-yellow-400 bg-white"/>
-        <input type="text" name="parcours_academique[${index}][diplome]"
-            placeholder="Ex: Master en Physique"
-            class="w-full border-2 border-gray-100 rounded-xl px-3 py-2 text-sm outline-none focus:border-yellow-400 bg-white"/>
-        <input type="text" name="parcours_academique[${index}][etablissement]"
-            placeholder="Ex: Université de..."
-            class="w-full border-2 border-gray-100 rounded-xl px-3 py-2 text-sm outline-none focus:border-yellow-400 bg-white"/>
-        <button type="button" onclick="this.closest('.parcours-item').remove()"
-            class="w-full h-10 rounded-lg flex items-center justify-center bg-red-100 text-red-500 hover:bg-red-200 transition sm:col-span-2 xl:col-span-1 xl:w-8 xl:h-8 shrink-0">
-            ✕
-        </button>
-    `;
+
+    const inputAnnees = document.createElement('input');
+    inputAnnees.type = 'text';
+    inputAnnees.name = `parcours_academique[${index}][annees]`;
+    inputAnnees.placeholder = 'Ex: 2018 - 2020';
+    inputAnnees.className = 'w-full border-2 border-gray-100 rounded-xl px-3 py-2 text-sm outline-none focus:border-yellow-400 bg-white';
+
+    const inputDiplome = document.createElement('input');
+    inputDiplome.type = 'text';
+    inputDiplome.name = `parcours_academique[${index}][diplome]`;
+    inputDiplome.placeholder = 'Ex: Master en Physique';
+    inputDiplome.className = 'w-full border-2 border-gray-100 rounded-xl px-3 py-2 text-sm outline-none focus:border-yellow-400 bg-white';
+
+    const inputEtab = document.createElement('input');
+    inputEtab.type = 'text';
+    inputEtab.name = `parcours_academique[${index}][etablissement]`;
+    inputEtab.placeholder = 'Ex: Université de...';
+    inputEtab.className = 'w-full border-2 border-gray-100 rounded-xl px-3 py-2 text-sm outline-none focus:border-yellow-400 bg-white';
+
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'w-full h-10 rounded-lg flex items-center justify-center bg-red-50 text-red-500 hover:bg-red-100 transition sm:col-span-2 xl:col-span-1 xl:w-8 xl:h-8 shrink-0';
+    btn.title = 'Supprimer';
+    btn.onclick = function() { div.remove(); };
+
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.setAttribute('class', 'w-4 h-4');
+    svg.setAttribute('fill', 'none');
+    svg.setAttribute('stroke', 'currentColor');
+    svg.setAttribute('viewBox', '0 0 24 24');
+    const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    path.setAttribute('stroke-linecap', 'round');
+    path.setAttribute('stroke-linejoin', 'round');
+    path.setAttribute('stroke-width', '2');
+    path.setAttribute('d', 'M6 18L18 6M6 6l12 12');
+    svg.appendChild(path);
+    btn.appendChild(svg);
+
+    div.appendChild(inputAnnees);
+    div.appendChild(inputDiplome);
+    div.appendChild(inputEtab);
+    div.appendChild(btn);
+
     container.appendChild(div);
 }
 </script>

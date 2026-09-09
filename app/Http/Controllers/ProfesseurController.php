@@ -12,7 +12,8 @@ use App\Models\Notification;
 use App\Models\User;
 use App\Mail\NouvelleReservation;
 use App\Mail\ReservationConfirmee;
-use App\Mail\ReservationAnnulee;
+use App\Models\Category;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
@@ -51,13 +52,14 @@ class ProfesseurController extends Controller
       ->get() : collect();
 
     // Avis reçus groupés par cours
-    $avisParCours = \App\Models\Review::whereHas('course', function($q) use ($profile) {
+    $avisParCours = $profile ? \App\Models\Review::whereHas('course', function($q) use ($profile) {
         $q->where('teacher_profile_id', $profile->id);
     })
     ->with(['course', 'user'])
     ->orderByDesc('created_at')
     ->get()
-    ->groupBy('course_id');
+    ->groupBy('course_id') : collect();
+
     return view('professeur.dashboard', compact(
         'user', 'profile', 'courses', 'reservationsCount',
         'cagnotteMensuelle', 'nombreEleves', 'totalCoursDonnes',
@@ -71,147 +73,202 @@ class ProfesseurController extends Controller
         return view('professeur.edit-profil', compact('user', 'profile'));
     }
 
-//     public function updateProfil(UpdateTeacherProfileRequest $request)
-// {
-//     $user = auth()->user();
-//     $profile = $user->teacherProfile;
+    public function updateProfil(UpdateTeacherProfileRequest $request)
+    {
+        $user = auth()->user();
+        $profile = $user->teacherProfile;
 
-//     // Gestion de la photo
-//     if ($request->hasFile('avatar')) {
-//         // Supprimer l'ancienne photo si elle existe
-//         if ($user->avatar && \Storage::disk('public')->exists($user->avatar)) {
-//             \Storage::disk('public')->delete($user->avatar);
-//         }
-//         $path = $request->file('avatar')->store('avatars', 'public');
-//         $user->avatar = $path;
-//     }
-
-//     $profile->update([
-//         'bio' => $request->bio,
-//         'a_propos_cours' => $request->a_propos_cours,
-//         'hourly_rate' => $request->hourly_rate,
-//         'experience_years' => $request->experience_years,
-//         'first_course_free' => $request->boolean('first_course_free'),
-//         'lieu_cours' => $request->lieu_cours ?? [],
-//         'zone_deplacement' => $request->zone_deplacement,
-//         'video_url' => $request->video_url,
-//     ]);
-
-//     $user->update([
-//         'ville' => $request->ville,
-//         'phone' => $request->phone,
-//     ]);
-
-//     if ($request->hasFile('avatar')) {
-//         $user->save();
-//     }
-
-//     return redirect()->route('professeur.dashboard')
-//         ->with('success', 'Profil mis à jour avec succès !');
-// }
-
-public function updateProfil(\Illuminate\Http\Request $request)
-{
-    $user = auth()->user();
-    $profile = $user->teacherProfile;
-
-    // Gestion de la photo
-    if ($request->hasFile('avatar')) {
-        if ($user->avatar && \Illuminate\Support\Facades\Storage::disk('public')->exists($user->avatar)) {
-            \Illuminate\Support\Facades\Storage::disk('public')->delete($user->avatar);
+        // Gestion de la photo
+        if ($request->hasFile('avatar')) {
+            if ($user->avatar && \Illuminate\Support\Facades\Storage::disk('public')->exists($user->avatar)) {
+                \Illuminate\Support\Facades\Storage::disk('public')->delete($user->avatar);
+            }
+            $path = $request->file('avatar')->store('avatars', 'public');
+            $user->avatar = $path;
+            $user->save();
         }
-        $path = $request->file('avatar')->store('avatars', 'public');
-        $user->avatar = $path;
-        $user->save();
-    }
 
-    $parcours = array_values(array_filter($request->input('parcours_academique', []), function($p) {
-        return !empty($p['diplome']) || !empty($p['annees']);
-    }));
+        $parcours = array_values(array_filter($request->input('parcours_academique', []), function($p) {
+            return !empty($p['diplome']) || !empty($p['annees']);
+        }));
 
-    \Illuminate\Support\Facades\DB::table('teacher_profiles')
-        ->where('id', $profile->id)
-        ->update([
-            'bio' => $request->bio,
-            'a_propos_cours' => $request->a_propos_cours,
-            'hourly_rate' => $request->hourly_rate,
-            'experience_years' => $request->experience_years,
-            'first_course_free' => $request->has('first_course_free') ? 1 : 0,
-            'lieu_cours' => json_encode($request->lieu_cours ?? []),
-            'zone_deplacement' => $request->zone_deplacement,
-            'video_url' => $request->video_url,
-            'parcours_academique' => json_encode($parcours),
-            'response_time' => $request->response_time,
-            'updated_at' => now(),
+        \Illuminate\Support\Facades\DB::table('teacher_profiles')
+            ->where('id', $profile->id)
+            ->update([
+                'bio' => $request->bio,
+                'a_propos_cours' => $request->a_propos_cours,
+                'experience_years' => $request->experience_years,
+                'zone_deplacement' => $this->parseZoneDeplacement($request),
+                'video_url' => $request->video_url,
+                'parcours_academique' => json_encode($parcours),
+                'response_time' => $request->response_time,
+                'updated_at' => now(),
+            ]);
+
+        $user->update([
+            'name'  => $request->name,
+            'ville' => $request->ville,
+            'phone' => $request->phone,
         ]);
 
-    $user->update([
-        'ville' => $request->ville,
-        'phone' => $request->phone,
-    ]);
+        \Illuminate\Support\Facades\Cache::forget('homepage_professeurs');
+        \Illuminate\Support\Facades\Cache::forget('homepage_meilleur_prof');
 
-    return redirect()->route('professeur.dashboard')
-        ->with('success', 'Profil mis à jour avec succès !');
-}
+        return redirect()->route('professeur.dashboard')
+            ->with('success', 'Profil mis à jour avec succès !');
+    }
     public function createCours()
     {
-        return view('professeur.create-cours');
+        $profile = auth()->user()->teacherProfile;
+        $courses = $profile ? $profile->courses()->latest()->get() : collect();
+        $categories = Category::orderBy('name')->pluck('name');
+        return view('professeur.create-cours', compact('categories', 'courses'));
     }
 
     public function storeCours(StoreCourseRequest $request)
-{
-    $profile = auth()->user()->teacherProfile;
+    {
+        $profile = auth()->user()->teacherProfile;
+        if (!$profile) {
+            return redirect()->route('professeur.dashboard')
+                ->with('error', 'Veuillez d\'abord compléter votre profil professeur avant de publier un cours.');
+        }
 
-    $cours = Course::create([
-        'teacher_profile_id' => $profile->id,
-        'title'              => $request->title,
-        'description'        => $request->description,
-        'category'           => $request->category,
-        'level'              => $request->level,
-        'format'             => $request->format,
-        'price_per_hour'     => $request->price_per_hour,
-        'is_active'          => false,      // invisible jusqu'à validation
-        'status'             => 'pending',  // en attente admin
-        'is_group'           => $request->has('is_group') ? true : false,
-        'max_students'       => $request->is_group ? $request->max_students : null,
-        'lieu_cours'         => $request->lieu_cours ?? [],
-        'zone_deplacement'   => $request->zone_deplacement,
-    ]);
+        // Gestion de la catégorie (existante ou nouvelle)
+        $finalCategory = $request->category;
+        if ($request->category === '__new__' || $request->filled('new_category')) {
+            $categoryName = trim($request->new_category);
+            Category::firstOrCreate(
+                ['name' => $categoryName],
+                ['slug' => Str::slug($categoryName), 'created_by_user_id' => auth()->id()]
+            );
+            $finalCategory = $categoryName;
+        }
 
-    // Notifier tous les admins
-    $admins = User::where('role', 'admin')->get();
-    foreach ($admins as $admin) {
+        $cours = Course::create([
+            'teacher_profile_id' => $profile->id,
+            'title'              => $request->title,
+            'description'        => $request->description,
+            'category'           => $finalCategory,
+            'level'              => $request->level,
+            'format'             => $request->format,
+            'price_per_hour'     => $request->price_per_hour,
+            'first_course_free'  => $request->boolean('first_course_free'),
+            'is_active'          => false,      // invisible jusqu'à validation
+            'status'             => 'pending',  // en attente admin
+            'is_group'           => $request->boolean('is_group'),
+            'max_students'       => $request->boolean('is_group') ? $request->max_students : null,
+            'lieu_cours'         => $request->lieu_cours ?? [],
+            'zone_deplacement'   => $this->parseZoneDeplacement($request),
+        ]);
+
+        // Synchroniser le tarif du profil et l'offre 1er cours offert
+        $profile->update([
+            'hourly_rate'       => $profile->courses()->min('price_per_hour') ?? $request->price_per_hour,
+            'first_course_free' => $profile->courses()->where('first_course_free', true)->exists(),
+        ]);
+
+        // Notifier tous les admins
+        $admins = User::where('role', 'admin')->get();
+        foreach ($admins as $admin) {
+            Notification::notifier(
+                userId: $admin->id,
+                type:   'course_pending',
+                title:  'Nouveau cours à valider',
+                body:   auth()->user()->name . ' a soumis un nouveau cours : "' . $cours->title . '"',
+                link:   '/admin/cours/' . $cours->id
+            );
+        }
+
+        // Notifier le prof
         Notification::notifier(
-            userId: $admin->id,
+            userId: auth()->id(),
             type:   'course_pending',
-            title:  'Nouveau cours à valider',
-            body:   auth()->user()->name . ' a soumis un nouveau cours : "' . $cours->title . '"',
-            link:   '/admin/cours/' . $cours->id
+            title:  'Cours soumis avec succès',
+            body:   'Votre cours "' . $cours->title . '" est en attente de validation par l\'équipe Kimboo.',
+            link:   route('professeur.create-cours')
         );
+
+        return redirect()->route('professeur.dashboard')
+            ->with('success', 'Cours soumis ! Il sera visible après validation par notre équipe.');
     }
 
-    // Notifier le prof
-    Notification::notifier(
-        userId: auth()->id(),
-        type:   'course_pending',
-        title:  'Cours soumis avec succès',
-        body:   'Votre cours "' . $cours->title . '" est en attente de validation par l\'équipe Kimboo.',
-        link:   route('professeur.create-cours')
-    );
+    public function editCours($id)
+    {
+        $course = Course::findOrFail($id);
 
-    return redirect()->route('professeur.dashboard')
-        ->with('success', 'Cours soumis ! Il sera visible après validation par notre équipe.');
-}
+        if ($course->teacherProfile->user_id !== auth()->id() && auth()->user()->role !== 'admin') {
+            return redirect()->route('professeur.dashboard')
+                ->with('error', 'Vous n\'êtes pas autorisé à modifier ce cours.');
+        }
+
+        $categories = Category::orderBy('name')->pluck('name');
+
+        return view('professeur.edit-cours', compact('course', 'categories'));
+    }
+
+    public function updateCours(StoreCourseRequest $request, $id)
+    {
+        $course = Course::findOrFail($id);
+
+        if ($course->teacherProfile->user_id !== auth()->id() && auth()->user()->role !== 'admin') {
+            return redirect()->route('professeur.dashboard')
+                ->with('error', 'Vous n\'êtes pas autorisé à modifier ce cours.');
+        }
+
+        $finalCategory = $request->category;
+        if ($request->category === '__new__' || $request->filled('new_category')) {
+            $categoryName = trim($request->new_category);
+            Category::firstOrCreate(
+                ['name' => $categoryName],
+                ['slug' => Str::slug($categoryName), 'created_by_user_id' => auth()->id()]
+            );
+            $finalCategory = $categoryName;
+        }
+
+        $course->update([
+            'title'              => $request->title,
+            'description'        => $request->description,
+            'category'           => $finalCategory,
+            'level'              => $request->level,
+            'format'             => $request->format,
+            'price_per_hour'     => $request->price_per_hour,
+            'first_course_free'  => $request->boolean('first_course_free'),
+            'is_group'           => $request->boolean('is_group'),
+            'max_students'       => $request->boolean('is_group') ? $request->max_students : null,
+            'lieu_cours'         => $request->lieu_cours ?? [],
+            'zone_deplacement'   => $this->parseZoneDeplacement($request),
+        ]);
+
+        $profile = $course->teacherProfile;
+        if ($profile) {
+            $profile->update([
+                'hourly_rate'       => $profile->courses()->min('price_per_hour') ?? $request->price_per_hour,
+                'first_course_free' => $profile->courses()->where('first_course_free', true)->exists(),
+            ]);
+        }
+
+        return redirect()->route('professeur.dashboard')
+            ->with('success', 'Cours modifié avec succès !');
+    }
 
     public function deleteCours($id)
     {
         $course = Course::findOrFail($id);
 
-        if ($course->teacherProfile->user_id !== auth()->id()) {
-            abort(403);
+        if ($course->teacherProfile->user_id !== auth()->id() && auth()->user()->role !== 'admin') {
+            return redirect()->route('professeur.dashboard')
+                ->with('error', 'Vous n\'êtes pas autorisé à supprimer ce cours.');
         }
 
+        $profile = $course->teacherProfile;
         $course->delete();
+
+        if ($profile) {
+            $profile->update([
+                'hourly_rate'       => $profile->courses()->min('price_per_hour') ?? 0,
+                'first_course_free' => $profile->courses()->where('first_course_free', true)->exists(),
+            ]);
+        }
 
         return redirect()->route('professeur.dashboard')
             ->with('success', 'Cours supprimé avec succès !');
@@ -290,8 +347,12 @@ public function updateProfil(\Illuminate\Http\Request $request)
     public function calendrier(Request $request)
 {
     $profile = auth()->user()->teacherProfile;
-    $mois    = $request->get('mois', now()->month);
-    $annee   = $request->get('annee', now()->year);
+    $validated = $request->validate([
+        'mois'  => ['nullable', 'integer', 'min:1', 'max:12'],
+        'annee' => ['nullable', 'integer', 'min:2020', 'max:2100'],
+    ]);
+    $mois  = $validated['mois'] ?? now()->month;
+    $annee = $validated['annee'] ?? now()->year;
 
     $coursduMois = Booking::whereHas('course', function($q) use ($profile) {
             $q->where('teacher_profile_id', $profile->id);
@@ -328,4 +389,39 @@ public function updateProfil(\Illuminate\Http\Request $request)
         'mois', 'annee'
     ));
 }
+
+    /**
+     * Parse et formate proprement la zone de déplacement avec son unité explicite.
+     */
+    private function parseZoneDeplacement($request): ?string
+    {
+        if ($request->filled('zone_unit')) {
+            $unit = $request->zone_unit;
+            $dist = trim((string)$request->input('zone_distance', ''));
+            $prec = trim((string)$request->input('zone_precisions', ''));
+
+            if ($unit === 'ville') {
+                return 'Toute la ville' . ($prec !== '' ? " ({$prec})" : '');
+            }
+            if ($unit === 'aucun') {
+                return 'Sans déplacement (en ligne / sur place)';
+            }
+            if ($dist !== '') {
+                return "{$dist} {$unit}" . ($prec !== '' ? " ({$prec})" : '');
+            }
+            if ($prec !== '') {
+                return $prec;
+            }
+        }
+
+        if ($request->filled('zone_deplacement')) {
+            $raw = trim((string)$request->zone_deplacement);
+            if (is_numeric($raw)) {
+                return ((float)$raw > 100) ? "{$raw} m" : "{$raw} km";
+            }
+            return $raw;
+        }
+
+        return null;
+    }
 }

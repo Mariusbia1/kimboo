@@ -7,8 +7,9 @@
 @section('content')
 
 @if(session('success'))
-<div class="mb-6 px-4 py-3 rounded-xl text-sm font-medium text-green-700 bg-green-100">
-    ✓ {{ session('success') }}
+<div class="mb-6 p-4 rounded-xl bg-green-50 border border-green-200 text-green-700 text-sm flex items-center gap-2">
+    <svg class="w-4 h-4 text-green-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+    <span>{{ session('success') }}</span>
 </div>
 @endif
 
@@ -16,8 +17,13 @@
 
     @if($reservations->isEmpty())
     <div class="text-center py-16">
-        <p class="text-4xl mb-4">📅</p>
-        <p class="text-gray-400 text-sm">Aucune réservation pour le moment.</p>
+        <div class="w-16 h-16 mx-auto mb-4 rounded-2xl bg-gray-100 flex items-center justify-center">
+            <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+            </svg>
+        </div>
+        <p class="text-base font-semibold text-gray-800">Aucune réservation pour le moment</p>
+        <p class="text-sm text-gray-400 mt-1">Les réservations de vos élèves apparaîtront ici</p>
     </div>
     @else
     <div class="overflow-x-auto">

@@ -11,6 +11,9 @@ class FavoriteController extends Controller
     public function toggle($profileId)
     {
         $user = auth()->user();
+        if (!$user) {
+            return response()->json(['error' => 'Unauthenticated.'], 401);
+        }
 
         $existing = Favorite::where('user_id', $user->id)
             ->where('teacher_profile_id', $profileId)
@@ -33,6 +36,10 @@ class FavoriteController extends Controller
     public function index()
     {
         $user = auth()->user();
+        if (!$user) {
+            return redirect()->route('login');
+        }
+
         $favoris = Favorite::where('user_id', $user->id)
             ->with(['teacherProfile.user', 'teacherProfile.courses'])
             ->get()

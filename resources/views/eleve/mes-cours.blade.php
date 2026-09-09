@@ -63,7 +63,7 @@
             </div>
 
             <p class="font-semibold text-black text-sm mb-1">{{ $booking->course->title }}</p>
-            <p class="text-sm text-gray-500">{{ $booking->course->level }} · {{ $booking->course->format }}</p>
+            <p class="text-sm text-gray-500">{{ $booking->course->level }} · {{ $booking->course->formatted_format }}</p>
         </div>
 
         {{-- Infos --}}
@@ -104,10 +104,17 @@
 
             {{-- Statut + action --}}
             <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                @if($booking->status === 'confirmé')
-                <span class="px-2.5 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-700">Confirmé</span>
+                @if($booking->status === 'en_attente')
+                <span class="px-2.5 py-1 rounded-full text-xs font-medium bg-amber-100 text-amber-700">En attente</span>
+                <a href="{{ route('eleve.reservations') }}"
+                   class="text-xs px-3 py-1.5 rounded-full font-medium inline-flex items-center justify-center gap-1 transition hover:bg-gray-50 border border-gray-200 text-gray-700">
+                    Gérer réservation
+                </a>
+
+                @elseif($booking->status === 'confirmé')
+                <span class="px-2.5 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-700">Confirmé</span>
                 <button onclick="ouvrirModalTerminer({{ $booking->id }}, '{{ addslashes($booking->course->title) }}')"
-                    class="text-sm px-3 py-1.5 rounded-lg text-white font-medium inline-flex items-center justify-center gap-1 transition hover:opacity-90"
+                    class="text-xs px-3 py-1.5 rounded-full text-white font-medium inline-flex items-center justify-center gap-1 transition hover:opacity-90"
                     style="background:#1A2B3C;">
                     <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
@@ -116,9 +123,9 @@
                 </button>
 
                 @elseif($booking->status === 'terminé' && !$booking->reviewed)
-                <span class="px-2.5 py-1 rounded-full text-sm font-medium bg-green-100 text-green-700">Terminé</span>
+                <span class="px-2.5 py-1 rounded-full text-xs font-medium bg-green-100 text-green-700">Terminé</span>
                 <button onclick="ouvrirModalAvis({{ $booking->id }}, {{ $booking->course->id }}, '{{ addslashes($booking->course->title) }}')"
-                    class="text-sm px-3 py-1.5 rounded-lg font-medium inline-flex items-center justify-center gap-1 transition hover:opacity-90"
+                    class="text-xs px-3 py-1.5 rounded-full font-medium inline-flex items-center justify-center gap-1 transition hover:opacity-90"
                     style="background:#FCB315; color:#000;">
                     <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24">
                         <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
@@ -175,7 +182,11 @@
             <label class="block text-sm font-medium text-gray-600 mb-2">Note</label>
             <div class="flex gap-2 mb-4">
                 @for($i = 1; $i <= 5; $i++)
-                <button type="button" onclick="setRating({{ $i }})" class="star-btn text-3xl transition hover:scale-110" data-value="{{ $i }}" style="color:#E5E7EB;">★</button>
+                <button type="button" onclick="setRating({{ $i }})" class="star-btn p-1 transition hover:scale-110 focus:outline-none" data-value="{{ $i }}">
+                    <svg class="w-8 h-8 text-gray-300 fill-current pointer-events-none transition-colors" viewBox="0 0 20 20">
+                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                    </svg>
+                </button>
                 @endfor
             </div>
             <input type="hidden" name="rating" id="rating-input" value="0"/>
@@ -214,7 +225,10 @@ function fermerModalAvis() {
 function setRating(value) {
     document.getElementById('rating-input').value = value;
     document.querySelectorAll('.star-btn').forEach(btn => {
-        btn.style.color = parseInt(btn.dataset.value) <= value ? '#FCB315' : '#E5E7EB';
+        const svg = btn.querySelector('svg');
+        if (svg) {
+            svg.style.color = parseInt(btn.dataset.value) <= value ? '#FCB315' : '#E5E7EB';
+        }
     });
 }
 document.getElementById('modal-terminer').addEventListener('click', function(e) { if (e.target === this) fermerModalTerminer(); });

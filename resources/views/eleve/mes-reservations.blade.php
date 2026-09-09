@@ -116,7 +116,7 @@
                         <form method="POST" action="{{ route('eleve.booking.cancel', $booking->id) }}">
                             @csrf @method('PATCH')
                             <button type="submit"
-                                class="text-sm px-3 py-1.5 rounded-lg text-white font-medium bg-red-500 flex items-center gap-1 transition hover:opacity-90">
+                                class="text-xs px-3 py-1.5 rounded-full text-white font-medium bg-red-500 flex items-center gap-1 transition hover:opacity-90">
                                 <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
                                 </svg>
@@ -125,7 +125,7 @@
                         </form>
                         @elseif($booking->status === 'confirmé')
                         <button onclick="ouvrirModalTerminer({{ $booking->id }}, '{{ addslashes($booking->course->title) }}')"
-                            class="text-sm px-3 py-1.5 rounded-lg text-white font-medium flex items-center gap-1 transition hover:opacity-90"
+                            class="text-xs px-3 py-1.5 rounded-full text-white font-medium flex items-center gap-1 transition hover:opacity-90"
                             style="background:#1A2B3C;">
                             <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>

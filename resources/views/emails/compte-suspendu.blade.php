@@ -9,35 +9,30 @@
         </div>
 
         <div style="padding:40px 32px;">
-            <h2 style="margin:0 0 8px; font-size:22px; font-weight:800; color:#000;">
-                Accès messagerie suspendu 24h
+            <h2 style="margin:0 0 8px; font-size:22px; font-weight:800; color:#EF4444;">
+                Votre compte Kimboo a été suspendu
             </h2>
             <p style="margin:0 0 24px; font-size:15px; color:#555; line-height:1.6;">
                 Bonjour <strong>{{ $user->name }}</strong>,<br>
-                Suite à plusieurs violations des règles de notre plateforme, votre accès à la messagerie a été suspendu pour <strong>24 heures</strong>.
+                Nous vous informons que votre compte utilisateur sur la plateforme Kimboo a été temporairement ou définitivement suspendu par l'administration.
             </p>
 
             <div style="background:#FEF2F2; border-radius:12px; padding:20px; margin-bottom:20px; border-left:4px solid #EF4444;">
-                <p style="margin:0 0 8px; font-size:14px; font-weight:700; color:#EF4444;">Raison de la suspension :</p>
+                <p style="margin:0 0 8px; font-size:14px; font-weight:700; color:#EF4444;">Motif de la suspension :</p>
                 <p style="margin:0; font-size:14px; color:#666; line-height:1.6;">
-                    Tentatives répétées d'envoi de contenus non autorisés (numéros de téléphone ou coordonnées bancaires) via la messagerie Kimboo.
+                    {{ $reason ?? $user->suspension_reason ?? 'Non-respect des conditions générales d\'utilisation et règles de sécurité de la plateforme Kimboo.' }}
                 </p>
             </div>
 
             <div style="background:#FFF8E7; border-radius:12px; padding:16px 20px; margin-bottom:28px;">
                 <p style="margin:0; font-size:14px; color:#555; line-height:1.6;">
-                    Les échanges de coordonnées personnelles en dehors de la plateforme sont interdits pour protéger tous les utilisateurs. En cas de récidive, votre compte pourra être définitivement suspendu.
+                    Pendant toute la durée de la suspension, l'accès à votre espace utilisateur, la réservation de cours et l'envoi de messages sont désactivés.
                 </p>
             </div>
 
-            <p style="margin:0 0 24px; font-size:14px; color:#555;">
-                Si vous pensez que c'est une erreur, contactez notre support.
+            <p style="margin:0 0 24px; font-size:14px; color:#555; line-height:1.6;">
+                Si vous pensez qu'il s'agit d'une erreur ou si vous souhaitez demander la réactivation de votre compte, contactez notre équipe d'assistance à <a href="mailto:support@kimboo.net" style="color:#D97706; font-weight:bold;">support@kimboo.net</a>.
             </p>
-
-            <a href="{{ url('/messages') }}"
-               style="display:inline-block; background:#FCB315; color:#000; font-weight:700; font-size:15px; padding:14px 28px; border-radius:12px; text-decoration:none;">
-                Retour à la plateforme
-            </a>
         </div>
 
         <div style="background:#F9FAFB; padding:24px 32px; text-align:center; border-top:1px solid #F0F0F0;">
