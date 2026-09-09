@@ -285,11 +285,19 @@ window.openAdminCourseModal = function(course) {
 
         // Avatar
         const avatarContainer = document.getElementById('course-modal-teacher-avatar');
+        avatarContainer.textContent = '';
         if (teacher.avatar) {
-            avatarContainer.innerHTML = `<img src="/storage/${teacher.avatar}" class="w-full h-full object-cover" alt="${teacher.name}">`;
+            const img = document.createElement('img');
+            img.src = `/storage/${teacher.avatar}`;
+            img.className = 'w-full h-full object-cover';
+            img.alt = teacher.name || 'Professeur';
+            avatarContainer.appendChild(img);
         } else {
             const initials = teacher.name ? teacher.name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase() : 'P';
-            avatarContainer.innerHTML = `<span class="font-extrabold text-sm text-slate-900">${initials}</span>`;
+            const span = document.createElement('span');
+            span.className = 'font-extrabold text-sm text-slate-900';
+            span.textContent = initials;
+            avatarContainer.appendChild(span);
         }
 
         // Verified

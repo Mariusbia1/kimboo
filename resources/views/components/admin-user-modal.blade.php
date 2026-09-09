@@ -194,21 +194,37 @@
         {{-- Actions d'administration en bas --}}
         <div class="px-6 py-4 bg-gray-50 border-t border-gray-100 flex flex-wrap items-center justify-between gap-3">
             <div class="flex flex-wrap items-center gap-2" id="user-modal-prof-actions">
-                {{-- Formulaire Certifier / Décertifier --}}
+                {{-- Formulaire Décertifier --}}
+                <form id="user-modal-decertify-form" method="POST" action="" class="hidden">
+                    @csrf @method('PATCH')
+                    <button type="submit" class="text-xs font-bold px-3 py-2 rounded-xl text-red-600 bg-red-50 hover:bg-red-100 transition-colors border border-red-200/60 flex items-center gap-1.5">
+                        <svg class="w-3.5 h-3.5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                        <span>Décertifier</span>
+                    </button>
+                </form>
+
+                {{-- Formulaire Certifier --}}
                 <form id="user-modal-certify-form" method="POST" action="" class="inline-block">
                     @csrf @method('PATCH')
-                    <button type="submit" id="user-modal-certify-btn"
-                            class="text-xs font-bold px-3.5 py-2 rounded-xl text-white bg-slate-900 hover:bg-black transition-colors flex items-center gap-1.5 shadow-sm">
+                    <button type="submit" class="text-xs font-bold px-3.5 py-2 rounded-xl text-white bg-slate-900 hover:bg-black transition-colors flex items-center gap-1.5 shadow-sm">
                         <svg class="w-3.5 h-3.5 text-[#FCB315]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                         <span>Certifier</span>
                     </button>
                 </form>
 
-                {{-- Formulaire Mettre en avant / Retirer --}}
+                {{-- Formulaire Retirer de l'accueil --}}
+                <form id="user-modal-unfeature-form" method="POST" action="" class="hidden">
+                    @csrf @method('PATCH')
+                    <button type="submit" class="text-xs font-bold px-3 py-2 rounded-xl text-gray-700 bg-gray-100 hover:bg-gray-200 transition-colors border border-gray-200/60 flex items-center gap-1.5">
+                        <svg class="w-3.5 h-3.5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                        <span>Retirer de l'accueil</span>
+                    </button>
+                </form>
+
+                {{-- Formulaire Mettre en avant --}}
                 <form id="user-modal-feature-form" method="POST" action="" class="inline-block">
                     @csrf @method('PATCH')
-                    <button type="submit" id="user-modal-feature-btn"
-                            class="text-xs font-bold px-3.5 py-2 rounded-xl text-black bg-[#FCB315] hover:opacity-95 transition-all flex items-center gap-1.5 shadow-sm">
+                    <button type="submit" class="text-xs font-bold px-3.5 py-2 rounded-xl text-black bg-[#FCB315] hover:opacity-95 transition-all flex items-center gap-1.5 shadow-sm">
                         <svg class="w-3.5 h-3.5 fill-black" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
                         <span>Mettre en avant</span>
                     </button>
@@ -331,11 +347,19 @@ window.openAdminUserModal = function(user) {
 
     // Avatar
     const avatarContainer = document.getElementById('user-modal-avatar-container');
+    avatarContainer.textContent = '';
     if (user.avatar) {
-        avatarContainer.innerHTML = `<img src="/storage/${user.avatar}" class="w-full h-full object-cover" alt="${user.name}">`;
+        const img = document.createElement('img');
+        img.src = `/storage/${user.avatar}`;
+        img.className = 'w-full h-full object-cover';
+        img.alt = user.name || 'Utilisateur';
+        avatarContainer.appendChild(img);
     } else {
         const initials = user.name ? user.name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase() : 'U';
-        avatarContainer.innerHTML = `<span class="font-extrabold text-xl text-slate-900">${initials}</span>`;
+        const span = document.createElement('span');
+        span.className = 'font-extrabold text-xl text-slate-900';
+        span.textContent = initials;
+        avatarContainer.appendChild(span);
     }
 
     // Role badge
@@ -459,49 +483,69 @@ window.openAdminUserModal = function(user) {
         const courses = prof.courses || [];
         document.getElementById('user-modal-prof-courses-count').textContent = courses.length;
         const coursesList = document.getElementById('user-modal-courses-list');
+        coursesList.textContent = '';
         if (courses.length > 0) {
-            coursesList.innerHTML = courses.map(c => `
-                <div class="flex items-center justify-between p-2.5 bg-white rounded-xl border border-gray-200/80 text-xs">
-                    <div>
-                        <span class="font-bold text-gray-900 block">${c.title}</span>
-                        <span class="text-gray-400 text-[11px]">${c.category} • ${c.format || 'En ligne'}</span>
-                    </div>
-                    <div class="text-right">
-                        <span class="font-extrabold text-gray-900 block">${Number(c.price_per_hour).toLocaleString('fr-FR')} F/h</span>
-                        <span class="inline-block px-1.5 py-0.2 rounded text-[10px] font-bold ${c.status === 'approved' ? 'bg-emerald-50 text-emerald-700' : (c.status === 'pending' ? 'bg-amber-50 text-amber-700' : 'bg-red-50 text-red-700')}">
-                            ${c.status === 'approved' ? 'Approuvé' : (c.status === 'pending' ? 'En attente' : 'Refusé')}
-                        </span>
-                    </div>
-                </div>
-            `).join('');
+            courses.forEach(c => {
+                const item = document.createElement('div');
+                item.className = 'flex items-center justify-between p-2.5 bg-white rounded-xl border border-gray-200/80 text-xs';
+
+                const left = document.createElement('div');
+                const title = document.createElement('span');
+                title.className = 'font-bold text-gray-900 block';
+                title.textContent = c.title || '';
+                const sub = document.createElement('span');
+                sub.className = 'text-gray-400 text-[11px]';
+                sub.textContent = `${c.category || ''} • ${c.format || 'En ligne'}`;
+                left.appendChild(title);
+                left.appendChild(sub);
+
+                const right = document.createElement('div');
+                right.className = 'text-right';
+                const price = document.createElement('span');
+                price.className = 'font-extrabold text-gray-900 block';
+                price.textContent = `${Number(c.price_per_hour || 0).toLocaleString('fr-FR')} F/h`;
+                const badge = document.createElement('span');
+                badge.className = 'inline-block px-1.5 py-0.2 rounded text-[10px] font-bold ' + 
+                    (c.status === 'approved' ? 'bg-emerald-50 text-emerald-700' : (c.status === 'pending' ? 'bg-amber-50 text-amber-700' : 'bg-red-50 text-red-700'));
+                badge.textContent = c.status === 'approved' ? 'Approuvé' : (c.status === 'pending' ? 'En attente' : 'Refusé');
+                right.appendChild(price);
+                right.appendChild(badge);
+
+                item.appendChild(left);
+                item.appendChild(right);
+                coursesList.appendChild(item);
+            });
         } else {
-            coursesList.innerHTML = '<p class="text-xs text-gray-400 italic">Aucun cours créé pour le moment.</p>';
+            const emptyP = document.createElement('p');
+            emptyP.className = 'text-xs text-gray-400 italic';
+            emptyP.textContent = 'Aucun cours créé pour le moment.';
+            coursesList.appendChild(emptyP);
         }
 
         // Actions certification form
+        const decertifyForm = document.getElementById('user-modal-decertify-form');
         const certifyForm = document.getElementById('user-modal-certify-form');
-        const certifyBtn = document.getElementById('user-modal-certify-btn');
         if (prof.is_verified) {
-            certifyForm.action = `/admin/professeurs/${prof.id}/decertifier`;
-            certifyBtn.innerHTML = '<svg class="w-3.5 h-3.5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg><span>Décertifier</span>';
-            certifyBtn.className = 'text-xs font-bold px-3 py-2 rounded-xl text-red-600 bg-red-50 hover:bg-red-100 transition-colors border border-red-200/60 flex items-center gap-1.5';
+            decertifyForm.classList.remove('hidden');
+            decertifyForm.action = `/admin/professeurs/${prof.id}/decertifier`;
+            certifyForm.classList.add('hidden');
         } else {
+            decertifyForm.classList.add('hidden');
+            certifyForm.classList.remove('hidden');
             certifyForm.action = `/admin/professeurs/${prof.id}/certifier`;
-            certifyBtn.innerHTML = '<svg class="w-3.5 h-3.5 text-[#FCB315]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg><span>Certifier</span>';
-            certifyBtn.className = 'text-xs font-bold px-3.5 py-2 rounded-xl text-white bg-slate-900 hover:bg-black transition-colors flex items-center gap-1.5 shadow-sm';
         }
 
         // Feature form
+        const unfeatureForm = document.getElementById('user-modal-unfeature-form');
         const featureForm = document.getElementById('user-modal-feature-form');
-        const featureBtn = document.getElementById('user-modal-feature-btn');
         if (prof.is_featured) {
-            featureForm.action = `/admin/professeurs/${prof.id}/unfeature`;
-            featureBtn.innerHTML = '<svg class="w-3.5 h-3.5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg><span>Retirer de l\'accueil</span>';
-            featureBtn.className = 'text-xs font-bold px-3 py-2 rounded-xl text-gray-700 bg-gray-100 hover:bg-gray-200 transition-colors border border-gray-200/60 flex items-center gap-1.5';
+            unfeatureForm.classList.remove('hidden');
+            unfeatureForm.action = `/admin/professeurs/${prof.id}/unfeature`;
+            featureForm.classList.add('hidden');
         } else {
+            unfeatureForm.classList.add('hidden');
+            featureForm.classList.remove('hidden');
             featureForm.action = `/admin/professeurs/${prof.id}/feature`;
-            featureBtn.innerHTML = '<svg class="w-3.5 h-3.5 fill-black" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg><span>Mettre en avant</span>';
-            featureBtn.className = 'text-xs font-bold px-3.5 py-2 rounded-xl text-black bg-[#FCB315] hover:opacity-95 transition-all flex items-center gap-1.5 shadow-sm';
         }
 
         // Public profile link
