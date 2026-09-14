@@ -60,7 +60,7 @@ return [
 
         'single' => [
             'driver' => 'single',
-            'path' => storage_path('logs/laravel.log'),
+            'path' => env('LOG_PATH', (is_dir(storage_path('logs')) && is_writable(storage_path('logs'))) ? storage_path('logs/laravel.log') : (sys_get_temp_dir() . '/laravel.log')),
             'level' => env('LOG_LEVEL', 'debug'),
             'replace_placeholders' => true,
         ],
