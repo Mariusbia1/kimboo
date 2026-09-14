@@ -21,6 +21,14 @@ class AppServiceProvider extends ServiceProvider
     {
         \Carbon\Carbon::setLocale('fr');
 
+        // Ignorer l'avertissement bénin tempnam() propre aux hébergements mutualisés (OVH)
+        set_error_handler(function ($errno, $errstr) {
+            if (str_contains($errstr, 'tempnam()')) {
+                return true;
+            }
+            return false;
+        }, E_NOTICE | E_WARNING);
+
         \Illuminate\Auth\Notifications\ResetPassword::toMailUsing(function ($notifiable, $token) {
             $resetUrl = url(route('password.reset', [
                 'token' => $token,
