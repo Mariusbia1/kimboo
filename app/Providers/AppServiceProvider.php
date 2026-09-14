@@ -11,7 +11,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        $viewPath = sys_get_temp_dir() . '/kimboo_views';
+        if (!is_dir($viewPath)) {
+            @mkdir($viewPath, 0777, true);
+        }
     }
 
     /**
