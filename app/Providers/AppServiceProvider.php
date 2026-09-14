@@ -24,6 +24,10 @@ class AppServiceProvider extends ServiceProvider
     {
         \Carbon\Carbon::setLocale('fr');
 
+        \Illuminate\Support\Facades\Mail::extend('phpmail', function () {
+            return new \App\Mail\PhpMailTransport();
+        });
+
         // Ignorer l'avertissement bénin tempnam() propre aux hébergements mutualisés (OVH)
         set_error_handler(function ($errno, $errstr) {
             if (str_contains($errstr, 'tempnam()')) {

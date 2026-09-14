@@ -686,4 +686,26 @@ public function updateParametres(Request $request)
         ->with('success', 'Paramètres mis à jour avec succès.');
 }
 
+public function testerEmail(Request $request)
+{
+    $request->validate([
+        'test_email' => ['required', 'email'],
+    ], [
+        'test_email.required' => 'Veuillez saisir une adresse email de test.',
+        'test_email.email'    => 'L\'adresse email saisie n\'est pas valide.',
+    ]);
+
+    $email = $request->input('test_email');
+
+    try {
+        Mail::raw("Ceci est un email de confirmation de messagerie envoyé depuis l'espace administrateur de Kimboo.", function ($message) use ($email) {
+            $message->to($email)->subject("Test de messagerie · Kimboo");
+        });
+
+        return back()->with('success', "Email de test envoyé avec succès à {$email} !");
+    } catch (\Throwable $e) {
+        return back()->with('error', "Erreur lors de l'envoi de l'email : " . $e->getMessage());
+    }
+}
+
 }

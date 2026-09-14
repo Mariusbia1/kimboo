@@ -107,9 +107,28 @@ Route::middleware(['auth'])->group(function () {
         Route::patch('/messages/alertes/{id}/ignored', [AdminController::class, 'alerteIgnored'])->whereNumber('id')->name('messages.alertes.ignored');
         Route::get('/parametres', [AdminController::class, 'parametres'])->name('parametres');
         Route::post('/parametres', [AdminController::class, 'updateParametres'])->name('parametres.update');
+        Route::post('/parametres/tester-email', [AdminController::class, 'testerEmail'])->name('parametres.tester-email');
         Route::get('/profil', [AdminController::class, 'editProfil'])->name('profil');
         Route::post('/profil', [AdminController::class, 'updateProfil'])->name('profil.update');
     });
+});
+
+Route::get('/test-email-status', function () {
+    $email = request('email', 'bonjour@kimboo.net');
+    try {
+        \Illuminate\Support\Facades\Mail::raw("Ceci est un test de validation de messagerie en ligne pour Kimboo.", function ($message) use ($email) {
+            $message->to($email)->subject("Test Messagerie Web Kimboo");
+        });
+        return response("<div style='font-family:sans-serif;padding:40px;text-align:center;'>
+            <h1 style='color:#16a34a;'>Succès !</h1>
+            <p>L'email de test a été envoyé avec succès à <strong>" . e($email) . "</strong> via le driver <code>" . e(config('mail.default')) . "</code>.</p>
+        </div>", 200);
+    } catch (\Throwable $e) {
+        return response("<div style='font-family:sans-serif;padding:40px;text-align:center;'>
+            <h1 style='color:#dc2626;'>Erreur d'envoi</h1>
+            <p style='color:#666;'>" . e($e->getMessage()) . "</p>
+        </div>", 500);
+    }
 });
 
 Route::get('/professeur/{id}', [HomeController::class, 'profil'])->whereNumber('id')->name('professeur.profil');
