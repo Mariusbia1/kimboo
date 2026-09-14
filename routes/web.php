@@ -102,6 +102,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/messages/conversations', [AdminController::class, 'messagesConversations'])->name('messages.conversations');
         Route::post('/messages/broadcast', [AdminController::class, 'broadcastMessage'])->name('messages.broadcast');
         Route::get('/messages/conversations/{userId1}/{userId2}', [AdminController::class, 'voirConversation'])->whereNumber('userId1')->whereNumber('userId2')->name('messages.voir');
+        Route::patch('/messages/conversations/{userId1}/{userId2}/resoudre-alertes', [AdminController::class, 'resoudreAlertesConversation'])->whereNumber('userId1')->whereNumber('userId2')->name('messages.resoudre-alertes');
         Route::patch('/messages/alertes/{id}/reviewed', [AdminController::class, 'alerteReviewed'])->whereNumber('id')->name('messages.alertes.reviewed');
         Route::patch('/messages/alertes/{id}/ignored', [AdminController::class, 'alerteIgnored'])->whereNumber('id')->name('messages.alertes.ignored');
         Route::get('/parametres', [AdminController::class, 'parametres'])->name('parametres');

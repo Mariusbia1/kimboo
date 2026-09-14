@@ -6,6 +6,19 @@
 
 @section('content')
 
+@if(session('success'))
+<div class="mb-6 p-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-900 flex items-center justify-between gap-3 shadow-xs">
+    <div class="flex items-center gap-3">
+        <span class="w-8 h-8 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+        </span>
+        <p class="text-xs font-bold">{{ session('success') }}</p>
+    </div>
+</div>
+@endif
+
 {{-- KPI Statistiques globales --}}
 <div class="grid grid-cols-1 gap-4 mb-8 sm:grid-cols-2 lg:grid-cols-4">
     <div class="bg-white rounded-2xl p-5 border border-gray-100/80" style="box-shadow:0 4px 12px rgba(0,0,0,0.04);">
@@ -286,6 +299,21 @@
 
             {{-- Colonne Actions --}}
             <div class="shrink-0 flex items-center gap-2">
+                @if($conv->hasAlert)
+                <form method="POST" action="{{ route('admin.messages.resoudre-alertes', [$user1->id, $user2->id]) }}"
+                      onsubmit="return confirm('Confirmer le règlement de toutes les alertes actives pour cette conversation ?');">
+                    @csrf @method('PATCH')
+                    <button type="submit"
+                            class="inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl text-xs font-bold text-emerald-800 bg-emerald-100 hover:bg-emerald-200 border border-emerald-300 transition shadow-2xs cursor-pointer"
+                            title="Marquer les alertes de cette conversation comme réglées">
+                        <svg class="w-3.5 h-3.5 text-emerald-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                        </svg>
+                        <span>Régler l'alerte</span>
+                    </button>
+                </form>
+                @endif
+
                 <a href="{{ route('admin.messages.voir', [$user1->id, $user2->id]) }}"
                    class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold text-black transition hover:opacity-90 shadow-2xs"
                    style="background:#FCB315;">

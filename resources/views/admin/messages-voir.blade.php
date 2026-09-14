@@ -6,6 +6,19 @@
 
 @section('content')
 
+@if(session('success'))
+<div class="mb-5 p-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-900 flex items-center justify-between gap-3 shadow-xs">
+    <div class="flex items-center gap-3">
+        <span class="w-8 h-8 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+        </span>
+        <p class="text-xs font-bold">{{ session('success') }}</p>
+    </div>
+</div>
+@endif
+
 {{-- Bandeau alertes actives sur cette conversation --}}
 @php
     $pendingAlerts = $alerts->where('status', 'pending');
@@ -28,9 +41,21 @@
         </div>
     </div>
     <div class="flex items-center gap-2 shrink-0 w-full sm:w-auto">
+        <form method="POST" action="{{ route('admin.messages.resoudre-alertes', [$user1->id, $user2->id]) }}"
+              onsubmit="return confirm('Confirmer le règlement de toutes les alertes de cette discussion ?');">
+            @csrf @method('PATCH')
+            <button type="submit"
+                    class="flex items-center gap-1.5 text-xs px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold transition text-center shadow-2xs cursor-pointer">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                </svg>
+                <span>Marquer comme réglé</span>
+            </button>
+        </form>
+
         <a href="{{ route('admin.messages.alertes') }}"
            class="flex-1 sm:flex-initial text-xs px-3.5 py-2 rounded-xl bg-white border border-red-200 text-red-700 font-bold hover:bg-red-50 transition text-center shadow-2xs">
-            Voir le détail des alertes
+            Détail des alertes
         </a>
     </div>
 </div>

@@ -424,9 +424,11 @@ public function messagesConversations(Request $request)
         $unreadCount = $threadMessages->where('is_read', false)->count();
 
         $pendingAlertsCount = MessageAlert::where(function($q) use ($u1Id, $u2Id) {
-            $q->where('sender_id', $u1Id)->where('receiver_id', $u2Id);
-        })->orWhere(function($q) use ($u1Id, $u2Id) {
-            $q->where('sender_id', $u2Id)->where('receiver_id', $u1Id);
+            $q->where(function($q2) use ($u1Id, $u2Id) {
+                $q2->where('sender_id', $u1Id)->where('receiver_id', $u2Id);
+            })->orWhere(function($q2) use ($u1Id, $u2Id) {
+                $q2->where('sender_id', $u2Id)->where('receiver_id', $u1Id);
+            });
         })->where('status', 'pending')->count();
 
         $isAssistance = ($user1->role === 'admin' || $user2->role === 'admin');
@@ -627,6 +629,20 @@ public function voirConversation($userId1, $userId2)
     })->get();
 
     return view('admin.messages-voir', compact('messages', 'user1', 'user2', 'alerts'));
+}
+
+public function resoudreAlertesConversation($userId1, $userId2)
+{
+    $updated = MessageAlert::where(function($q) use ($userId1, $userId2) {
+        $q->where(function($q2) use ($userId1, $userId2) {
+            $q2->where('sender_id', $userId1)->where('receiver_id', $userId2);
+        })->orWhere(function($q2) use ($userId1, $userId2) {
+            $q2->where('sender_id', $userId2)->where('receiver_id', $userId1);
+        });
+    })->where('status', 'pending')
+      ->update(['status' => 'reviewed']);
+
+    return back()->with('success', "Toutes les alertes actives de cette conversation ont été marquées comme réglées ($updated traitée(s)).");
 }
 
 public function alerteReviewed($id)

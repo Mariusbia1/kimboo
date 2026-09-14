@@ -1359,6 +1359,54 @@ test('professeur suspendu n apparait plus sur la page accueil, le catalogue ni s
     $this->get(route('professeur.profil', $profile->id))->assertOk()->assertSee('Cours Unique Chimie Quantique');
 });
 
+test('admin peut marquer et regler toutes les alertes de securite d une conversation', function () {
+    $admin = User::factory()->create(['role' => 'admin']);
+    $user1 = User::factory()->create(['role' => 'eleve', 'name' => 'Eleve Alerte Test']);
+    $user2 = User::factory()->create(['role' => 'professeur', 'name' => 'Prof Alerte Test']);
+
+    $message = Message::create([
+        'sender_id' => $user1->id,
+        'receiver_id' => $user2->id,
+        'content' => 'Voici mon RIB CI0987654321',
+        'is_blocked' => true,
+    ]);
+
+    $alert = \App\Models\MessageAlert::create([
+        'message_id' => $message->id,
+        'sender_id' => $user1->id,
+        'receiver_id' => $user2->id,
+        'alert_type' => 'bank',
+        'matched_content' => 'CI0987654321',
+        'status' => 'pending',
+    ]);
+
+    // 1. Sur la liste des conversations admin, l'alerte active est visible avec le bouton de résolution
+    $response = $this->actingAs($admin)->get(route('admin.messages.conversations'));
+    $response->assertOk();
+    $response->assertSee('Alerte active (1)');
+    $response->assertSee('Régler l\'alerte', false);
+
+    // 2. Sur la vue détaillée de la conversation, le bandeau d'alerte et le bouton sont présents
+    $responseVoir = $this->actingAs($admin)->get(route('admin.messages.voir', [$user1->id, $user2->id]));
+    $responseVoir->assertOk();
+    $responseVoir->assertSee('alerte(s) de sécurité détectée(s)');
+    $responseVoir->assertSee('Marquer comme réglé');
+
+    // 3. Résolution des alertes via la route
+    $patchRes = $this->actingAs($admin)->patch(route('admin.messages.resoudre-alertes', [$user1->id, $user2->id]));
+    $patchRes->assertSessionHas('success');
+
+    $alert->refresh();
+    expect($alert->status)->toBe('reviewed');
+
+    // 4. Après résolution, le badge d'alerte active n'est plus présent
+    $responseAfter = $this->actingAs($admin)->get(route('admin.messages.conversations'));
+    $responseAfter->assertOk();
+    $responseAfter->assertDontSee('Alerte active (1)');
+    $responseAfter->assertDontSee('Régler l\'alerte', false);
+});
+
+
 
 
 
