@@ -42,6 +42,8 @@ class AppServiceProvider extends ServiceProvider
                 'email' => $notifiable->getEmailForPasswordReset(),
             ], false));
 
+            \Illuminate\Support\Facades\Log::info("LIEN DE REINITIALISATION POUR " . $notifiable->email . " : " . $resetUrl);
+
             return (new \Illuminate\Notifications\Messages\MailMessage)
                 ->subject('Réinitialisation de votre mot de passe · Kimboo')
                 ->view('emails.reinitialisation-mot-de-passe', [
@@ -52,6 +54,8 @@ class AppServiceProvider extends ServiceProvider
         });
 
         \Illuminate\Auth\Notifications\VerifyEmail::toMailUsing(function ($notifiable, $url) {
+            \Illuminate\Support\Facades\Log::info("LIEN DE VERIFICATION EMAIL POUR " . $notifiable->email . " : " . $url);
+
             return (new \Illuminate\Notifications\Messages\MailMessage)
                 ->subject('Vérification de votre adresse email · Kimboo')
                 ->view('emails.verification-email', [

@@ -25,3 +25,32 @@ Artisan::command('mail:test {email=bonjour@kimboo.net}', function ($email) {
         $this->error("Erreur lors de l'envoi : " . $e->getMessage());
     }
 })->purpose('Tester l\'envoi d\'un email');
+
+Artisan::command('user:password {email} {password}', function ($email, $password) {
+    $user = \App\Models\User::where('email', $email)->first();
+    if (!$user) {
+        $this->error("Aucun utilisateur trouve avec l'email {$email}");
+        return 1;
+    }
+    $user->password = \Illuminate\Support\Facades\Hash::make($password);
+    $user->save();
+    $this->info(">>> MOT DE PASSE MIS A JOUR AVEC SUCCES POUR {$email} <<<");
+    return 0;
+})->purpose('Modifier directement le mot de passe d un utilisateur');
+
+Artisan::command('user:reset-link {email}', function ($email) {
+    $user = \App\Models\User::where('email', $email)->first();
+    if (!$user) {
+        $this->error("Aucun utilisateur trouve avec l'email {$email}");
+        return 1;
+    }
+    $token = \Illuminate\Support\Facades\Password::createToken($user);
+    $url = url(route('password.reset', [
+        'token' => $token,
+        'email' => $email,
+    ], false));
+    $this->info(">>> LIEN DE REINITIALISATION POUR {$email} <<<");
+    $this->line($url);
+    return 0;
+})->purpose('Generer instantanement un lien de reinitialisation de mot de passe');
+
