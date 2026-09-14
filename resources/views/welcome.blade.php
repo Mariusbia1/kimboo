@@ -213,8 +213,7 @@ style="min-height: calc(80vh); background: linear-gradient(rgba(0,0,0,0.50), rgb
 
         <!-- Bouton -->
         <div class="text-center mt-14">
-            <a href="#"
-               onclick="document.getElementById('search-input').scrollIntoView({behavior:'smooth'}); document.getElementById('search-input').focus(); return false;"
+            <a href="{{ route('cours.index') }}"
                class="inline-flex items-center gap-3 px-8 py-4 rounded-full text-black font-bold text-base transition hover:opacity-90 shadow-md"
                style="background:#FCB315;">
                 Trouver mon prof !
