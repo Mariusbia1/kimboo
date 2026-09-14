@@ -17,4 +17,15 @@ require __DIR__.'/../vendor/autoload.php';
 /** @var Application $app */
 $app = require_once __DIR__.'/../bootstrap/app.php';
 
+// Neutraliser l'avertissement tempnam() propre aux environnements mutualisés (OVH)
+$previousHandler = set_error_handler(function ($errno, $errstr, $errfile = '', $errline = 0) use (&$previousHandler) {
+    if (str_contains($errstr, 'tempnam()')) {
+        return true;
+    }
+    if (is_callable($previousHandler)) {
+        return call_user_func($previousHandler, $errno, $errstr, $errfile, $errline);
+    }
+    return false;
+});
+
 $app->handleRequest(Request::capture());
