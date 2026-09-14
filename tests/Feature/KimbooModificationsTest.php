@@ -1406,6 +1406,38 @@ test('admin peut marquer et regler toutes les alertes de securite d une conversa
     $responseAfter->assertDontSee('Régler l\'alerte', false);
 });
 
+test('tous les emails du systeme et notifications sont en francais avec la charte kimboo', function () {
+    $user = User::factory()->create(['name' => 'Jean Dupont', 'email' => 'jean@example.com']);
+
+    // 1. Vue de réinitialisation de mot de passe
+    $resetHtml = view('emails.reinitialisation-mot-de-passe', [
+        'user' => $user,
+        'resetUrl' => 'https://kimboo.net/reset-password/fake-token',
+        'count' => 60,
+    ])->render();
+
+    expect($resetHtml)->toContain('kimboo')
+        ->toContain('Réinitialisation de votre mot de passe')
+        ->toContain('Bonjour <strong>Jean Dupont</strong>')
+        ->toContain('Réinitialiser mon mot de passe')
+        ->toContain('60 minutes')
+        ->toContain('Plateforme ivoirienne de cours particuliers');
+
+    // 2. Vue de vérification d'email
+    $verifyHtml = view('emails.verification-email', [
+        'user' => $user,
+        'verificationUrl' => 'https://kimboo.net/verify-email/1/fake-hash',
+        'expireMinutes' => 60,
+    ])->render();
+
+    expect($verifyHtml)->toContain('kimboo')
+        ->toContain('Vérifiez votre adresse email')
+        ->toContain('Bonjour <strong>Jean Dupont</strong>')
+        ->toContain('Vérifier mon adresse email')
+        ->toContain('Plateforme ivoirienne de cours particuliers');
+});
+
+
 
 
 
