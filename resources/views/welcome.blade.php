@@ -274,8 +274,8 @@ style="min-height: calc(80vh); background: linear-gradient(rgba(0,0,0,0.50), rgb
         </div>
 
         <!-- Bloc de droite Bleu avec les textes Kimboo -->
-        <div class="bg-[#0062FF] p-8 sm:p-12 lg:p-16 flex flex-col justify-center text-black">
-            <h2 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-black tracking-tight leading-[1.1] mb-6" style="font-family:'Plus Jakarta Sans',sans-serif;">
+        <div class="bg-[#0062FF] p-8 sm:p-12 lg:p-14 flex flex-col justify-center text-black">
+            <h2 class="text-3xl sm:text-4xl lg:text-[42px] font-extrabold text-black tracking-tight leading-[1.15] mb-5" style="font-family:'Plus Jakarta Sans',sans-serif;">
                 Devenez mentor<br>sur Kimboo
             </h2>
 
