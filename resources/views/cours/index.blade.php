@@ -21,7 +21,8 @@
                     </svg>
                     <input type="text" name="q" value="{{ $q }}"
                         placeholder="Rechercher un prof, une matière, une ville, un niveau..."
-                        class="w-full outline-none text-sm bg-transparent text-gray-800 placeholder-gray-400 font-medium"/>
+                        class="w-full text-sm bg-transparent text-gray-800 placeholder-gray-400 font-medium border-0 border-none ring-0 focus:ring-0 focus:border-0 shadow-none outline-none focus:outline-none"
+                        style="border:none !important; outline:none !important; box-shadow:none !important;"/>
                     @if($categorie)
                     <input type="hidden" name="categorie" value="{{ $categorie }}"/>
                     @endif

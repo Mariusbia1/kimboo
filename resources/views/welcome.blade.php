@@ -14,16 +14,17 @@ style="min-height: calc(80vh); background: linear-gradient(rgba(0,0,0,0.50), rgb
         <p class="text-lg mb-10" style="color:rgba(255,255,255,0.85);">
             {{ \App\Models\SiteSetting::get('hero_subtitle', 'Des cours particuliers à domicile ou en ligne avec les meilleurs enseignants sélectionnés pour votre réussite.') }}
         </p>
-        <!-- Barre de recherche bien arrondie -->
-        <form action="{{ route('cours.index') }}" method="GET" class="flex flex-col sm:flex-row items-center gap-2 bg-white rounded-full p-2 pl-6 max-w-2xl mx-auto shadow-2xl transition hover:shadow-[0_12px_40px_rgba(0,0,0,0.22)] border border-white/60 focus-within:ring-2 focus-within:ring-[#FCB315]/50">
-            <div class="flex items-center gap-3 flex-1 w-full">
+        <!-- Barre de recherche bien arrondie sans bordure interne -->
+        <form action="{{ route('cours.index') }}" method="GET" class="flex flex-col sm:flex-row items-center gap-2 bg-white rounded-3xl sm:rounded-full p-2 pl-4 sm:pl-6 max-w-2xl mx-auto shadow-2xl transition hover:shadow-[0_12px_40px_rgba(0,0,0,0.22)] border border-white/60 focus-within:ring-2 focus-within:ring-[#FCB315]/50">
+            <div class="flex items-center gap-3 flex-1 w-full py-1 sm:py-0">
                 <svg class="w-5 h-5 text-gray-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0z"/>
                 </svg>
                 <input
                     type="text"
                     name="q"
-                    class="w-full outline-none text-sm sm:text-base text-gray-800 bg-transparent placeholder-gray-400 font-medium"
+                    class="w-full text-sm sm:text-base text-gray-800 bg-transparent placeholder-gray-400 font-medium border-0 border-none ring-0 focus:ring-0 focus:border-0 shadow-none outline-none focus:outline-none"
+                    style="border:none !important; outline:none !important; box-shadow:none !important;"
                     id="search-input"
                     placeholder="Que souhaitez-vous apprendre aujourd'hui ?"
                 />
