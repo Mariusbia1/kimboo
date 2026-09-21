@@ -324,199 +324,213 @@ style="min-height: calc(80vh); background: linear-gradient(rgba(0,0,0,0.50), rgb
 </section>
 
 
-<!-- HISTOIRES DE RÉUSSITE & TÉMOIGNAGES -->
-<section class="py-20 lg:py-28 px-4 overflow-hidden" style="background:#FAF9F6;">
-    <div class="max-w-6xl mx-auto">
+<!-- HISTOIRES DE RÉUSSITE & TÉMOIGNAGES FLOTTANTS -->
+<section class="py-20 lg:py-28 px-4 overflow-hidden relative" style="background:#FAF9F6;">
+    <div class="max-w-6xl mx-auto mb-12 text-center">
+        <h2 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-black mb-3 tracking-tight" style="font-family:'Plus Jakarta Sans',sans-serif;">
+            Des résultats concrets avec nos professeurs
+        </h2>
+        <p class="text-sm sm:text-base text-gray-600 max-w-xl mx-auto leading-relaxed">
+            Découvrez comment élèves et enseignants progressent ensemble chaque jour partout en Côte d'Ivoire.
+        </p>
 
-        <!-- En-tête avec storytelling -->
-        <div class="text-center mb-14">
-            <h2 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-black mb-4 tracking-tight" style="font-family:'Plus Jakarta Sans',sans-serif;">
-                Chaque déclic commence par une belle rencontre
-            </h2>
-            <p class="text-sm sm:text-base text-gray-600 max-w-2xl mx-auto leading-relaxed">
-                Examens réussis, reconversions audacieuses ou nouvelles passions : découvrez les parcours concrets de ceux qui ont progressé avec leurs mentors sur Kimboo.
-            </p>
-
-            <!-- Chiffres clés / Preuve sociale -->
-            <div class="flex flex-wrap items-center justify-center gap-3 sm:gap-6 mt-6">
-                <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white border border-gray-200/80 shadow-2xs text-xs font-semibold text-gray-800">
-                    <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
-                    <span><strong>98%</strong> de satisfaction élève</span>
-                </div>
-                <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white border border-gray-200/80 shadow-2xs text-xs font-semibold text-gray-800">
-                    <svg class="w-3.5 h-3.5 text-[#FCB315]" fill="currentColor" viewBox="0 0 20 20">
-                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
-                    </svg>
-                    <span><strong>4.9 / 5</strong> note moyenne</span>
-                </div>
-                <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white border border-gray-200/80 shadow-2xs text-xs font-semibold text-gray-800">
-                    <span>📚 <strong>+15 000 h</strong> dispensées</span>
-                </div>
+        <!-- Chiffres clés / Preuve sociale sans emojis -->
+        <div class="flex flex-wrap items-center justify-center gap-3 sm:gap-5 mt-6">
+            <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white border border-gray-200/80 shadow-2xs text-xs font-semibold text-gray-800">
+                <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                <span><strong>98%</strong> de satisfaction élève</span>
+            </div>
+            <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white border border-gray-200/80 shadow-2xs text-xs font-semibold text-gray-800">
+                <svg class="w-3.5 h-3.5 text-[#FCB315]" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                </svg>
+                <span><strong>4.9 / 5</strong> note moyenne</span>
+            </div>
+            <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white border border-gray-200/80 shadow-2xs text-xs font-semibold text-gray-800">
+                <svg class="w-3.5 h-3.5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+                </svg>
+                <span><strong>+15 000 h</strong> dispensées</span>
             </div>
         </div>
+    </div>
 
-        @php
-        $stories = [
-            [
-                'nom' => 'Kouassi Adjoua',
-                'role' => 'Élève en Terminale C',
-                'ville' => 'Cocody, Abidjan',
-                'titre' => 'De 8/20 en Maths au Bac C avec Mention Bien',
-                'texte' => 'En début d’année, je perdais pied en mathématiques et le stress du Bac montait. Mon mentor sur Kimboo a complètement changé ma méthode : exercices ciblés, patience et simulations régulières. Mes notes ont décollé et j’ai décroché ma mention !',
-                'resultat' => '🎓 Bac C Mention Bien',
-                'mentor' => 'Patrick C. (Maths)',
-                'badge_style' => 'background:#ECFDF5; color:#065F46; border:1px solid #A7F3D0;',
-                'tag' => 'Réussite Scolaire',
-            ],
-            [
-                'nom' => 'Sébastien Kouamé',
-                'role' => 'Reconversion Professionnelle',
-                'ville' => 'Marcory, Abidjan',
-                'titre' => 'D’assistant comptable à Administrateur Systèmes & Réseaux',
-                'texte' => 'Je voulais basculer dans l’IT sans quitter mon emploi. Mon mentor m’a formé 3 soirs par semaine sur Windows Server, Active Directory et le cloud. Deux mois après la fin du module, j’ai signé mon premier CDI en tant qu’administrateur système.',
-                'resultat' => '💼 Embauché en CDI',
-                'mentor' => 'Massirima P. (Informatique)',
-                'badge_style' => 'background:#EFF6FF; color:#1E40AF; border:1px solid #BFDBFE;',
-                'tag' => 'Reconversion IT',
-            ],
-            [
-                'nom' => 'Fatou Diallo',
-                'role' => 'Étudiante en Master',
-                'ville' => 'Plateau, Abidjan',
-                'titre' => 'Admise à mon Master à l’international avec un TOEFL de 105',
-                'texte' => 'Bloquée au niveau B1, j’avais 6 semaines pour certifier mon anglais pour ma bourse d’études. Grâce aux séances intensives d’expression orale et aux astuces méthodologiques de ma professeure, j’ai obtenu 105/120 dès la première tentative.',
-                'resultat' => '✈️ TOEFL 105/120 & Bourse',
-                'mentor' => 'Aïcha T. (Anglais)',
-                'badge_style' => 'background:#FDF2F8; color:#9D174D; border:1px solid #FBCFE8;',
-                'tag' => 'Mobilité & Langues',
-            ],
-            [
-                'nom' => 'Dr. Yao Konan',
-                'role' => 'Professeur & Mentor certifié',
-                'ville' => 'Yopougon, Abidjan',
-                'titre' => 'Plus de 25 élèves réguliers et des revenus sécurisés chaque mois',
-                'texte' => 'Auparavant, je perdais un temps précieux à gérer les annulations et les retards de paiement. Sur Kimboo, tout est automatisé et fluide. Je me consacre entièrement à la réussite de mes élèves et j’ai développé une véritable communauté fidèle.',
-                'resultat' => '📈 +25 élèves réguliers',
-                'mentor' => 'Professeur Vérifié',
-                'badge_style' => 'background:#F5F3FF; color:#5B21B6; border:1px solid #DDD6FE;',
-                'tag' => 'Impact Enseignant',
-            ],
-            [
-                'nom' => 'Mme Touré Ahou',
-                'role' => 'Parent d’élève',
-                'ville' => 'Angré, Cocody',
-                'titre' => 'Mon fils a retrouvé le goût d’apprendre et le sourire en classe',
-                'texte' => 'En classe de 4e, mon fils aîné décrochait en français et perdait confiance. Le professeur particulier Kimboo a su trouver les mots et une approche bienveillante. Aujourd’hui, il est dans le top 5 de sa classe et fait ses devoirs avec enthousiasme.',
-                'resultat' => '⭐ Moyenne de 9.5 à 15.2/20',
-                'mentor' => 'Gervais N. (Français)',
-                'badge_style' => 'background:#FFFBEB; color:#92400E; border:1px solid #FDE68A;',
-                'tag' => 'Soutien Scolaire',
-            ],
-            [
-                'nom' => 'Armand Bléssou',
-                'role' => 'Entrepreneur & Passionné',
-                'ville' => 'Treichville, Abidjan',
-                'titre' => 'Du cours de cuisine au lancement de mon service traiteur',
-                'texte' => 'Je voulais professionnaliser mes compétences en cuisine ivoirienne et africaine moderne. Mon chef mentor m’a transmis les secrets de sauces, la gestion des cuissons et le dressage gastronomique. J’ai ouvert mon service traiteur événementiel le mois dernier !',
-                'resultat' => '🍲 Service traiteur lancé',
-                'mentor' => 'Chef Jean-Paul B. (Cuisine)',
-                'badge_style' => 'background:#FFF8E7; color:#B45309; border:1px solid #FCD34D;',
-                'tag' => 'Passion & Business',
-            ],
-        ];
-        @endphp
+    @php
+    $stories = [
+        [
+            'nom' => 'Kouassi Adjoua',
+            'role' => 'Élève en Terminale C',
+            'ville' => 'Cocody, Abidjan',
+            'titre' => 'De 8/20 en Maths au Bac C avec Mention Bien',
+            'texte' => 'En début d’année, je perdais pied en mathématiques. Mon professeur sur Kimboo m’a redonné confiance avec une méthode progressive. Je suis passée de 8/20 à 16.5/20 au Bac.',
+            'resultat' => 'Bac C Mention Bien',
+            'mentor' => 'Patrick C. (Maths)',
+            'badge_style' => 'background:#ECFDF5; color:#065F46; border:1px solid #A7F3D0;',
+            'tag' => 'Réussite Scolaire',
+        ],
+        [
+            'nom' => 'Sébastien Kouamé',
+            'role' => 'Reconversion Professionnelle',
+            'ville' => 'Marcory, Abidjan',
+            'titre' => 'D’assistant comptable à Administrateur Systèmes',
+            'texte' => 'Je voulais basculer dans l’informatique sans quitter mon emploi. Mon mentor m’a formé le soir sur Windows Server et les réseaux. Deux mois plus tard, j’ai signé mon premier CDI.',
+            'resultat' => 'Embauché en CDI',
+            'mentor' => 'Massirima P. (Informatique)',
+            'badge_style' => 'background:#EFF6FF; color:#1E40AF; border:1px solid #BFDBFE;',
+            'tag' => 'Reconversion IT',
+        ],
+        [
+            'nom' => 'Fatou Diallo',
+            'role' => 'Étudiante en Master',
+            'ville' => 'Plateau, Abidjan',
+            'titre' => 'Admise en Master à l’international avec un TOEFL de 105',
+            'texte' => 'J’avais six semaines pour certifier mon anglais pour ma bourse d’études. Grâce aux simulations orales intensives de ma professeure, j’ai obtenu 105/120 dès la première tentative.',
+            'resultat' => 'TOEFL 105/120 & Bourse',
+            'mentor' => 'Aïcha T. (Anglais)',
+            'badge_style' => 'background:#FDF2F8; color:#9D174D; border:1px solid #FBCFE8;',
+            'tag' => 'Mobilité & Langues',
+        ],
+        [
+            'nom' => 'Dr. Yao Konan',
+            'role' => 'Professeur certifié',
+            'ville' => 'Yopougon, Abidjan',
+            'titre' => 'Plus de 25 élèves réguliers et des revenus sécurisés',
+            'texte' => 'Kimboo a totalement sécurisé et simplifié mon activité d’enseignant. Fini les retards de paiement. Je me concentre à 100% sur la pédagogie et la progression de mes élèves.',
+            'resultat' => '+25 élèves réguliers',
+            'mentor' => 'Professeur Vérifié',
+            'badge_style' => 'background:#F5F3FF; color:#5B21B6; border:1px solid #DDD6FE;',
+            'tag' => 'Impact Enseignant',
+        ],
+        [
+            'nom' => 'Mme Touré Ahou',
+            'role' => 'Parent d’élève',
+            'ville' => 'Angré, Cocody',
+            'titre' => 'Mon fils a retrouvé le goût d’apprendre et le sourire',
+            'texte' => 'En classe de 4e, mon fils décrochait en français. Le professeur particulier Kimboo a su débloquer ses blocages avec bienveillance. Aujourd’hui, il est dans le top 5 de sa classe.',
+            'resultat' => 'Moyenne de 9.5 à 15.2/20',
+            'mentor' => 'Gervais N. (Français)',
+            'badge_style' => 'background:#FFFBEB; color:#92400E; border:1px solid #FDE68A;',
+            'tag' => 'Soutien Scolaire',
+        ],
+        [
+            'nom' => 'Armand Bléssou',
+            'role' => 'Entrepreneur & Passionné',
+            'ville' => 'Treichville, Abidjan',
+            'titre' => 'Du cours de cuisine au lancement de mon service traiteur',
+            'texte' => 'Les cours particuliers m’ont permis de maîtriser les cuissons et le dressage gastronomique. J’ai ouvert ma propre activité traiteur avec succès.',
+            'resultat' => 'Service traiteur lancé',
+            'mentor' => 'Chef Jean-Paul B. (Cuisine)',
+            'badge_style' => 'background:#FFF8E7; color:#B45309; border:1px solid #FCD34D;',
+            'tag' => 'Passion & Business',
+        ],
+    ];
+    @endphp
 
-        <!-- Slider de récits immersifs -->
-        <div class="relative">
-            <div class="overflow-hidden py-4" id="temoignages-wrapper">
-                <div class="flex gap-6 transition-transform duration-500 ease-in-out" id="temoignages-track" style="width: max-content;">
+    <!-- Ruban flottant défilant sur une seule ligne -->
+    <div class="relative w-full overflow-hidden py-4">
+        <!-- Dégradés latéraux pour effet flottant infini -->
+        <div class="pointer-events-none absolute left-0 top-0 bottom-0 w-16 sm:w-32 bg-gradient-to-r from-[#FAF9F6] to-transparent z-10"></div>
+        <div class="pointer-events-none absolute right-0 top-0 bottom-0 w-16 sm:w-32 bg-gradient-to-l from-[#FAF9F6] to-transparent z-10"></div>
 
-                    @foreach($stories as $s)
-                    <div class="rounded-3xl p-7 sm:p-8 shrink-0 bg-white border border-gray-100 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between"
-                         style="width:380px; max-width:88vw;">
-
-                        <div>
-                            <!-- Header de la carte : Tag & Badge Résultat Concret -->
-                            <div class="flex items-center justify-between gap-2 mb-4">
-                                <span class="text-[11px] font-bold uppercase tracking-wider text-gray-400">
-                                    #{{ $s['tag'] }}
-                                </span>
-                                <span class="text-xs font-bold px-3 py-1 rounded-full shrink-0 shadow-2xs" style="{{ $s['badge_style'] }}">
-                                    {{ $s['resultat'] }}
-                                </span>
-                            </div>
-
-                            <!-- Titre d'histoire captivant -->
-                            <h3 class="font-extrabold text-black text-base sm:text-lg leading-snug mb-3" style="font-family:'Plus Jakarta Sans',sans-serif;">
-                                « {{ $s['titre'] }} »
-                            </h3>
-
-                            <!-- Récit / Storytelling -->
-                            <p class="text-xs sm:text-sm text-gray-600 leading-relaxed mb-6">
-                                {{ $s['texte'] }}
-                            </p>
-                        </div>
-
-                        <!-- Footer : Étoiles + Auteur + Mention Mentor -->
-                        <div class="pt-5 border-t border-gray-100">
-                            <div class="flex items-center justify-between mb-3">
-                                <div class="flex items-center gap-1">
-                                    <x-star-rating :rating="5" size="3.5" />
-                                </div>
-                                <span class="text-[11px] font-semibold text-gray-500 bg-gray-50 px-2.5 py-0.5 rounded-md border border-gray-100">
-                                    Avec {{ $s['mentor'] }}
-                                </span>
-                            </div>
-
-                            <div class="flex items-center gap-3">
-                                <x-avatar :name="$s['nom']" size="10" />
-                                <div class="min-w-0">
-                                    <p class="font-bold text-black text-sm truncate">{{ $s['nom'] }}</p>
-                                    <p class="text-xs text-gray-500 font-medium truncate">{{ $s['role'] }} · {{ $s['ville'] }}</p>
-                                </div>
-                            </div>
-                        </div>
-
+        <div class="kimboo-marquee-track flex gap-6 w-max">
+            <!-- Première boucle -->
+            @foreach($stories as $s)
+            <div class="rounded-3xl p-7 sm:p-8 bg-white/95 backdrop-blur-sm border border-gray-100 shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all duration-300 flex flex-col justify-between shrink-0"
+                 style="width: 380px; max-width: 85vw;">
+                <div>
+                    <div class="flex items-center justify-between gap-2 mb-4">
+                        <span class="text-[11px] font-bold uppercase tracking-wider text-gray-400">
+                            #{{ $s['tag'] }}
+                        </span>
+                        <span class="text-xs font-bold px-3 py-1 rounded-full shrink-0 shadow-2xs" style="{{ $s['badge_style'] }}">
+                            {{ $s['resultat'] }}
+                        </span>
                     </div>
-                    @endforeach
 
-                </div>
-            </div>
+                    <h3 class="font-extrabold text-black text-base sm:text-lg leading-snug mb-3" style="font-family:'Plus Jakarta Sans',sans-serif;">
+                        « {{ $s['titre'] }} »
+                    </h3>
 
-            <!-- Navigation Slider -->
-            <div class="flex items-center justify-center gap-4 mt-8">
-                <button onclick="slidePrev()"
-                    class="w-12 h-12 rounded-full border-2 bg-white flex items-center justify-center transition hover:border-[#FCB315] hover:text-[#FCB315] shadow-xs"
-                    style="border-color:#E5E5E5;"
-                    title="Témoignage précédent">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
-                    </svg>
-                </button>
-
-                <!-- Indicateurs Dots -->
-                <div class="flex items-center gap-2" id="temoignages-dots">
-                    @for($i = 0; $i < 6; $i++)
-                    <button onclick="goToSlide({{ $i }})"
-                        class="h-2 rounded-full transition-all duration-300 dot"
-                        style="background: {{ $i === 0 ? '#FCB315' : '#E5E5E5' }}; width: {{ $i === 0 ? '24px' : '8px' }};"
-                        aria-label="Aller au témoignage {{ $i + 1 }}">
-                    </button>
-                    @endfor
+                    <p class="text-xs sm:text-sm text-gray-600 leading-relaxed mb-6">
+                        {{ $s['texte'] }}
+                    </p>
                 </div>
 
-                <button onclick="slideNext()"
-                    class="w-12 h-12 rounded-full border-2 bg-white flex items-center justify-center transition hover:border-[#FCB315] hover:text-[#FCB315] shadow-xs"
-                    style="border-color:#E5E5E5;"
-                    title="Témoignage suivant">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-                    </svg>
-                </button>
+                <div class="pt-5 border-t border-gray-100">
+                    <div class="flex items-center justify-between mb-3">
+                        <x-star-rating :rating="5" size="3.5" />
+                        <span class="text-[11px] font-semibold text-gray-500 bg-gray-50 px-2.5 py-0.5 rounded-md border border-gray-100">
+                            Avec {{ $s['mentor'] }}
+                        </span>
+                    </div>
+
+                    <div class="flex items-center gap-3">
+                        <x-avatar :name="$s['nom']" size="10" />
+                        <div class="min-w-0">
+                            <p class="font-bold text-black text-sm truncate">{{ $s['nom'] }}</p>
+                            <p class="text-xs text-gray-500 font-medium truncate">{{ $s['role'] }} · {{ $s['ville'] }}</p>
+                        </div>
+                    </div>
+                </div>
             </div>
+            @endforeach
+
+            <!-- Seconde boucle identique pour défilement infini sans coupure -->
+            @foreach($stories as $s)
+            <div class="rounded-3xl p-7 sm:p-8 bg-white/95 backdrop-blur-sm border border-gray-100 shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all duration-300 flex flex-col justify-between shrink-0"
+                 style="width: 380px; max-width: 85vw;">
+                <div>
+                    <div class="flex items-center justify-between gap-2 mb-4">
+                        <span class="text-[11px] font-bold uppercase tracking-wider text-gray-400">
+                            #{{ $s['tag'] }}
+                        </span>
+                        <span class="text-xs font-bold px-3 py-1 rounded-full shrink-0 shadow-2xs" style="{{ $s['badge_style'] }}">
+                            {{ $s['resultat'] }}
+                        </span>
+                    </div>
+
+                    <h3 class="font-extrabold text-black text-base sm:text-lg leading-snug mb-3" style="font-family:'Plus Jakarta Sans',sans-serif;">
+                        « {{ $s['titre'] }} »
+                    </h3>
+
+                    <p class="text-xs sm:text-sm text-gray-600 leading-relaxed mb-6">
+                        {{ $s['texte'] }}
+                    </p>
+                </div>
+
+                <div class="pt-5 border-t border-gray-100">
+                    <div class="flex items-center justify-between mb-3">
+                        <x-star-rating :rating="5" size="3.5" />
+                        <span class="text-[11px] font-semibold text-gray-500 bg-gray-50 px-2.5 py-0.5 rounded-md border border-gray-100">
+                            Avec {{ $s['mentor'] }}
+                        </span>
+                    </div>
+
+                    <div class="flex items-center gap-3">
+                        <x-avatar :name="$s['nom']" size="10" />
+                        <div class="min-w-0">
+                            <p class="font-bold text-black text-sm truncate">{{ $s['nom'] }}</p>
+                            <p class="text-xs text-gray-500 font-medium truncate">{{ $s['role'] }} · {{ $s['ville'] }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @endforeach
         </div>
-
     </div>
 </section>
+
+<style>
+@keyframes kimbooMarquee {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+}
+.kimboo-marquee-track {
+    animation: kimbooMarquee 42s linear infinite;
+}
+.kimboo-marquee-track:hover {
+    animation-play-state: paused;
+}
+</style>
 
 @endsection
