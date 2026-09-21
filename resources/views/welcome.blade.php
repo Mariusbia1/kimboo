@@ -226,9 +226,9 @@ style="min-height: calc(80vh); background: linear-gradient(rgba(0,0,0,0.50), rgb
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-8 items-stretch">
 
             <!-- Étape 1 : Trouver votre mentor -->
-            <div class="bg-[#FBFBFA] rounded-[32px] p-6 sm:p-8 border border-gray-200/70 shadow-xs hover:shadow-xl transition-all duration-300 flex flex-col justify-between group">
+            <div class="bg-[#FBFBFA] rounded-[32px] p-6 sm:p-8 border border-gray-200/70 shadow-xs hover:shadow-xl transition-all duration-300 flex flex-col justify-between group overflow-hidden">
                 <div>
-                    <!-- Header avec numéro et badge -->
+                    <!-- Header avec numéro et icône -->
                     <div class="flex items-center justify-between mb-6">
                         <span class="text-xs font-black px-3 py-1 rounded-full bg-white text-gray-800 border border-gray-200/80 shadow-2xs font-mono">
                             01
@@ -248,10 +248,10 @@ style="min-height: calc(80vh); background: linear-gradient(rgba(0,0,0,0.50), rgb
                     </p>
                 </div>
 
-                <!-- Illustration visuelle : Cartes profils superposées -->
-                <div class="relative w-full h-[270px] bg-white rounded-2xl p-4 overflow-hidden flex items-center justify-center border border-gray-200/60 shadow-inner">
-                    <!-- Carte en arrière-plan (inclinée) -->
-                    <div class="absolute w-[185px] bg-white rounded-2xl p-2.5 shadow-md border border-gray-100 transform -rotate-6 -translate-x-7 translate-y-3 opacity-75 scale-95 group-hover:-rotate-10 group-hover:-translate-x-9 transition-transform duration-500 pointer-events-none">
+                <!-- Illustration visuelle directe (sans double cadre interne) -->
+                <div class="relative w-full h-[250px] flex items-center justify-center pt-2">
+                    <!-- Carte arrière (inclinée) -->
+                    <div class="absolute w-[185px] bg-white rounded-2xl p-2.5 shadow-md border border-gray-100/90 transform -rotate-6 -translate-x-6 translate-y-3 opacity-70 scale-95 group-hover:-rotate-10 group-hover:-translate-x-8 transition-transform duration-500 pointer-events-none">
                         <div class="w-full h-24 rounded-xl overflow-hidden bg-gray-100 mb-2">
                             <img src="{{ asset('images/mentor-kimboo-2.jpg') }}" alt="Professeur Kimboo" class="w-full h-full object-cover object-top">
                         </div>
@@ -263,21 +263,12 @@ style="min-height: calc(80vh); background: linear-gradient(rgba(0,0,0,0.50), rgb
                         </div>
                     </div>
 
-                    <!-- Carte principale au premier plan -->
-                    <div class="relative z-10 w-[200px] bg-white rounded-2xl p-3 shadow-xl border border-gray-200/90 transform rotate-2 translate-x-3 group-hover:rotate-0 group-hover:translate-x-0 group-hover:scale-[1.03] transition-transform duration-500">
-                        <div class="relative w-full h-28 rounded-xl overflow-hidden bg-gray-100 mb-2.5 shadow-2xs">
+                    <!-- Carte avant principale -->
+                    <div class="relative z-10 w-[205px] bg-white rounded-2xl p-3 shadow-xl border border-gray-200/90 transform rotate-2 translate-x-3 group-hover:rotate-0 group-hover:translate-x-0 group-hover:scale-[1.03] transition-transform duration-500">
+                        <div class="w-full h-28 rounded-xl overflow-hidden bg-gray-100 mb-2.5 shadow-2xs">
                             <img src="{{ asset('images/mentor-kimboo.jpg') }}" alt="Professeur Koffi Kouamé" class="w-full h-full object-cover object-top">
-                            <span class="absolute top-2 left-2 text-[9px] font-black px-2 py-0.5 rounded-md bg-white/95 text-gray-900 shadow-2xs flex items-center gap-1">
-                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
-                                Disponible
-                            </span>
                         </div>
-                        <div class="flex items-center gap-1">
-                            <span class="text-xs font-black text-gray-900 truncate">Koffi Kouamé</span>
-                            <svg class="w-3.5 h-3.5 text-blue-500 shrink-0 fill-current" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
-                            </svg>
-                        </div>
+                        <div class="text-xs font-black text-gray-900 truncate">Koffi Kouamé</div>
                         <div class="text-[11px] text-gray-500 font-medium truncate">Mathématiques & Physique</div>
                         <div class="mt-2 pt-2 border-t border-gray-100 flex items-center justify-between">
                             <div class="flex items-center gap-1">
@@ -294,9 +285,9 @@ style="min-height: calc(80vh); background: linear-gradient(rgba(0,0,0,0.50), rgb
             </div>
 
             <!-- Étape 2 : Commencer votre apprentissage -->
-            <div class="bg-[#FBFBFA] rounded-[32px] p-6 sm:p-8 border border-gray-200/70 shadow-xs hover:shadow-xl transition-all duration-300 flex flex-col justify-between group">
+            <div class="bg-[#FBFBFA] rounded-[32px] p-6 sm:p-8 border border-gray-200/70 shadow-xs hover:shadow-xl transition-all duration-300 flex flex-col justify-between group overflow-hidden">
                 <div>
-                    <!-- Header avec numéro et badge -->
+                    <!-- Header avec numéro et icône -->
                     <div class="flex items-center justify-between mb-6">
                         <span class="text-xs font-black px-3 py-1 rounded-full bg-white text-gray-800 border border-gray-200/80 shadow-2xs font-mono">
                             02
@@ -316,20 +307,10 @@ style="min-height: calc(80vh); background: linear-gradient(rgba(0,0,0,0.50), rgb
                     </p>
                 </div>
 
-                <!-- Illustration visuelle : Réservation & Planning interactif -->
-                <div class="relative w-full h-[270px] bg-white rounded-2xl p-4 overflow-hidden flex items-center justify-center border border-gray-200/60 shadow-inner">
-                    <!-- Ticket de réservation principal -->
-                    <div class="w-[220px] bg-white rounded-2xl p-3.5 shadow-xl border border-gray-200/90 transform group-hover:scale-[1.03] transition-transform duration-500">
-                        <div class="flex items-center justify-between gap-2 mb-2.5">
-                            <span class="inline-flex items-center gap-1 text-[9px] font-extrabold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">
-                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
-                                Confirmé
-                            </span>
-                            <span class="text-[9px] font-bold text-amber-800 bg-[#FFF8E7] px-2 py-0.5 rounded-md border border-[#FCB315]/30">
-                                1er cours offert
-                            </span>
-                        </div>
-
+                <!-- Illustration visuelle directe (sans double cadre interne) -->
+                <div class="relative w-full h-[250px] flex items-center justify-center pt-2">
+                    <!-- Ticket de séance épuré -->
+                    <div class="w-[225px] bg-white rounded-2xl p-4 shadow-xl border border-gray-200/90 transform group-hover:scale-[1.03] transition-transform duration-500">
                         <div class="text-xs font-black text-gray-900 mb-1">
                             Samedi · 10h00 - 11h30
                         </div>
@@ -341,14 +322,14 @@ style="min-height: calc(80vh); background: linear-gradient(rgba(0,0,0,0.50), rgb
                             À domicile ou En ligne
                         </div>
 
-                        <div class="pt-2.5 border-t border-gray-100 flex items-center gap-2 mb-3">
-                            <div class="w-6 h-6 rounded-full overflow-hidden bg-gray-200 shrink-0">
+                        <div class="pt-3 border-t border-gray-100 flex items-center gap-2 mb-3.5">
+                            <div class="w-7 h-7 rounded-full overflow-hidden bg-gray-200 shrink-0">
                                 <img src="{{ asset('images/mentor-kimboo.jpg') }}" alt="Professeur" class="w-full h-full object-cover">
                             </div>
                             <div class="truncate text-[11px] font-bold text-gray-800">Avec Koffi Kouamé</div>
                         </div>
 
-                        <div class="w-full py-1.5 rounded-xl text-center text-xs font-bold text-black shadow-xs" style="background:#FCB315;">
+                        <div class="w-full py-2 rounded-xl text-center text-xs font-bold text-black shadow-xs" style="background:#FCB315;">
                             Rejoindre la séance
                         </div>
                     </div>
@@ -356,9 +337,9 @@ style="min-height: calc(80vh); background: linear-gradient(rgba(0,0,0,0.50), rgb
             </div>
 
             <!-- Étape 3 : Progresser -->
-            <div class="bg-[#FBFBFA] rounded-[32px] p-6 sm:p-8 border border-gray-200/70 shadow-xs hover:shadow-xl transition-all duration-300 flex flex-col justify-between group">
+            <div class="bg-[#FBFBFA] rounded-[32px] p-6 sm:p-8 border border-gray-200/70 shadow-xs hover:shadow-xl transition-all duration-300 flex flex-col justify-between group overflow-hidden">
                 <div>
-                    <!-- Header avec numéro et badge -->
+                    <!-- Header avec numéro et icône -->
                     <div class="flex items-center justify-between mb-6">
                         <span class="text-xs font-black px-3 py-1 rounded-full bg-white text-gray-800 border border-gray-200/80 shadow-2xs font-mono">
                             03
@@ -378,18 +359,15 @@ style="min-height: calc(80vh); background: linear-gradient(rgba(0,0,0,0.50), rgb
                     </p>
                 </div>
 
-                <!-- Illustration visuelle : Résultats & Progression -->
-                <div class="relative w-full h-[270px] bg-white rounded-2xl p-4 overflow-hidden flex items-center justify-center border border-gray-200/60 shadow-inner">
-                    <!-- Carte de suivi des résultats -->
-                    <div class="w-[220px] bg-white rounded-2xl p-3.5 shadow-xl border border-gray-200/90 transform group-hover:scale-[1.03] transition-transform duration-500">
-                        <div class="flex items-center justify-between mb-2">
-                            <span class="text-xs font-black text-gray-900">Résultats constatés</span>
-                            <span class="text-[10px] font-black text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200">
-                                +4,5 pts
-                            </span>
+                <!-- Illustration visuelle directe (sans double cadre interne) -->
+                <div class="relative w-full h-[250px] flex items-center justify-center pt-2">
+                    <!-- Carte de suivi épurée -->
+                    <div class="w-[225px] bg-white rounded-2xl p-4 shadow-xl border border-gray-200/90 transform group-hover:scale-[1.03] transition-transform duration-500">
+                        <div class="text-xs font-black text-gray-900 mb-2">
+                            Résultats constatés
                         </div>
 
-                        <div class="space-y-1.5 mb-3">
+                        <div class="space-y-1.5 mb-3.5">
                             <div class="flex justify-between text-[11px] font-semibold text-gray-600">
                                 <span>Progression globale</span>
                                 <span class="text-gray-900 font-extrabold">92%</span>
@@ -399,8 +377,8 @@ style="min-height: calc(80vh); background: linear-gradient(rgba(0,0,0,0.50), rgb
                             </div>
                         </div>
 
-                        <div class="pt-2.5 border-t border-gray-100">
-                            <div class="flex items-center gap-1 mb-1">
+                        <div class="pt-3 border-t border-gray-100">
+                            <div class="flex items-center gap-1 mb-1.5">
                                 @for($i = 0; $i < 5; $i++)
                                 <svg class="w-3 h-3 text-[#FCB315] fill-current" viewBox="0 0 20 20">
                                     <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
