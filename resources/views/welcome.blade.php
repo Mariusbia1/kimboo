@@ -164,33 +164,39 @@ style="min-height: calc(80vh); background: linear-gradient(rgba(0,0,0,0.50), rgb
 </section>
 
 <!-- LE PROGRÈS COMMENCE AVEC LE BON MENTOR -->
-<section class="py-20 lg:py-28 px-4 bg-white border-t border-gray-100/90">
-    <div class="max-w-5xl mx-auto">
+<section class="py-20 lg:py-28 px-4 border-y border-gray-200/60" style="background:#F6F6F4;">
+    <div class="max-w-7xl mx-auto">
         <!-- En-tête -->
         <div class="text-center mb-14 sm:mb-20">
-            <h2 class="text-3xl sm:text-5xl lg:text-[58px] font-extrabold text-black tracking-tight mb-4" style="font-family:'Plus Jakarta Sans',sans-serif; line-height: 1.12;">
+            <h2 class="text-3xl sm:text-5xl lg:text-6xl font-black text-black tracking-tight mb-4" style="font-family:'Plus Jakarta Sans',sans-serif; line-height: 1.12;">
                 Le progrès commence avec<br class="hidden sm:inline"> le bon mentor
             </h2>
-            <p class="text-sm sm:text-base lg:text-lg text-gray-700 font-medium">
+            <p class="text-base sm:text-lg text-gray-700 font-medium">
                 Des professeurs sélectionnés, un apprentissage qui vous ressemble
             </p>
         </div>
 
-        <!-- Contenu 2 colonnes : Photo HD + Statistique -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-14 items-center max-w-4xl mx-auto">
-            <!-- Photo à gauche -->
-            <div class="relative overflow-hidden rounded-3xl shadow-md border border-gray-100/90 aspect-4/3 md:aspect-4/3 bg-gray-50">
+        <!-- Contenu 2 colonnes : Photo HD Pleine Largeur + Statistique & Impact -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-14 items-center w-full">
+            <!-- Photo à gauche (7 colonnes sur desktop) -->
+            <div class="lg:col-span-7 relative overflow-hidden rounded-[28px] shadow-sm border border-black/5 bg-white aspect-4/3 sm:aspect-16/10 lg:aspect-auto lg:h-[460px]">
                 <img src="{{ asset('images/student-learning.jpg') }}" 
                      alt="Apprenant étudiant avec son professeur Kimboo" 
-                     class="w-full h-full object-cover object-center transform hover:scale-102 transition-transform duration-500"
+                     class="w-full h-full object-cover object-center transform hover:scale-[1.02] transition-transform duration-700"
                      loading="lazy">
             </div>
 
-            <!-- Statistique & Message fort à droite -->
-            <div class="flex flex-col justify-center space-y-4 text-left">
-                <h3 class="text-2xl sm:text-3xl lg:text-[34px] font-extrabold text-black leading-snug tracking-tight" style="font-family:'Plus Jakarta Sans',sans-serif; line-height: 1.25;">
+            <!-- Statistique & Message fort à droite (5 colonnes sur desktop) -->
+            <div class="lg:col-span-5 flex flex-col justify-center space-y-6 lg:pl-2">
+                <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white border border-gray-200/90 shadow-2xs w-fit">
+                    <span class="w-2 h-2 rounded-full bg-[#FCB315]"></span>
+                    <span class="text-xs font-bold uppercase tracking-wider text-gray-800">Impact & Accompagnement</span>
+                </div>
+
+                <h3 class="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-black leading-snug tracking-tight" style="font-family:'Plus Jakarta Sans',sans-serif;">
                     8 apprenants sur 10 interrogés considèrent l’accompagnement d’un professeur essentiel à leur progression.
                 </h3>
+
                 <p class="text-xs sm:text-sm text-gray-500 font-medium">
                     Enquête Kimboo auprès de 20 apprenants, septembre 2026.
                 </p>
