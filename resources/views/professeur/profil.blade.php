@@ -403,13 +403,13 @@
     </div>
 </div>
 
-<!-- PROFILS SIMILAIRES (Point 16 : grille avec photo identique à l'accueil) -->
+<!-- PROFILS SIMILAIRES -->
 <section class="py-16 px-4 sm:px-6 lg:py-20" style="background:#F7F7F7;">
-    <div class="max-w-6xl mx-auto">
-        <h2 class="font-extrabold text-2xl text-black mb-8" style="font-family:'Plus Jakarta Sans',sans-serif;">
+    <div class="max-w-5xl mx-auto">
+        <h2 class="font-extrabold text-xl sm:text-2xl text-black mb-6" style="font-family:'Plus Jakarta Sans',sans-serif;">
             Professeurs similaires
         </h2>
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-7 gap-y-10">
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
             @forelse($similaires as $sim)
             @php
                 $simCategory = $sim->courses->first()?->category ?? 'Général';
@@ -418,52 +418,59 @@
             <a href="{{ route('professeur.profil', $sim->id) }}" class="block group transition flex flex-col justify-between">
                 <div>
                     <!-- Photo avec texte superposé -->
-                    <div class="relative mb-3">
-                        <div class="w-full aspect-[4/4] rounded-3xl overflow-hidden bg-gray-100 relative group-hover:opacity-95 transition shadow-xs">
-                            <x-avatar :user="$sim->user" full="true" rounded="3xl" />
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/25 to-transparent pointer-events-none"></div>
+                    <div class="relative mb-2.5">
+                        <div class="w-full aspect-[4/3] rounded-2xl overflow-hidden bg-gray-100 relative group-hover:opacity-95 transition shadow-2xs">
+                            <x-avatar :user="$sim->user" full="true" rounded="2xl" />
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent pointer-events-none"></div>
 
-                            <div class="absolute bottom-3.5 left-4 right-4 text-white pointer-events-none z-10">
-                                <h3 class="font-extrabold text-lg sm:text-xl leading-tight text-white drop-shadow-sm truncate">
+                            <div class="absolute bottom-2.5 left-3 right-3 text-white pointer-events-none z-10">
+                                <h3 class="font-bold text-sm sm:text-base leading-tight text-white drop-shadow-sm truncate">
                                     {{ $sim->user->name }}
                                 </h3>
-                                <p class="text-xs text-white/90 font-medium drop-shadow-xs truncate mt-0.5">
+                                <p class="text-[11px] text-white/90 font-medium drop-shadow-2xs truncate mt-0.5">
                                     {{ $sim->lieu_cours_summary }}
                                 </p>
                             </div>
                         </div>
-                    </div>
 
-                    <!-- Note & Badge -->
-                    <div class="flex items-center justify-between gap-2 mb-1">
-                        <div class="flex items-center gap-1.5">
-                            <svg class="w-4 h-4 text-[#FCB315] fill-current shrink-0" viewBox="0 0 20 20">
-                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
-                            </svg>
-                            <span class="text-xs font-black text-gray-900">{{ number_format($sim->rating, $sim->rating == (int)$sim->rating ? 0 : 1, ',', '') }}</span>
-                            <span class="text-xs text-gray-500 font-medium">({{ $sim->reviews_count }} {{ $sim->reviews_count > 1 ? 'évaluations' : 'évaluation' }})</span>
-                        </div>
+                        <!-- Badge certifié haut à droite -->
                         @if($sim->is_verified)
-                        <span class="inline-flex items-center gap-1 text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-indigo-50 text-indigo-700 border border-indigo-100 shrink-0">
-                            <span class="text-indigo-500">✦</span> Ambassadeur
-                        </span>
+                        <div class="absolute top-2.5 right-2.5 z-10">
+                            <x-verified-badge size="22" />
+                        </div>
                         @endif
                     </div>
 
-                    <!-- Matière - Bio -->
-                    <p class="text-xs text-gray-700 leading-snug line-clamp-2 mb-2">
-                        <strong class="font-bold text-gray-900">{{ $simCategory }}</strong>
-                        <span class="text-gray-400 font-normal"> - </span>
-                        <span class="text-gray-600">{{ $simBio }}</span>
+                    <!-- Note & Catégorie -->
+                    <div class="flex items-center justify-between gap-2 mb-1">
+                        <div class="flex items-center gap-1">
+                            <svg class="w-3.5 h-3.5 text-[#FCB315] fill-current shrink-0" viewBox="0 0 20 20">
+                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                            </svg>
+                            <span class="text-xs font-bold text-gray-900">{{ number_format($sim->rating, 1) }}</span>
+                            <span class="text-[11px] text-gray-400 font-medium">({{ $sim->reviews_count }} avis)</span>
+                        </div>
+                        <span class="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-amber-50 text-amber-900 border border-amber-200/60 shrink-0">
+                            {{ $simCategory }}
+                        </span>
+                    </div>
+
+                    <!-- Bio concise -->
+                    <p class="text-xs text-gray-500 leading-relaxed mb-2 line-clamp-2">
+                        {{ $simBio }}
                     </p>
                 </div>
 
-                <!-- Prix -->
-                <div class="flex items-center gap-2 text-sm mt-auto">
-                    <span class="font-black text-gray-900">{{ number_format($sim->hourly_rate, 0, ',', ' ') }} FCFA/h</span>
+                <!-- Prix & 1er cours offert -->
+                <div class="flex items-center justify-between gap-1 pt-0.5 mt-auto">
+                    <div class="flex items-baseline gap-1">
+                        <span class="text-sm font-extrabold text-gray-900">{{ number_format($sim->hourly_rate, 0, ',', ' ') }}</span>
+                        <span class="text-[11px] font-semibold text-gray-400">FCFA/h</span>
+                    </div>
                     @if($sim->first_course_free)
-                    <span class="text-gray-300 font-bold">·</span>
-                    <span class="text-xs font-bold text-[#E05A47]">1<sup>er</sup> cours offert</span>
+                    <span class="text-[11px] font-bold px-2 py-0.5 rounded-md bg-[#FFF8E7] text-[#9A6A00] border border-[#FCB315]/40 shrink-0">
+                        1er cours offert
+                    </span>
                     @endif
                 </div>
             </a>

@@ -51,13 +51,13 @@ style="min-height: calc(80vh); background: linear-gradient(rgba(0,0,0,0.50), rgb
 
 <!-- PROFESSEURS RECOMMANDÉS -->
 <section class="py-16 px-4 bg-white">
-    <div class="max-w-6xl mx-auto">
+    <div class="max-w-5xl mx-auto">
         <div class="flex flex-col sm:flex-row sm:items-end justify-between mb-8 gap-3">
             <div>
-                <h2 class="text-3xl sm:text-4xl font-bold text-black mb-2" style="font-family:'Plus Jakarta Sans',sans-serif;">
+                <h2 class="text-2xl sm:text-3xl font-bold text-black mb-1.5" style="font-family:'Plus Jakarta Sans',sans-serif;">
                     {{ \App\Models\SiteSetting::get('home_teachers_title', 'Les meilleurs profs de Côte d\'Ivoire sont sur Kimboo') }}
                 </h2>
-                <p class="text-sm" style="color:#2b2b2b;">
+                <p class="text-xs sm:text-sm text-gray-500">
                     {{ \App\Models\SiteSetting::get('home_teachers_subtitle', 'Vérifiés et certifiés par l\'équipe Kimboo') }}
                 </p>
             </div>
@@ -67,84 +67,92 @@ style="min-height: calc(80vh); background: linear-gradient(rgba(0,0,0,0.50), rgb
             </a>
         </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-7 gap-y-10">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
             @forelse($professeurs as $profile)
             @php
                 $firstCourse = $profile->courses->first();
                 $categoryName = $firstCourse?->category ?? 'Général';
-                $bioSnippet = $profile->bio ? Str::limit($profile->bio, 95) : 'Professeur passionné et certifié sur Kimboo.';
+                $bioSnippet = $profile->bio ? Str::limit($profile->bio, 80) : 'Professeur passionné et certifié sur Kimboo.';
             @endphp
             <div class="flex flex-col justify-between group">
                 <div>
-                    <!-- Photo cliquable avec Nom & Lieu superposés et Cœur en haut à droite -->
-                    <div class="relative mb-3">
-                        <a href="{{ route('professeur.profil', $profile->id) }}" class="block w-full aspect-[4/4] rounded-3xl overflow-hidden bg-gray-100 relative group-hover:opacity-95 transition shadow-xs">
-                            <x-avatar :user="$profile->user" full="true" rounded="3xl" />
+                    <!-- Photo cliquable compacte avec Nom & Lieu superposés -->
+                    <div class="relative mb-2.5">
+                        <a href="{{ route('professeur.profil', $profile->id) }}" class="block w-full aspect-[4/3] rounded-2xl overflow-hidden bg-gray-100 relative group-hover:opacity-95 transition shadow-2xs">
+                            <x-avatar :user="$profile->user" full="true" rounded="2xl" />
                             
-                            <!-- Dégradé sombre en bas pour lisibilité parfaite -->
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/25 to-transparent pointer-events-none"></div>
+                            <!-- Dégradé sombre en bas pour lisibilité -->
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent pointer-events-none"></div>
 
-                            <!-- Nom et Lieu/Format superposés en bas à gauche de la photo -->
-                            <div class="absolute bottom-3.5 left-4 right-4 text-white pointer-events-none z-10">
-                                <h3 class="font-extrabold text-lg sm:text-xl leading-tight text-white drop-shadow-sm truncate">
+                            <!-- Nom et Lieu superposés en bas à gauche de la photo -->
+                            <div class="absolute bottom-2.5 left-3 right-3 text-white pointer-events-none z-10">
+                                <h3 class="font-bold text-sm sm:text-base leading-tight text-white drop-shadow-sm truncate">
                                     {{ $profile->user->name }}
                                 </h3>
-                                <p class="text-xs text-white/90 font-medium drop-shadow-xs truncate mt-0.5">
+                                <p class="text-[11px] text-white/90 font-medium drop-shadow-2xs truncate mt-0.5">
                                     {{ $profile->lieu_cours_summary }}
                                 </p>
                             </div>
                         </a>
 
-                        <!-- Bouton like haut à droite -->
-                        @auth
-                        <button onclick="toggleFavori({{ $profile->id }}, this)"
-                            class="absolute top-3.5 right-3.5 w-8 h-8 rounded-full flex items-center justify-center transition hover:scale-110 shadow-sm z-20"
-                            style="background:rgba(0,0,0,0.3); backdrop-filter:blur(4px);">
-                            <svg class="w-4 h-4 favori-icon" fill="{{ in_array($profile->id, $favorisIds) ? '#ef4444' : 'none' }}"
-                                 stroke="{{ in_array($profile->id, $favorisIds) ? '#ef4444' : '#ffffff' }}"
-                                 stroke-width="2"
-                                 viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round"
-                                      d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
-                            </svg>
-                        </button>
-                        @endauth
+                        <!-- Badge en vedette haut à gauche -->
+                        @if($profile->is_featured)
+                        <div class="absolute top-2.5 left-2.5 z-10">
+                            <x-featured-badge />
+                        </div>
+                        @endif
+
+                        <!-- Badge certifié haut à droite & Bouton like -->
+                        <div class="absolute top-2.5 right-2.5 flex items-center gap-1.5 z-10">
+                            @if($profile->is_verified)
+                            <x-verified-badge size="22" />
+                            @endif
+
+                            @auth
+                            <button onclick="toggleFavori({{ $profile->id }}, this)"
+                                class="w-7 h-7 rounded-full flex items-center justify-center transition hover:scale-110 shadow-xs"
+                                style="background:rgba(255,255,255,0.92);">
+                                <svg class="w-3.5 h-3.5 favori-icon" fill="{{ in_array($profile->id, $favorisIds) ? '#e53e3e' : 'none' }}"
+                                     stroke="{{ in_array($profile->id, $favorisIds) ? '#e53e3e' : '#666' }}"
+                                     viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                          d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+                                </svg>
+                            </button>
+                            @endauth
+                        </div>
                     </div>
 
-                    <!-- Ligne 1 : Note/Avis & Badge Statut -->
+                    <!-- Ligne 1 : Note/Avis & Catégorie -->
                     <div class="flex items-center justify-between gap-2 mb-1">
-                        <div class="flex items-center gap-1.5">
-                            <svg class="w-4 h-4 text-[#FCB315] fill-current shrink-0" viewBox="0 0 20 20">
+                        <div class="flex items-center gap-1">
+                            <svg class="w-3.5 h-3.5 text-[#FCB315] fill-current shrink-0" viewBox="0 0 20 20">
                                 <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
                             </svg>
-                            <span class="text-xs font-black text-gray-900">{{ number_format($profile->rating, $profile->rating == (int)$profile->rating ? 0 : 1, ',', '') }}</span>
-                            <span class="text-xs text-gray-500 font-medium">({{ $profile->reviews_count }} {{ $profile->reviews_count > 1 ? 'évaluations' : 'évaluation' }})</span>
+                            <span class="text-xs font-bold text-gray-900">{{ number_format($profile->rating, 1) }}</span>
+                            <span class="text-[11px] text-gray-400 font-medium">({{ $profile->reviews_count }} avis)</span>
                         </div>
-                        @if($profile->is_verified)
-                        <span class="inline-flex items-center gap-1 text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-indigo-50 text-indigo-700 border border-indigo-100 shrink-0">
-                            <span class="text-indigo-500">✦</span> Ambassadeur
+                        <span class="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-amber-50 text-amber-900 border border-amber-200/60 shrink-0">
+                            {{ $categoryName }}
                         </span>
-                        @elseif($profile->is_featured)
-                        <span class="inline-flex items-center gap-1 text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-amber-50 text-amber-800 border border-amber-200 shrink-0">
-                            <span class="text-amber-600">✦</span> En vedette
-                        </span>
-                        @endif
                     </div>
 
-                    <!-- Ligne 2 : Matière - Bio/Description du cours -->
-                    <p class="text-xs text-gray-700 leading-snug line-clamp-2 mb-2">
-                        <strong class="font-bold text-gray-900">{{ $categoryName }}</strong>
-                        <span class="text-gray-400 font-normal"> - </span>
-                        <span class="text-gray-600">{{ $bioSnippet }}</span>
+                    <!-- Ligne 2 : Bio concise -->
+                    <p class="text-xs text-gray-500 leading-relaxed mb-2 line-clamp-2">
+                        {{ $bioSnippet }}
                     </p>
                 </div>
 
                 <!-- Ligne 3 : Prix & 1er cours offert -->
-                <div class="flex items-center gap-2 text-sm">
-                    <span class="font-black text-gray-900">{{ number_format($profile->hourly_rate, 0, ',', ' ') }} FCFA/h</span>
+                <div class="flex items-center justify-between gap-1 pt-0.5">
+                    <div class="flex items-baseline gap-1">
+                        <span class="text-sm font-extrabold text-gray-900">{{ number_format($profile->hourly_rate, 0, ',', ' ') }}</span>
+                        <span class="text-[11px] font-semibold text-gray-400">FCFA/h</span>
+                    </div>
                     @if($profile->first_course_free)
-                    <span class="text-gray-300 font-bold">·</span>
-                    <span class="text-xs font-bold text-[#E05A47]">1<sup>er</sup> cours offert</span>
+                    <span class="text-[11px] font-bold px-2 py-0.5 rounded-md bg-[#FFF8E7] text-[#9A6A00] border border-[#FCB315]/40 shrink-0">
+                        1er cours offert
+                    </span>
                     @endif
                 </div>
             </div>
