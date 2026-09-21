@@ -294,9 +294,6 @@ style="min-height: calc(80vh); background: linear-gradient(rgba(0,0,0,0.50), rgb
 
             <!-- Textes à droite -->
             <div>
-                <span class="inline-block px-4 py-1.5 rounded-full text-xs sm:text-sm font-bold mb-5 tracking-wide" style="background:rgba(252,179,21,0.15); color:#FCB315;">
-                    POUR LES PROFESSEURS
-                </span>
                 <h2 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white mb-5" style="font-family:'Plus Jakarta Sans',sans-serif; line-height:1.2;">
                     Devenez mentor<br>sur <span style="color:#FCB315;">Kimboo</span>
                 </h2>
