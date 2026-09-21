@@ -47,15 +47,15 @@
      class="{{ $isFull ? 'w-full h-full' : '' }} {{ $roundedClass }} object-cover object-top shrink-0 transition duration-300 group-hover:scale-105"
      style="object-position: center top; @if(!$isFull) width:{{ $dimRem }}rem; height:{{ $dimRem }}rem; @endif"
      onerror="this.style.display='none'; this.nextElementSibling.classList.remove('hidden'); this.nextElementSibling.classList.add('flex');"/>
-<div class="{{ $isFull ? 'w-full h-full' : '' }} {{ $roundedClass }} hidden relative overflow-hidden shrink-0 flex items-center justify-center font-extrabold text-[#0B0F19] tracking-wider select-none border border-amber-300/50 shadow-sm"
-     @if(!$isFull) style="width:{{ $dimRem }}rem; height:{{ $dimRem }}rem; font-size:{{ $fontSizeRem }}rem; background: radial-gradient(135% 135% at 20% 15%, #FFF2CC 0%, #FCB315 50%, #E59800 100%); box-shadow: inset 0 1px 2px rgba(255,255,255,0.7), 0 4px 14px rgba(252,179,21,0.25);"
-     @else style="font-size:{{ $fontSizeRem }}rem; background: radial-gradient(135% 135% at 20% 15%, #FFF2CC 0%, #FCB315 50%, #E59800 100%); box-shadow: inset 0 2px 4px rgba(255,255,255,0.7), 0 8px 24px rgba(252,179,21,0.3);" @endif>
-    <span class="relative z-10 leading-none drop-shadow-2xs">{{ $initials }}</span>
+<div class="{{ $isFull ? 'w-full h-full' : '' }} {{ $roundedClass }} hidden relative overflow-hidden shrink-0 flex items-center justify-center font-black text-black tracking-wider select-none"
+     @if(!$isFull) style="width:{{ $dimRem }}rem; height:{{ $dimRem }}rem; font-size:{{ $fontSizeRem }}rem; background: #FCB315;"
+     @else style="font-size:{{ $fontSizeRem }}rem; background: #FCB315;" @endif>
+    <span class="relative z-10 leading-none">{{ $initials }}</span>
 </div>
 @else
-<div class="{{ $isFull ? 'w-full h-full' : '' }} {{ $roundedClass }} relative overflow-hidden shrink-0 flex items-center justify-center font-extrabold text-[#0B0F19] tracking-wider select-none border border-amber-300/50 shadow-sm"
-     @if(!$isFull) style="width:{{ $dimRem }}rem; height:{{ $dimRem }}rem; font-size:{{ $fontSizeRem }}rem; background: radial-gradient(135% 135% at 20% 15%, #FFF2CC 0%, #FCB315 50%, #E59800 100%); box-shadow: inset 0 1px 2px rgba(255,255,255,0.7), 0 4px 14px rgba(252,179,21,0.25);"
-     @else style="font-size:{{ $fontSizeRem }}rem; background: radial-gradient(135% 135% at 20% 15%, #FFF2CC 0%, #FCB315 50%, #E59800 100%); box-shadow: inset 0 2px 4px rgba(255,255,255,0.7), 0 8px 24px rgba(252,179,21,0.3);" @endif>
-    <span class="relative z-10 leading-none drop-shadow-2xs">{{ $initials }}</span>
+<div class="{{ $isFull ? 'w-full h-full' : '' }} {{ $roundedClass }} relative overflow-hidden shrink-0 flex items-center justify-center font-black text-black tracking-wider select-none"
+     @if(!$isFull) style="width:{{ $dimRem }}rem; height:{{ $dimRem }}rem; font-size:{{ $fontSizeRem }}rem; background: #FCB315;"
+     @else style="font-size:{{ $fontSizeRem }}rem; background: #FCB315;" @endif>
+    <span class="relative z-10 leading-none">{{ $initials }}</span>
 </div>
 @endif

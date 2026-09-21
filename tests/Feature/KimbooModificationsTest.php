@@ -327,9 +327,9 @@ test('composant avatar genere de superbes initiales doubles sans photo', functio
 
     $view = $this->blade('<x-avatar :user="$user" size="12" />', ['user' => $user]);
 
-    // Doit contenir les initiales AD et les styles modernes de dégradé épuré (sans cercles SVG)
+    // Doit contenir les initiales AD et la couleur officielle de la charte Kimboo (#FCB315)
     $view->assertSee('AD');
-    $view->assertSee('radial-gradient', false);
+    $view->assertSee('#FCB315', false);
     $view->assertDontSee('<circle', false);
 });
 
