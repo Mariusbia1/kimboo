@@ -409,13 +409,13 @@ style="min-height: calc(80vh); background: linear-gradient(rgba(0,0,0,0.50), rgb
     </div>
 </section>
 
-<!-- BANNIÈRE GARANTIE & SATISFACTION -->
-<section class="py-16 sm:py-20 lg:py-24 text-center text-black" style="background: #FF6600;">
+<!-- BANNIÈRE GARANTIE & SATISFACTION (CHARTE KIMBOO) -->
+<section class="py-16 sm:py-20 lg:py-24 text-center text-black" style="background: #FCB315;">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <h2 class="text-3xl sm:text-5xl lg:text-6xl xl:text-7xl font-black text-black tracking-tight uppercase leading-[1.08]" style="font-family:'Plus Jakarta Sans',sans-serif;">
             DES LEÇONS QUE VOUS ALLEZ ADORER.<br class="hidden sm:inline"> GARANTIES.
         </h2>
-        <p class="text-sm sm:text-base lg:text-lg font-medium text-black/95 mt-4 sm:mt-6 max-w-2xl mx-auto leading-relaxed">
+        <p class="text-sm sm:text-base lg:text-lg font-semibold text-black/85 mt-4 sm:mt-6 max-w-2xl mx-auto leading-relaxed">
             Votre professeur ne vous convient pas ? Essayez en un autre gratuitement !
         </p>
     </div>
