@@ -29,9 +29,9 @@
             <div class="relative mb-5 w-full aspect-square rounded-3xl overflow-hidden bg-gray-100 shadow-sm">
                 <x-avatar :user="$profile->user" full="true" rounded="3xl" />
 
-                <!-- Badge certifié haut à droite -->
+                <!-- Badge certifié haut à gauche -->
                 @if($profile->is_verified)
-                <div class="absolute top-3 right-3 z-10">
+                <div class="absolute top-3 left-3 z-10">
                     <x-verified-badge />
                 </div>
                 @endif
@@ -433,9 +433,9 @@
                             </div>
                         </div>
 
-                        <!-- Badge certifié haut à droite -->
+                        <!-- Badge certifié haut à gauche -->
                         @if($sim->is_verified)
-                        <div class="absolute top-2.5 right-2.5 z-10">
+                        <div class="absolute top-2.5 left-2.5 z-10">
                             <x-verified-badge size="22" />
                         </div>
                         @endif
