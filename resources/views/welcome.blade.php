@@ -262,65 +262,89 @@ style="min-height: calc(80vh); background: linear-gradient(rgba(0,0,0,0.50), rgb
 </section>
 
 <!-- DEVENIR MENTOR -->
-<section class="py-24 px-4" style="background:#0a0a0a;">
+<section class="py-20 lg:py-28 px-4" style="background:#0a0a0a;">
     <div class="max-w-6xl mx-auto">
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
 
-            <!-- Texte -->
+            <!-- Image Mentor à gauche -->
+            <div class="relative flex items-center justify-center">
+                <div class="relative w-full max-w-md lg:max-w-none aspect-[4/5] sm:aspect-square lg:aspect-[4/5] max-h-[540px] rounded-3xl overflow-hidden shadow-2xl border border-white/10 group">
+                    <img src="{{ asset('images/mentor-kimboo.jpg') }}"
+                         alt="Devenez mentor sur Kimboo"
+                         class="w-full h-full object-cover object-top transition duration-500 group-hover:scale-105"
+                         loading="lazy" />
+
+                    <!-- Gradient subtil bas pour relief -->
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none"></div>
+
+                    <!-- Badge flottant en bas -->
+                    <div class="absolute bottom-5 left-5 right-5 p-4 rounded-2xl bg-black/70 backdrop-blur-md border border-white/15 text-white flex items-center gap-3.5 shadow-lg">
+                        <div class="w-10 h-10 rounded-xl flex items-center justify-center shrink-0" style="background:#FCB315;">
+                            <svg class="w-5 h-5 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <p class="font-extrabold text-sm text-white" style="font-family:'Plus Jakarta Sans',sans-serif;">Partagez votre expertise</p>
+                            <p class="text-xs text-gray-300">Rejoignez la communauté de professeurs Kimboo</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Textes à droite -->
             <div>
-                <span class="inline-block px-4 py-1.5 rounded-full text-sm font-bold mb-6" style="background:rgba(252,179,21,0.15); color:#FCB315;">
+                <span class="inline-block px-4 py-1.5 rounded-full text-xs sm:text-sm font-bold mb-5 tracking-wide" style="background:rgba(252,179,21,0.15); color:#FCB315;">
                     POUR LES PROFESSEURS
                 </span>
-                <h2 class="text-4xl font-bold text-white mb-6" style="font-family:'Plus Jakarta Sans',sans-serif; line-height:1.2;">
+                <h2 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white mb-5" style="font-family:'Plus Jakarta Sans',sans-serif; line-height:1.2;">
                     Devenez mentor<br>sur <span style="color:#FCB315;">Kimboo</span>
                 </h2>
-                <p class="text-sm leading-relaxed mb-8" style="color:rgba(255,255,255,0.6);">
+                <p class="text-sm sm:text-base leading-relaxed mb-8" style="color:rgba(255,255,255,0.7);">
                     Gagnez de l'argent en partageant votre savoir. Inscrivez-vous pour donner des cours particuliers en ligne ou en présentiel et recevez vos paiements en toute sécurité.
                 </p>
 
                 <!-- Avantages -->
-                <div class="space-y-4 mb-10">
+                <div class="space-y-4 mb-9">
+                    <div class="flex items-center gap-4">
+                        <div class="w-10 h-10 rounded-xl flex items-center justify-center shrink-0" style="background:rgba(252,179,21,0.12);">
+                            <svg class="w-5 h-5" style="color:#FCB315;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                            </svg>
+                        </div>
+                        <span class="text-sm font-medium" style="color:rgba(255,255,255,0.85);">Créez votre profil en quelques minutes</span>
+                    </div>
 
-    <div class="flex items-center gap-4">
-        <div class="w-10 h-10 rounded-xl flex items-center justify-center shrink-0" style="background:rgba(252,179,21,0.1);">
-            <svg class="w-5 h-5" style="color:#FCB315;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
-            </svg>
-        </div>
-        <span class="text-sm" style="color:rgba(255,255,255,0.8);">Créez votre profil en quelques minutes</span>
-    </div>
+                    <div class="flex items-center gap-4">
+                        <div class="w-10 h-10 rounded-xl flex items-center justify-center shrink-0" style="background:rgba(252,179,21,0.12);">
+                            <svg class="w-5 h-5" style="color:#FCB315;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                        </div>
+                        <span class="text-sm font-medium" style="color:rgba(255,255,255,0.85);">Fixez vos propres tarifs et disponibilités</span>
+                    </div>
 
-    <div class="flex items-center gap-4">
-        <div class="w-10 h-10 rounded-xl flex items-center justify-center shrink-0" style="background:rgba(252,179,21,0.1);">
-            <svg class="w-5 h-5" style="color:#FCB315;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-            </svg>
-        </div>
-        <span class="text-sm" style="color:rgba(255,255,255,0.8);">Fixez vos propres tarifs et disponibilités</span>
-    </div>
+                    <div class="flex items-center gap-4">
+                        <div class="w-10 h-10 rounded-xl flex items-center justify-center shrink-0" style="background:rgba(252,179,21,0.12);">
+                            <svg class="w-5 h-5" style="color:#FCB315;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                            </svg>
+                        </div>
+                        <span class="text-sm font-medium" style="color:rgba(255,255,255,0.85);">Recevez vos paiements en toute sécurité</span>
+                    </div>
 
-    <div class="flex items-center gap-4">
-        <div class="w-10 h-10 rounded-xl flex items-center justify-center shrink-0" style="background:rgba(252,179,21,0.1);">
-            <svg class="w-5 h-5" style="color:#FCB315;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
-            </svg>
-        </div>
-        <span class="text-sm" style="color:rgba(255,255,255,0.8);">Recevez vos paiements en toute sécurité</span>
-    </div>
-
-    <div class="flex items-center gap-4">
-        <div class="w-10 h-10 rounded-xl flex items-center justify-center shrink-0" style="background:rgba(252,179,21,0.1);">
-            <svg class="w-5 h-5" style="color:#FCB315;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
-            </svg>
-        </div>
-        <span class="text-sm" style="color:rgba(255,255,255,0.8);">Développez votre clientèle facilement</span>
-    </div>
-
-</div>
+                    <div class="flex items-center gap-4">
+                        <div class="w-10 h-10 rounded-xl flex items-center justify-center shrink-0" style="background:rgba(252,179,21,0.12);">
+                            <svg class="w-5 h-5" style="color:#FCB315;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
+                            </svg>
+                        </div>
+                        <span class="text-sm font-medium" style="color:rgba(255,255,255,0.85);">Développez votre clientèle facilement</span>
+                    </div>
+                </div>
 
                 <a href="{{ route('register') }}?role=professeur"
-                   class="inline-flex items-center gap-3 px-8 py-4 rounded-full text-black font-bold text-sm transition hover:opacity-90 shadow-md"
+                   class="inline-flex items-center gap-3 px-8 py-4 rounded-full text-black font-bold text-sm transition hover:opacity-90 shadow-lg hover:scale-[1.02] active:scale-[0.98]"
                    style="background:#FCB315;">
                     Donner des cours
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -328,62 +352,6 @@ style="min-height: calc(80vh); background: linear-gradient(rgba(0,0,0,0.50), rgb
                     </svg>
                 </a>
             </div>
-
-            <!-- Card prof réel -->
-            @if($meilleurProf)
-            <div class="flex items-center justify-center">
-                <div class="bg-white rounded-3xl p-8 text-center relative overflow-hidden" style="width:300px; box-shadow: 0 30px 80px rgba(0,0,0,0.5);">
-
-                    <!-- Décoration -->
-                    <div class="absolute top-0 right-0 w-32 h-32 rounded-full opacity-5" style="background:#FCB315; transform:translate(30%, -30%);"></div>
-
-                    <!-- Photo -->
-                    <div class="mx-auto mb-4" style="width:100px; height:100px;">
-                        <x-avatar :user="$meilleurProf->user" full="true" rounded="2xl" />
-                    </div>
-
-                    <!-- Badge certifié -->
-                    @if($meilleurProf->is_verified)
-                    <div class="absolute top-3 right-3">
-                        <x-verified-badge />
-                    </div>
-                    @endif
-
-                    <!-- Nom -->
-                    <h3 class="text-xl font-bold text-black mb-1" style="font-family:'Plus Jakarta Sans',sans-serif;">
-                        {{ $meilleurProf->user->name }}
-                    </h3>
-                    <p class="text-sm mb-4" style="color:#2b2b2b;">
-                        {{ $meilleurProf->courses->first()->category ?? 'Professeur' }}
-                    </p>
-
-                    <!-- Note -->
-                    <div class="flex items-center justify-center gap-2 mb-4">
-                        <x-star-rating :rating="$meilleurProf->rating" size="4" />
-                        <span class="font-bold text-black text-sm">{{ $meilleurProf->rating }}</span>
-                    </div>
-
-                    <!-- Stats prof -->
-                    <div class="grid grid-cols-2 gap-3 mb-5">
-                        <div class="rounded-xl p-3" style="background:#F9FAFB;">
-                            <p class="text-lg font-black text-black" style="font-family:'Plus Jakarta Sans',sans-serif;">{{ $meilleurProf->reviews_count }}</p>
-                            <p class="text-sm" style="color:#2b2b2b;">Avis</p>
-                        </div>
-                        <div class="rounded-xl p-3" style="background:#F9FAFB;">
-                            <p class="text-lg font-black text-black" style="font-family:'Plus Jakarta Sans',sans-serif;">{{ $meilleurProf->experience_years ?? 'N/A' }}</p>
-                            <p class="text-sm" style="color:#2b2b2b;">Expérience</p>
-                        </div>
-                    </div>
-
-                    <!-- Tarif -->
-                    <div class="rounded-xl p-3" style="background:#FFF8E7;">
-                        <p class="text-lg font-black" style="color:#FCB315; font-family:'Plus Jakarta Sans',sans-serif;">
-                            {{ number_format($meilleurProf->hourly_rate, 0, ',', ' ') }} FCFA / H
-                        </p>
-                    </div>
-                </div>
-            </div>
-            @endif
 
         </div>
     </div>
