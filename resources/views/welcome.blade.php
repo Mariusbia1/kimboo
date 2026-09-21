@@ -8,7 +8,7 @@
 <section class="w-full px-4 flex items-center justify-center relative"
 style="min-height: calc(80vh); background: linear-gradient(rgba(0,0,0,0.50), rgba(0,0,0,0.50)), url('{{ asset('images/hero-home.webp') }}') center/cover no-repeat;">
     <div class="max-w-4xl mx-auto text-center">
-        <h1 class="text-4xl md:text-5xl font-bold text-white mb-4" style="font-family:'Plus Jakarta Sans',sans-serif; line-height:1.2;">
+        <h1 class="text-4xl sm:text-5xl md:text-6xl font-black text-white mb-4 tracking-tight" style="line-height:1.15;">
             {{ \App\Models\SiteSetting::get('hero_title', 'Trouvez le professeur idéal en Côte d’Ivoire') }}
         </h1>
         <p class="text-lg mb-10" style="color:rgba(255,255,255,0.85);">
