@@ -14,8 +14,8 @@
 
         <!-- Formulaire de recherche et filtres personnalisés bien arrondis -->
         <form action="{{ route('cours.index') }}" method="GET" id="search-filter-form" class="bg-white rounded-3xl p-5 sm:p-6 border border-gray-100 shadow-sm mb-6">
-            <div class="flex flex-col md:flex-row gap-3 mb-5">
-                <div class="flex items-center gap-3 flex-1 bg-gray-50/90 rounded-full px-6 py-3.5 border border-gray-200/90 focus-within:border-[#FCB315] focus-within:bg-white focus-within:ring-2 focus-within:ring-[#FCB315]/20 transition shadow-inner">
+            <div class="flex flex-col md:flex-row items-center gap-3 mb-5">
+                <div class="flex items-center gap-3 flex-1 w-full bg-gray-50/90 rounded-full p-1.5 pl-5 sm:pl-6 border border-gray-200/90 focus-within:border-[#FCB315] focus-within:bg-white focus-within:ring-2 focus-within:ring-[#FCB315]/20 transition shadow-inner">
                     <svg class="w-5 h-5 text-gray-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0z"/>
                     </svg>
@@ -26,24 +26,21 @@
                     @if($categorie)
                     <input type="hidden" name="categorie" value="{{ $categorie }}"/>
                     @endif
+
+                    <!-- Bouton de recherche intégré au cadre -->
+                    <button type="submit"
+                        class="px-7 py-3 rounded-full text-black font-bold text-sm transition hover:opacity-95 shadow-xs shrink-0 flex items-center justify-center hover:scale-[1.02] active:scale-[0.98]"
+                        style="background:#FCB315;">
+                        Rechercher
+                    </button>
                 </div>
 
-                <div class="flex items-center gap-2">
-                    <button type="submit"
-                        class="px-8 py-3.5 rounded-full text-black font-bold text-sm transition hover:opacity-90 shrink-0 shadow-sm flex items-center justify-center gap-2 hover:scale-[1.02] active:scale-[0.98]"
-                        style="background:#FCB315;">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0z"/>
-                        </svg>
-                        <span>Rechercher</span>
-                    </button>
-                    @if($q || $categorie || $typeCours || ($distance && (int)$distance < 50) || ($tarif && (float)$tarif < 70000))
-                    <a href="{{ route('cours.index') }}"
-                       class="px-5 py-3.5 rounded-full text-sm font-semibold border border-gray-300 hover:bg-gray-100 transition shrink-0 text-gray-700">
-                        Réinitialiser
-                    </a>
-                    @endif
-                </div>
+                @if($q || $categorie || $typeCours || ($distance && (int)$distance < 50) || ($tarif && (float)$tarif < 70000))
+                <a href="{{ route('cours.index') }}"
+                   class="px-5 py-3 rounded-full text-xs sm:text-sm font-semibold border border-gray-200 hover:bg-gray-100 transition shrink-0 text-gray-600">
+                    Réinitialiser
+                </a>
+                @endif
             </div>
 
             <!-- Critères personnalisés (Type de cours, Distance, Tarif) -->

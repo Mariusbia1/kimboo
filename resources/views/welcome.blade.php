@@ -30,12 +30,9 @@ style="min-height: calc(80vh); background: linear-gradient(rgba(0,0,0,0.50), rgb
                 />
             </div>
             <button type="submit"
-                class="w-full sm:w-auto px-8 py-3.5 rounded-full text-black font-bold text-sm transition hover:opacity-95 shadow-md flex items-center justify-center gap-2 hover:scale-[1.02] active:scale-[0.98]"
+                class="w-full sm:w-auto px-8 py-3.5 rounded-full text-black font-bold text-sm transition hover:opacity-95 shadow-md flex items-center justify-center hover:scale-[1.02] active:scale-[0.98]"
                 style="background:#FCB315;">
-                <svg class="w-4 h-4 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0z"/>
-                </svg>
-                <span>{{ \App\Models\SiteSetting::get('hero_cta_text', 'Rechercher') }}</span>
+                {{ \App\Models\SiteSetting::get('hero_cta_text', 'Rechercher') }}
             </button>
         </form>
 
