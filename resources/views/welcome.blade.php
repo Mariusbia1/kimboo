@@ -67,13 +67,13 @@ style="min-height: calc(80vh); background: linear-gradient(rgba(0,0,0,0.50), rgb
             </a>
         </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-8">
             @forelse($professeurs as $profile)
-            <div class="bg-white rounded-3xl p-4 border border-gray-100 hover:border-amber-200/90 hover:shadow-xl transition-all duration-300 hover:-translate-y-1.5 flex flex-col justify-between group">
+            <div class="flex flex-col justify-between group">
                 <div>
                     <!-- Photo cliquable compacte et bien proportionnée -->
                     <div class="relative mb-3.5">
-                        <a href="{{ route('professeur.profil', $profile->id) }}" class="block w-full aspect-[4/3] rounded-2xl overflow-hidden bg-gray-100 shadow-xs relative">
+                        <a href="{{ route('professeur.profil', $profile->id) }}" class="block w-full aspect-[4/3] rounded-2xl overflow-hidden bg-gray-100 relative group-hover:opacity-95 transition">
                             <x-avatar :user="$profile->user" full="true" rounded="2xl" />
                         </a>
 
@@ -132,7 +132,7 @@ style="min-height: calc(80vh); background: linear-gradient(rgba(0,0,0,0.50), rgb
                 </div>
 
                 <!-- Prix & 1er cours -->
-                <div class="pt-3 border-t border-gray-100/90 flex items-center justify-between">
+                <div class="pt-1 flex items-center justify-between">
                     <div class="flex items-baseline gap-1">
                         <span class="text-sm font-black text-gray-900">{{ number_format($profile->hourly_rate, 0, ',', ' ') }}</span>
                         <span class="text-[11px] font-semibold text-gray-400">FCFA/h</span>

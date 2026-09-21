@@ -411,10 +411,10 @@
         </h2>
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
             @forelse($similaires as $sim)
-            <a href="{{ route('professeur.profil', $sim->id) }}" class="block group bg-white rounded-3xl p-5 border border-gray-100 shadow-sm hover:shadow-md transition">
-                <div class="relative mb-4">
+            <a href="{{ route('professeur.profil', $sim->id) }}" class="block group transition">
+                <div class="relative mb-3.5">
                     <!-- Photo en carré grand format -->
-                    <div class="w-full aspect-square rounded-2xl overflow-hidden bg-gray-100 shadow-sm">
+                    <div class="w-full aspect-square rounded-2xl overflow-hidden bg-gray-100 group-hover:opacity-95 transition">
                         <x-avatar :user="$sim->user" full="true" rounded="2xl" />
                     </div>
 
@@ -427,7 +427,7 @@
                 </div>
 
                 <!-- Infos prof -->
-                <h3 class="font-bold text-black text-base group-hover:underline mb-0.5">{{ $sim->user->name }}</h3>
+                <h3 class="font-bold text-black text-base group-hover:text-amber-700 transition mb-0.5">{{ $sim->user->name }}</h3>
                 <p class="text-xs text-gray-500 font-medium mb-2">{{ $sim->courses->first()->category ?? 'Cours divers' }}</p>
 
                 <!-- Note -->
@@ -443,7 +443,7 @@
                 <p class="text-xs text-gray-600 leading-relaxed mb-3">{{ Str::limit($sim->bio, 75) }}</p>
 
                 <!-- Prix -->
-                <div class="flex items-center justify-between pt-3 border-t border-gray-100">
+                <div class="flex items-center justify-between pt-1">
                     <span class="font-black text-black text-sm">{{ number_format($sim->hourly_rate, 0, ',', ' ') }} FCFA / h</span>
                     @if($sim->first_course_free)
                     <span class="text-xs font-bold text-[#FCB315]">1er cours offert</span>
