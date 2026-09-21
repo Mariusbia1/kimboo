@@ -7,7 +7,7 @@
 <!-- Header -->
 <section class="py-10 px-4" style="background:#F7F7F7;">
     <div class="max-w-6xl mx-auto">
-        <h1 class="text-3xl font-bold text-black mb-2" style="font-family:'Plus Jakarta Sans',sans-serif;">
+        <h1 class="text-2xl sm:text-3xl font-black text-black tracking-tight mb-1.5">
             {{ $categorie ? 'Cours de ' . $categorie : 'Tous les professeurs' }}
         </h1>
         <p class="text-sm mb-6" style="color:#2b2b2b;">{{ $professeurs->total() }} professeur(s) disponible(s)</p>

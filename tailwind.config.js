@@ -16,8 +16,8 @@ export default {
     theme: {
         extend: {
             fontFamily: {
-                sans: ['"Plus Jakarta Sans"', 'Inter', ...defaultTheme.fontFamily.sans],
-                heading: ['"Plus Jakarta Sans"', ...defaultTheme.fontFamily.sans],
+                sans: ['"Gilroy"', '"Plus Jakarta Sans"', 'Inter', ...defaultTheme.fontFamily.sans],
+                heading: ['"Gilroy"', '"Plus Jakarta Sans"', ...defaultTheme.fontFamily.sans],
             },
         },
     },

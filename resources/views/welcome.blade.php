@@ -8,10 +8,10 @@
 <section class="w-full px-4 flex items-center justify-center relative"
 style="min-height: calc(80vh); background: linear-gradient(rgba(0,0,0,0.50), rgba(0,0,0,0.50)), url('{{ asset('images/hero-home.webp') }}') center/cover no-repeat;">
     <div class="max-w-4xl mx-auto text-center">
-        <h1 class="text-4xl sm:text-5xl md:text-6xl font-black text-white mb-4 tracking-tight" style="line-height:1.15;">
+        <h1 class="text-3xl sm:text-5xl lg:text-6xl font-black text-white mb-4 tracking-tight leading-[1.12]">
             {{ \App\Models\SiteSetting::get('hero_title', 'Trouvez le professeur idéal en Côte d’Ivoire') }}
         </h1>
-        <p class="text-lg mb-10" style="color:rgba(255,255,255,0.85);">
+        <p class="text-base sm:text-lg lg:text-xl font-medium mb-10 leading-relaxed max-w-2xl mx-auto" style="color:rgba(255,255,255,0.88);">
             {{ \App\Models\SiteSetting::get('hero_subtitle', 'Des cours particuliers à domicile ou en ligne avec les meilleurs enseignants sélectionnés pour votre réussite.') }}
         </p>
         <!-- Barre de recherche bien arrondie sans bordure interne -->
@@ -54,10 +54,10 @@ style="min-height: calc(80vh); background: linear-gradient(rgba(0,0,0,0.50), rgb
     <div class="max-w-5xl mx-auto">
         <div class="flex flex-col sm:flex-row sm:items-end justify-between mb-8 gap-3">
             <div>
-                <h2 class="text-2xl sm:text-3xl font-bold text-black mb-1.5" style="font-family:'Plus Jakarta Sans',sans-serif;">
+                <h2 class="text-2xl sm:text-3xl font-black text-black mb-1.5 tracking-tight">
                     {{ \App\Models\SiteSetting::get('home_teachers_title', 'Les meilleurs profs de Côte d\'Ivoire sont sur Kimboo') }}
                 </h2>
-                <p class="text-xs sm:text-sm text-gray-500">
+                <p class="text-xs sm:text-sm text-gray-500 font-medium">
                     {{ \App\Models\SiteSetting::get('home_teachers_subtitle', 'Vérifiés et certifiés par l\'équipe Kimboo') }}
                 </p>
             </div>
@@ -166,7 +166,7 @@ style="min-height: calc(80vh); background: linear-gradient(rgba(0,0,0,0.50), rgb
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <!-- En-tête -->
         <div class="text-center mb-14 sm:mb-20">
-            <h2 class="text-3xl sm:text-5xl lg:text-6xl font-black text-black tracking-tight mb-4" style="font-family:'Plus Jakarta Sans',sans-serif; line-height: 1.12;">
+            <h2 class="text-3xl sm:text-4xl lg:text-5xl font-black text-black tracking-tight mb-4 leading-[1.15]">
                 Le progrès commence avec<br class="hidden sm:inline"> le bon mentor
             </h2>
             <p class="text-base sm:text-lg text-gray-700 font-medium">
@@ -191,7 +191,7 @@ style="min-height: calc(80vh); background: linear-gradient(rgba(0,0,0,0.50), rgb
                     <span class="text-xs font-bold uppercase tracking-wider text-gray-800">Impact & Accompagnement</span>
                 </div>
 
-                <h3 class="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-black leading-snug tracking-tight" style="font-family:'Plus Jakarta Sans',sans-serif;">
+                <h3 class="text-xl sm:text-2xl lg:text-3xl font-extrabold text-black leading-snug tracking-tight">
                     8 apprenants sur 10 interrogés considèrent l’accompagnement d’un professeur essentiel à leur progression.
                 </h3>
 
@@ -212,7 +212,7 @@ style="min-height: calc(80vh); background: linear-gradient(rgba(0,0,0,0.50), rgb
                 <span class="w-2 h-2 rounded-full bg-[#FCB315]"></span>
                 SIMPLE & RAPIDE
             </span>
-            <h2 class="text-3xl sm:text-5xl lg:text-6xl font-black text-black tracking-tight mb-4" style="font-family:'Plus Jakarta Sans',sans-serif; line-height: 1.15;">
+            <h2 class="text-3xl sm:text-4xl lg:text-5xl font-black text-black tracking-tight mb-4 leading-[1.15]">
                 Comment marche Kimboo ?
             </h2>
             <p class="text-gray-600 text-base sm:text-lg max-w-xl mx-auto font-medium">
@@ -238,7 +238,7 @@ style="min-height: calc(80vh); background: linear-gradient(rgba(0,0,0,0.50), rgb
                         </div>
                     </div>
 
-                    <h3 class="text-xl sm:text-2xl font-black text-black mb-3 tracking-tight" style="font-family:'Plus Jakarta Sans',sans-serif;">
+                    <h3 class="text-lg sm:text-xl font-black text-black mb-2.5 tracking-tight">
                         Trouver votre mentor
                     </h3>
                     <p class="text-gray-600 text-sm leading-relaxed mb-6 font-medium">
@@ -297,7 +297,7 @@ style="min-height: calc(80vh); background: linear-gradient(rgba(0,0,0,0.50), rgb
                         </div>
                     </div>
 
-                    <h3 class="text-xl sm:text-2xl font-black text-black mb-3 tracking-tight" style="font-family:'Plus Jakarta Sans',sans-serif;">
+                    <h3 class="text-lg sm:text-xl font-black text-black mb-2.5 tracking-tight">
                         Commencer votre apprentissage
                     </h3>
                     <p class="text-gray-600 text-sm leading-relaxed mb-6 font-medium">
@@ -349,7 +349,7 @@ style="min-height: calc(80vh); background: linear-gradient(rgba(0,0,0,0.50), rgb
                         </div>
                     </div>
 
-                    <h3 class="text-xl sm:text-2xl font-black text-black mb-3 tracking-tight" style="font-family:'Plus Jakarta Sans',sans-serif;">
+                    <h3 class="text-lg sm:text-xl font-black text-black mb-2.5 tracking-tight">
                         Progresser
                     </h3>
                     <p class="text-gray-600 text-sm leading-relaxed mb-6 font-medium">
@@ -410,7 +410,7 @@ style="min-height: calc(80vh); background: linear-gradient(rgba(0,0,0,0.50), rgb
 <!-- BANNIÈRE GARANTIE & SATISFACTION (CHARTE KIMBOO) -->
 <section class="py-16 sm:py-20 lg:py-24 text-center text-black" style="background: #FCB315;">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 class="text-3xl sm:text-5xl lg:text-6xl xl:text-7xl font-black text-black tracking-tight uppercase leading-[1.08]" style="font-family:'Plus Jakarta Sans',sans-serif;">
+        <h2 class="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-black text-black tracking-tight uppercase leading-[1.08]">
             DES LEÇONS QUE VOUS ALLEZ ADORER.<br class="hidden sm:inline"> GARANTIES.
         </h2>
         <p class="text-sm sm:text-base lg:text-lg font-semibold text-black/85 mt-4 sm:mt-6 max-w-2xl mx-auto leading-relaxed">
@@ -433,7 +433,7 @@ style="min-height: calc(80vh); background: linear-gradient(rgba(0,0,0,0.50), rgb
 
         <!-- Bloc de droite Bleu avec les textes Kimboo -->
         <div class="bg-[#0062FF] p-8 sm:p-12 lg:p-14 flex flex-col justify-center text-black">
-            <h2 class="text-4xl sm:text-5xl lg:text-[50px] font-extrabold text-black tracking-tight leading-[1.12] mb-6" style="font-family:'Plus Jakarta Sans',sans-serif;">
+            <h2 class="text-3xl sm:text-4xl lg:text-5xl font-black text-black tracking-tight leading-[1.12] mb-6">
                 Devenez mentor<br>sur Kimboo
             </h2>
 
@@ -485,10 +485,10 @@ style="min-height: calc(80vh); background: linear-gradient(rgba(0,0,0,0.50), rgb
 <!-- HISTOIRES HUMAINES & TÉMOIGNAGES (RUBAN FLOTTANT ÉPURÉ) -->
 <section class="py-20 lg:py-24 px-4 overflow-hidden relative" style="background:#FAF9F6;">
     <div class="max-w-4xl mx-auto mb-14 text-center">
-        <h2 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-black mb-4 tracking-tight" style="font-family:'Plus Jakarta Sans',sans-serif;">
+        <h2 class="text-2xl sm:text-3xl lg:text-4xl font-black text-black mb-4 tracking-tight">
             Des histoires de confiance et de progrès
         </h2>
-        <p class="text-sm sm:text-base text-gray-600 max-w-xl mx-auto leading-relaxed">
+        <p class="text-sm sm:text-base text-gray-600 max-w-xl mx-auto leading-relaxed font-medium">
             Les mots sincères de nos élèves, parents et professeurs qui avancent ensemble partout en Côte d'Ivoire.
         </p>
     </div>
