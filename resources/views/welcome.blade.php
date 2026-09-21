@@ -162,6 +162,43 @@ style="min-height: calc(80vh); background: linear-gradient(rgba(0,0,0,0.50), rgb
         </div>
     </div>
 </section>
+
+<!-- LE PROGRÈS COMMENCE AVEC LE BON MENTOR -->
+<section class="py-16 lg:py-24 px-4 bg-white border-t border-gray-100/80">
+    <div class="max-w-5xl mx-auto">
+        <!-- En-tête -->
+        <div class="text-center mb-12 sm:mb-16">
+            <h2 class="text-3xl sm:text-5xl lg:text-[56px] font-black text-black tracking-tight mb-4" style="font-family:'Plus Jakarta Sans',sans-serif; line-height: 1.15;">
+                Le progrès commence avec<br class="hidden sm:inline"> le bon mentor
+            </h2>
+            <p class="text-sm sm:text-base lg:text-lg text-gray-700 font-medium">
+                Des professeurs sélectionnés, un apprentissage qui vous ressemble
+            </p>
+        </div>
+
+        <!-- Contenu 2 colonnes : Photo + Statistique -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-14 items-center max-w-4xl mx-auto">
+            <!-- Photo à gauche -->
+            <div class="relative overflow-hidden rounded-3xl shadow-sm border border-gray-100 aspect-4/3 md:aspect-auto md:h-84 bg-gray-50">
+                <img src="{{ asset('images/student-learning.jpg') }}" 
+                     alt="Apprenant étudiant avec son professeur Kimboo" 
+                     class="w-full h-full object-cover object-center"
+                     loading="lazy">
+            </div>
+
+            <!-- Statistique & Message fort à droite -->
+            <div class="flex flex-col justify-center space-y-4 text-left">
+                <h3 class="text-2xl sm:text-3xl lg:text-[32px] font-extrabold text-black leading-snug tracking-tight" style="font-family:'Plus Jakarta Sans',sans-serif;">
+                    8 apprenants sur 10 interrogés considèrent l’accompagnement d’un professeur essentiel à leur progression.
+                </h3>
+                <p class="text-xs sm:text-sm text-gray-500 font-medium">
+                    Enquête Kimboo auprès de 20 apprenants, septembre 2026.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
 <!-- COMMENT ÇA MARCHE -->
 <section class="py-24 px-4 bg-white" id="comment-ca-marche">
     <div class="max-w-6xl mx-auto">
