@@ -164,11 +164,11 @@ style="min-height: calc(80vh); background: linear-gradient(rgba(0,0,0,0.50), rgb
 </section>
 
 <!-- LE PROGRÈS COMMENCE AVEC LE BON MENTOR -->
-<section class="py-16 lg:py-24 px-4 bg-white border-t border-gray-100/80">
+<section class="py-20 lg:py-28 px-4 bg-white border-t border-gray-100/90">
     <div class="max-w-5xl mx-auto">
         <!-- En-tête -->
-        <div class="text-center mb-12 sm:mb-16">
-            <h2 class="text-3xl sm:text-5xl lg:text-[56px] font-black text-black tracking-tight mb-4" style="font-family:'Plus Jakarta Sans',sans-serif; line-height: 1.15;">
+        <div class="text-center mb-14 sm:mb-20">
+            <h2 class="text-3xl sm:text-5xl lg:text-[58px] font-extrabold text-black tracking-tight mb-4" style="font-family:'Plus Jakarta Sans',sans-serif; line-height: 1.12;">
                 Le progrès commence avec<br class="hidden sm:inline"> le bon mentor
             </h2>
             <p class="text-sm sm:text-base lg:text-lg text-gray-700 font-medium">
@@ -176,19 +176,19 @@ style="min-height: calc(80vh); background: linear-gradient(rgba(0,0,0,0.50), rgb
             </p>
         </div>
 
-        <!-- Contenu 2 colonnes : Photo + Statistique -->
+        <!-- Contenu 2 colonnes : Photo HD + Statistique -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-14 items-center max-w-4xl mx-auto">
             <!-- Photo à gauche -->
-            <div class="relative overflow-hidden rounded-3xl shadow-sm border border-gray-100 aspect-4/3 md:aspect-auto md:h-84 bg-gray-50">
+            <div class="relative overflow-hidden rounded-3xl shadow-md border border-gray-100/90 aspect-4/3 md:aspect-4/3 bg-gray-50">
                 <img src="{{ asset('images/student-learning.jpg') }}" 
                      alt="Apprenant étudiant avec son professeur Kimboo" 
-                     class="w-full h-full object-cover object-center"
+                     class="w-full h-full object-cover object-center transform hover:scale-102 transition-transform duration-500"
                      loading="lazy">
             </div>
 
             <!-- Statistique & Message fort à droite -->
             <div class="flex flex-col justify-center space-y-4 text-left">
-                <h3 class="text-2xl sm:text-3xl lg:text-[32px] font-extrabold text-black leading-snug tracking-tight" style="font-family:'Plus Jakarta Sans',sans-serif;">
+                <h3 class="text-2xl sm:text-3xl lg:text-[34px] font-extrabold text-black leading-snug tracking-tight" style="font-family:'Plus Jakarta Sans',sans-serif; line-height: 1.25;">
                     8 apprenants sur 10 interrogés considèrent l’accompagnement d’un professeur essentiel à leur progression.
                 </h3>
                 <p class="text-xs sm:text-sm text-gray-500 font-medium">
