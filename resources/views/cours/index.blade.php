@@ -227,12 +227,7 @@
                             </div>
                         </a>
 
-                        <!-- Badge en vedette haut à gauche -->
-                        @if($profile->is_featured)
-                        <div class="absolute top-2.5 left-2.5 z-10">
-                            <x-featured-badge />
-                        </div>
-                        @endif
+
 
                         <!-- Badge certifié haut à droite & Bouton like -->
                         <div class="absolute top-2.5 right-2.5 flex items-center gap-1.5 z-10">
