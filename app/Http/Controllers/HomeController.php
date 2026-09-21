@@ -23,6 +23,10 @@ class HomeController extends Controller
             ])
                 ->whereHas('user', fn ($u) => $u->where('is_suspended', false))
                 ->whereHas('courses', fn ($q) => $q->approved())
+                ->where(function ($q) {
+                    $q->where('is_verified', true)
+                      ->orWhere('is_featured', true);
+                })
                 ->withCount(['courses as cours_donnes' => function ($q) {
                     $q->approved()->whereHas('bookings', function ($q2) {
                         $q2->where('status', 'terminé');

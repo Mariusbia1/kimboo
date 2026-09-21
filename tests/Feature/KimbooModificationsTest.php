@@ -567,6 +567,85 @@ test('seuls les professeurs avec cours approuves apparaissent publiquement', fun
     $response->assertDontSee('Prof Cours En Attente');
 });
 
+test('seuls les professeurs verifies ou mis en avant par l admin apparaissent sur la page d accueil', function () {
+    \Illuminate\Support\Facades\Cache::flush();
+
+    // 1. Prof non vérifié et non mis en avant
+    $profNonVerifie = User::factory()->create(['name' => 'Professeur Non Vérifié Unique', 'role' => 'professeur']);
+    $profile1 = TeacherProfile::create([
+        'user_id' => $profNonVerifie->id,
+        'hourly_rate' => 7000,
+        'bio' => 'Bio prof non verifie',
+        'is_verified' => false,
+        'is_featured' => false,
+    ]);
+    Course::create([
+        'teacher_profile_id' => $profile1->id,
+        'title' => 'Cours Maths Simple',
+        'category' => 'Mathématiques',
+        'level' => 'Collège',
+        'format' => 'En ligne',
+        'price_per_hour' => 7000,
+        'status' => 'approved',
+        'is_active' => true,
+    ]);
+
+    // 2. Prof vérifié (certifié par défaut)
+    $profVerifie = User::factory()->create(['name' => 'Professeur Certifié Unique', 'role' => 'professeur']);
+    $profile2 = TeacherProfile::create([
+        'user_id' => $profVerifie->id,
+        'hourly_rate' => 10000,
+        'bio' => 'Bio prof certifie',
+        'is_verified' => true,
+        'is_featured' => false,
+    ]);
+    Course::create([
+        'teacher_profile_id' => $profile2->id,
+        'title' => 'Cours SVT Certifié',
+        'category' => 'Biologie',
+        'level' => 'Lycée',
+        'format' => 'Présentiel',
+        'price_per_hour' => 10000,
+        'status' => 'approved',
+        'is_active' => true,
+    ]);
+
+    // 3. Prof non vérifié mais mis en avant par l'admin (featured)
+    $profFeatured = User::factory()->create(['name' => 'Professeur Mis En Avant Unique', 'role' => 'professeur']);
+    $profile3 = TeacherProfile::create([
+        'user_id' => $profFeatured->id,
+        'hourly_rate' => 15000,
+        'bio' => 'Bio prof mis en avant',
+        'is_verified' => false,
+        'is_featured' => true,
+    ]);
+    Course::create([
+        'teacher_profile_id' => $profile3->id,
+        'title' => 'Cours Physique Vedette',
+        'category' => 'Physique',
+        'level' => 'Université',
+        'format' => 'Les deux',
+        'price_per_hour' => 15000,
+        'status' => 'approved',
+        'is_active' => true,
+    ]);
+
+    // Sur la page d'accueil : le certifié et le featured apparaissent, le non vérifié n'apparaît PAS
+    \Illuminate\Support\Facades\Cache::flush();
+    $resHome = $this->get('/');
+    $resHome->assertOk();
+    $resHome->assertSee('Professeur Certifié Unique');
+    $resHome->assertSee('Professeur Mis En Avant Unique');
+    $resHome->assertDontSee('Professeur Non Vérifié Unique');
+
+    // Sur le catalogue /cours : TOUS les profs avec cours approuvés apparaissent
+    $resCatalog = $this->get('/cours');
+    $resCatalog->assertOk();
+    $resCatalog->assertSee('Professeur Certifié Unique');
+    $resCatalog->assertSee('Professeur Mis En Avant Unique');
+    $resCatalog->assertSee('Professeur Non Vérifié Unique');
+});
+
 test('categorie Langues est unifiee sans boutons de sous-langues comme Anglais ou Francais', function () {
     // Prof 1 : Anglais sous catégorie Langues
     $profLangue1 = User::factory()->create(['name' => 'Professeur John Doe', 'role' => 'professeur']);
