@@ -111,6 +111,39 @@ class TeacherProfile extends Model
         return $zone;
     }
 
+    /**
+     * Retourne le lieu et le format des cours sous forme courte (ex: Abidjan (face à face & webcam)).
+     */
+    public function getLieuCoursSummaryAttribute(): string
+    {
+        $city = $this->user?->ville ?: 'Abidjan';
+        $lieux = (array) ($this->lieu_cours ?? []);
+        $hasWebcam = in_array('webcam', $lieux);
+        $hasFace = in_array('chez_prof', $lieux) || in_array('chez_eleve', $lieux);
+
+        if (!$hasWebcam && !$hasFace && $this->relationLoaded('courses') && $this->courses->isNotEmpty()) {
+            $fmt = $this->courses->first()->format;
+            if ($fmt === 'Les deux') {
+                $hasWebcam = true;
+                $hasFace = true;
+            } elseif ($fmt === 'En ligne') {
+                $hasWebcam = true;
+            } else {
+                $hasFace = true;
+            }
+        }
+
+        if ($hasWebcam && $hasFace) {
+            return "{$city} (face à face & webcam)";
+        } elseif ($hasWebcam) {
+            return "{$city} (webcam)";
+        } elseif ($hasFace) {
+            return "{$city} (face à face)";
+        }
+
+        return "{$city} (face à face & webcam)";
+    }
+
     protected static function booted()
     {
         static::saved(function () {

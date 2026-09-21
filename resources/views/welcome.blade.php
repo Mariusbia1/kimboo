@@ -67,80 +67,84 @@ style="min-height: calc(80vh); background: linear-gradient(rgba(0,0,0,0.50), rgb
             </a>
         </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-8">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-7 gap-y-10">
             @forelse($professeurs as $profile)
+            @php
+                $firstCourse = $profile->courses->first();
+                $categoryName = $firstCourse?->category ?? 'Général';
+                $bioSnippet = $profile->bio ? Str::limit($profile->bio, 95) : 'Professeur passionné et certifié sur Kimboo.';
+            @endphp
             <div class="flex flex-col justify-between group">
                 <div>
-                    <!-- Photo cliquable compacte et bien proportionnée -->
-                    <div class="relative mb-3.5">
-                        <a href="{{ route('professeur.profil', $profile->id) }}" class="block w-full aspect-[4/3] rounded-2xl overflow-hidden bg-gray-100 relative group-hover:opacity-95 transition">
-                            <x-avatar :user="$profile->user" full="true" rounded="2xl" />
+                    <!-- Photo cliquable avec Nom & Lieu superposés et Cœur en haut à droite -->
+                    <div class="relative mb-3">
+                        <a href="{{ route('professeur.profil', $profile->id) }}" class="block w-full aspect-[4/4] rounded-3xl overflow-hidden bg-gray-100 relative group-hover:opacity-95 transition shadow-xs">
+                            <x-avatar :user="$profile->user" full="true" rounded="3xl" />
+                            
+                            <!-- Dégradé sombre en bas pour lisibilité parfaite -->
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/25 to-transparent pointer-events-none"></div>
+
+                            <!-- Nom et Lieu/Format superposés en bas à gauche de la photo -->
+                            <div class="absolute bottom-3.5 left-4 right-4 text-white pointer-events-none z-10">
+                                <h3 class="font-extrabold text-lg sm:text-xl leading-tight text-white drop-shadow-sm truncate">
+                                    {{ $profile->user->name }}
+                                </h3>
+                                <p class="text-xs text-white/90 font-medium drop-shadow-xs truncate mt-0.5">
+                                    {{ $profile->lieu_cours_summary }}
+                                </p>
+                            </div>
                         </a>
 
-                        <!-- Badge en vedette haut à gauche -->
-                        @if($profile->is_featured)
-                        <div class="absolute top-2.5 left-2.5 z-10">
-                            <x-featured-badge />
-                        </div>
-                        @endif
-
-                        <!-- Badge certifié haut à droite -->
-                        @if($profile->is_verified)
-                        <div class="absolute top-2.5 right-2.5 z-10">
-                            <x-verified-badge />
-                        </div>
-                        @endif
-
-                        <!-- Bouton like bas à droite -->
+                        <!-- Bouton like haut à droite -->
                         @auth
                         <button onclick="toggleFavori({{ $profile->id }}, this)"
-                            class="absolute bottom-2.5 right-2.5 w-8 h-8 rounded-full flex items-center justify-center transition hover:scale-110 shadow-sm z-10"
-                            style="background:rgba(255,255,255,0.95);">
-                            <svg class="w-3.5 h-3.5 favori-icon" fill="{{ in_array($profile->id, $favorisIds) ? '#e53e3e' : 'none' }}"
-                                 stroke="{{ in_array($profile->id, $favorisIds) ? '#e53e3e' : '#666' }}"
+                            class="absolute top-3.5 right-3.5 w-8 h-8 rounded-full flex items-center justify-center transition hover:scale-110 shadow-sm z-20"
+                            style="background:rgba(0,0,0,0.3); backdrop-filter:blur(4px);">
+                            <svg class="w-4 h-4 favori-icon" fill="{{ in_array($profile->id, $favorisIds) ? '#ef4444' : 'none' }}"
+                                 stroke="{{ in_array($profile->id, $favorisIds) ? '#ef4444' : '#ffffff' }}"
+                                 stroke-width="2"
                                  viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                <path stroke-linecap="round" stroke-linejoin="round"
                                       d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
                             </svg>
                         </button>
                         @endauth
                     </div>
 
-                    <!-- Nom & Catégorie -->
-                    <div class="flex items-center justify-between gap-2 mb-1.5">
-                        <a href="{{ route('professeur.profil', $profile->id) }}" class="font-bold text-gray-900 text-base group-hover:text-amber-700 transition truncate">
-                            {{ $profile->user->name }}
-                        </a>
-                        <span class="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-amber-50 text-amber-900 border border-amber-200/60 shrink-0">
-                            {{ $profile->courses->first()->category ?? 'Général' }}
+                    <!-- Ligne 1 : Note/Avis & Badge Statut -->
+                    <div class="flex items-center justify-between gap-2 mb-1">
+                        <div class="flex items-center gap-1.5">
+                            <svg class="w-4 h-4 text-[#FCB315] fill-current shrink-0" viewBox="0 0 20 20">
+                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                            </svg>
+                            <span class="text-xs font-black text-gray-900">{{ number_format($profile->rating, $profile->rating == (int)$profile->rating ? 0 : 1, ',', '') }}</span>
+                            <span class="text-xs text-gray-500 font-medium">({{ $profile->reviews_count }} {{ $profile->reviews_count > 1 ? 'évaluations' : 'évaluation' }})</span>
+                        </div>
+                        @if($profile->is_verified)
+                        <span class="inline-flex items-center gap-1 text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-indigo-50 text-indigo-700 border border-indigo-100 shrink-0">
+                            <span class="text-indigo-500">✦</span> Ambassadeur
                         </span>
+                        @elseif($profile->is_featured)
+                        <span class="inline-flex items-center gap-1 text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-amber-50 text-amber-800 border border-amber-200 shrink-0">
+                            <span class="text-amber-600">✦</span> En vedette
+                        </span>
+                        @endif
                     </div>
 
-                    <!-- Note & avis -->
-                    <div class="flex items-center gap-1.5 mb-2">
-                        <svg class="w-4 h-4 text-[#FCB315] fill-current shrink-0" viewBox="0 0 20 20">
-                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
-                        </svg>
-                        <span class="text-xs font-extrabold text-gray-900">{{ number_format($profile->rating, 1) }}</span>
-                        <span class="text-[11px] text-gray-400 font-medium">({{ $profile->reviews_count }} avis)</span>
-                    </div>
-
-                    <!-- Bio concise -->
-                    <p class="text-xs text-gray-500 leading-relaxed mb-3 line-clamp-2">
-                        {{ $profile->bio ? Str::limit($profile->bio, 90) : 'Professeur passionné et certifié sur Kimboo.' }}
+                    <!-- Ligne 2 : Matière - Bio/Description du cours -->
+                    <p class="text-xs text-gray-700 leading-snug line-clamp-2 mb-2">
+                        <strong class="font-bold text-gray-900">{{ $categoryName }}</strong>
+                        <span class="text-gray-400 font-normal"> - </span>
+                        <span class="text-gray-600">{{ $bioSnippet }}</span>
                     </p>
                 </div>
 
-                <!-- Prix & 1er cours -->
-                <div class="pt-1 flex items-center justify-between">
-                    <div class="flex items-baseline gap-1">
-                        <span class="text-sm font-black text-gray-900">{{ number_format($profile->hourly_rate, 0, ',', ' ') }}</span>
-                        <span class="text-[11px] font-semibold text-gray-400">FCFA/h</span>
-                    </div>
+                <!-- Ligne 3 : Prix & 1er cours offert -->
+                <div class="flex items-center gap-2 text-sm">
+                    <span class="font-black text-gray-900">{{ number_format($profile->hourly_rate, 0, ',', ' ') }} FCFA/h</span>
                     @if($profile->first_course_free)
-                    <span class="text-[11px] font-bold px-2 py-0.5 rounded-md bg-[#FFF8E7] text-[#9A6A00] border border-[#FCB315]/40">
-                        1er cours offert
-                    </span>
+                    <span class="text-gray-300 font-bold">·</span>
+                    <span class="text-xs font-bold text-[#E05A47]">1<sup>er</sup> cours offert</span>
                     @endif
                 </div>
             </div>
