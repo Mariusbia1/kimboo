@@ -114,13 +114,17 @@ class AdminController extends Controller
     {
         $profile = TeacherProfile::findOrFail($id);
         $profile->update(['is_verified' => true]);
-        return back()->with('success', 'Professeur certifié avec succès !');
+        \Illuminate\Support\Facades\Cache::forget('homepage_professeurs');
+        \Illuminate\Support\Facades\Cache::forget('homepage_meilleur_prof');
+        return back()->with('success', 'Professeur certifié avec succès ! Il apparaîtra prioritairement sur l\'accueil.');
     }
 
     public function decertifierProfesseur($id)
     {
         $profile = TeacherProfile::findOrFail($id);
         $profile->update(['is_verified' => false]);
+        \Illuminate\Support\Facades\Cache::forget('homepage_professeurs');
+        \Illuminate\Support\Facades\Cache::forget('homepage_meilleur_prof');
         return back()->with('success', 'Certification retirée.');
     }
 
@@ -128,14 +132,18 @@ class AdminController extends Controller
     {
         $profile = TeacherProfile::findOrFail($id);
         $profile->update(['is_featured' => true]);
-        return back()->with('success', 'Professeur mis en avant sur la page d\'accueil !');
+        \Illuminate\Support\Facades\Cache::forget('homepage_professeurs');
+        \Illuminate\Support\Facades\Cache::forget('homepage_meilleur_prof');
+        return back()->with('success', 'Professeur mis en avant en tête de la page d\'accueil !');
     }
 
     public function unfeatureProfesseur($id)
     {
         $profile = TeacherProfile::findOrFail($id);
         $profile->update(['is_featured' => false]);
-        return back()->with('success', 'Mise en avant retirée.');
+        \Illuminate\Support\Facades\Cache::forget('homepage_professeurs');
+        \Illuminate\Support\Facades\Cache::forget('homepage_meilleur_prof');
+        return back()->with('success', 'Mise en avant retirée de la page d\'accueil.');
     }
 
     public function suspendUser(Request $request, $id)

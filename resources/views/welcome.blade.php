@@ -14,24 +14,27 @@ style="min-height: calc(80vh); background: linear-gradient(rgba(0,0,0,0.50), rgb
         <p class="text-lg mb-10" style="color:rgba(255,255,255,0.85);">
             {{ \App\Models\SiteSetting::get('hero_subtitle', 'Des cours particuliers à domicile ou en ligne avec les meilleurs enseignants sélectionnés pour votre réussite.') }}
         </p>
-        <!-- Barre de recherche -->
-        <form action="{{ route('cours.index') }}" method="GET" class="flex flex-col sm:flex-row items-center gap-3 bg-white rounded-xl p-3 max-w-2xl mx-auto" style="box-shadow: 0 8px 30px rgba(0,0,0,0.15);">
-            <div class="flex items-center gap-2 flex-1 w-full">
+        <!-- Barre de recherche bien arrondie -->
+        <form action="{{ route('cours.index') }}" method="GET" class="flex flex-col sm:flex-row items-center gap-2 bg-white rounded-full p-2 pl-6 max-w-2xl mx-auto shadow-2xl transition hover:shadow-[0_12px_40px_rgba(0,0,0,0.22)] border border-white/60 focus-within:ring-2 focus-within:ring-[#FCB315]/50">
+            <div class="flex items-center gap-3 flex-1 w-full">
                 <svg class="w-5 h-5 text-gray-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0z"/>
                 </svg>
                 <input
                     type="text"
                     name="q"
-                    class="w-full outline-none text-base text-gray-700 bg-transparent"
+                    class="w-full outline-none text-sm sm:text-base text-gray-800 bg-transparent placeholder-gray-400 font-medium"
                     id="search-input"
-                    placeholder=""
+                    placeholder="Que souhaitez-vous apprendre aujourd'hui ?"
                 />
             </div>
             <button type="submit"
-                class="w-full sm:w-auto px-8 py-3.5 rounded-full text-black font-semibold text-sm transition hover:opacity-90 shadow-sm"
+                class="w-full sm:w-auto px-8 py-3.5 rounded-full text-black font-bold text-sm transition hover:opacity-95 shadow-md flex items-center justify-center gap-2 hover:scale-[1.02] active:scale-[0.98]"
                 style="background:#FCB315;">
-                {{ \App\Models\SiteSetting::get('hero_cta_text', 'Rechercher') }}
+                <svg class="w-4 h-4 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0z"/>
+                </svg>
+                <span>{{ \App\Models\SiteSetting::get('hero_cta_text', 'Rechercher') }}</span>
             </button>
         </form>
 
@@ -39,7 +42,7 @@ style="min-height: calc(80vh); background: linear-gradient(rgba(0,0,0,0.50), rgb
         <div class="flex flex-wrap justify-center gap-2 mt-5 text-[rgb(43,43,43)]">
             @foreach(['Mathématiques', 'Cuisine', 'Anglais', 'Sport', 'Lingala', 'Informatique'] as $suggestion)
             <a href="{{ route('cours.index', ['q' => $suggestion]) }}"
-               class="text-sm px-5 py-2 rounded-full border border-gray-200 bg-white text-[rgb(43,43,43)] hover:border-yellow-400 hover:text-yellow-600 transition shadow-xs font-medium inline-block">
+               class="text-xs sm:text-sm px-4 py-1.5 sm:px-5 sm:py-2 rounded-full border border-gray-200 bg-white/95 text-gray-800 hover:border-yellow-400 hover:text-yellow-700 transition shadow-xs font-semibold inline-block backdrop-blur-xs">
                 {{ $suggestion }}
             </a>
             @endforeach
@@ -51,77 +54,100 @@ style="min-height: calc(80vh); background: linear-gradient(rgba(0,0,0,0.50), rgb
 <!-- PROFESSEURS RECOMMANDÉS -->
 <section class="py-16 px-4 bg-white">
     <div class="max-w-6xl mx-auto">
-        <h2 class="text-4xl font-bold text-black mb-2" style="font-family:'Plus Jakarta Sans',sans-serif;">
-            {{ \App\Models\SiteSetting::get('home_teachers_title', 'Les meilleurs profs de Côte d\'Ivoire sont sur Kimboo') }}
-        </h2>
-        <p class="text-sm mb-8" style="color:#2b2b2b;">
-            {{ \App\Models\SiteSetting::get('home_teachers_subtitle', 'Vérifiés par l\'équipe Kimboo') }}
-        </p>
+        <div class="flex flex-col sm:flex-row sm:items-end justify-between mb-8 gap-3">
+            <div>
+                <h2 class="text-3xl sm:text-4xl font-bold text-black mb-2" style="font-family:'Plus Jakarta Sans',sans-serif;">
+                    {{ \App\Models\SiteSetting::get('home_teachers_title', 'Les meilleurs profs de Côte d\'Ivoire sont sur Kimboo') }}
+                </h2>
+                <p class="text-sm" style="color:#2b2b2b;">
+                    {{ \App\Models\SiteSetting::get('home_teachers_subtitle', 'Vérifiés et certifiés par l\'équipe Kimboo') }}
+                </p>
+            </div>
+            <a href="{{ route('cours.index') }}" class="text-xs sm:text-sm font-bold text-amber-800 hover:text-black flex items-center gap-1.5 transition shrink-0">
+                <span>Voir tous les professeurs</span>
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+            </a>
+        </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             @forelse($professeurs as $profile)
-            <a href="{{ route('professeur.profil', $profile->id) }}" class="block group">
-                <div class="relative mb-3">
-    <!-- Photo cliquable -->
-    <div class="w-full aspect-square rounded-2xl overflow-hidden bg-gray-100 shadow-sm relative">
-        <x-avatar :user="$profile->user" full="true" rounded="2xl" />
-    </div>
+            <div class="bg-white rounded-3xl p-4 border border-gray-100 hover:border-amber-200/90 hover:shadow-xl transition-all duration-300 hover:-translate-y-1.5 flex flex-col justify-between group">
+                <div>
+                    <!-- Photo cliquable compacte et bien proportionnée -->
+                    <div class="relative mb-3.5">
+                        <a href="{{ route('professeur.profil', $profile->id) }}" class="block w-full aspect-[4/3] rounded-2xl overflow-hidden bg-gray-100 shadow-xs relative">
+                            <x-avatar :user="$profile->user" full="true" rounded="2xl" />
+                        </a>
 
-    <!-- Badge en vedette haut à gauche -->
-    @if($profile->is_featured)
-    <div class="absolute top-3 left-3 z-10">
-        <x-featured-badge />
-    </div>
-    @endif
+                        <!-- Badge en vedette haut à gauche -->
+                        @if($profile->is_featured)
+                        <div class="absolute top-2.5 left-2.5 z-10">
+                            <x-featured-badge />
+                        </div>
+                        @endif
 
-    <!-- Badge certifié haut à droite -->
-    @if($profile->is_verified)
-    <div class="absolute top-3 right-3 z-10">
-        <x-verified-badge />
-    </div>
-    @endif
+                        <!-- Badge certifié haut à droite -->
+                        @if($profile->is_verified)
+                        <div class="absolute top-2.5 right-2.5 z-10">
+                            <x-verified-badge />
+                        </div>
+                        @endif
 
-    <!-- Bouton like bas à droite -->
-    @auth
-    <button onclick="toggleFavori({{ $profile->id }}, this)"
-        class="absolute bottom-3 right-3 w-9 h-9 rounded-full flex items-center justify-center transition hover:scale-110 shadow-sm z-10"
-        style="background:rgba(255,255,255,0.95);">
-        <svg class="w-4 h-4 favori-icon" fill="{{ in_array($profile->id, $favorisIds) ? '#e53e3e' : 'none' }}"
-             stroke="{{ in_array($profile->id, $favorisIds) ? '#e53e3e' : '#666' }}"
-             viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
-        </svg>
-    </button>
-    @endauth
-</div>
+                        <!-- Bouton like bas à droite -->
+                        @auth
+                        <button onclick="toggleFavori({{ $profile->id }}, this)"
+                            class="absolute bottom-2.5 right-2.5 w-8 h-8 rounded-full flex items-center justify-center transition hover:scale-110 shadow-sm z-10"
+                            style="background:rgba(255,255,255,0.95);">
+                            <svg class="w-3.5 h-3.5 favori-icon" fill="{{ in_array($profile->id, $favorisIds) ? '#e53e3e' : 'none' }}"
+                                 stroke="{{ in_array($profile->id, $favorisIds) ? '#e53e3e' : '#666' }}"
+                                 viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                      d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+                            </svg>
+                        </button>
+                        @endauth
+                    </div>
 
-                <!-- Infos -->
-                <h3 class="font-semibold text-black text-base group-hover:underline">{{ $profile->user->name }}</h3>
-                <p class="text-sm mb-1" style="color:#2b2b2b;">{{ $profile->courses->first()->category ?? 'Cours divers' }}</p>
+                    <!-- Nom & Catégorie -->
+                    <div class="flex items-center justify-between gap-2 mb-1.5">
+                        <a href="{{ route('professeur.profil', $profile->id) }}" class="font-bold text-gray-900 text-base group-hover:text-amber-700 transition truncate">
+                            {{ $profile->user->name }}
+                        </a>
+                        <span class="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-amber-50 text-amber-900 border border-amber-200/60 shrink-0">
+                            {{ $profile->courses->first()->category ?? 'Général' }}
+                        </span>
+                    </div>
 
-                <!-- Note -->
-                <div class="flex items-center gap-1.5 mb-2">
-                    <svg class="w-4 h-4 text-[#FCB315] fill-current" viewBox="0 0 20 20">
-                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
-                    </svg>
-                    <span class="text-sm font-bold text-black">{{ $profile->rating }}</span>
-                    <span class="text-xs text-gray-500 font-medium">({{ $profile->reviews_count }} avis)</span>
+                    <!-- Note & avis -->
+                    <div class="flex items-center gap-1.5 mb-2">
+                        <svg class="w-4 h-4 text-[#FCB315] fill-current shrink-0" viewBox="0 0 20 20">
+                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                        </svg>
+                        <span class="text-xs font-extrabold text-gray-900">{{ number_format($profile->rating, 1) }}</span>
+                        <span class="text-[11px] text-gray-400 font-medium">({{ $profile->reviews_count }} avis)</span>
+                    </div>
+
+                    <!-- Bio concise -->
+                    <p class="text-xs text-gray-500 leading-relaxed mb-3 line-clamp-2">
+                        {{ $profile->bio ? Str::limit($profile->bio, 90) : 'Professeur passionné et certifié sur Kimboo.' }}
+                    </p>
                 </div>
 
-                <!-- Bio -->
-                <p class="text-sm leading-relaxed mb-2" style="color:#2b2b2b;">{{ Str::limit($profile->bio, 75) }}</p>
-
-                <!-- Prix + 1er cours -->
-                <div class="flex items-center justify-between">
-                    <span class="text-sm font-bold text-black">{{ number_format($profile->hourly_rate, 0, ',', ' ') }} FCFA / H</span>
+                <!-- Prix & 1er cours -->
+                <div class="pt-3 border-t border-gray-100/90 flex items-center justify-between">
+                    <div class="flex items-baseline gap-1">
+                        <span class="text-sm font-black text-gray-900">{{ number_format($profile->hourly_rate, 0, ',', ' ') }}</span>
+                        <span class="text-[11px] font-semibold text-gray-400">FCFA/h</span>
+                    </div>
                     @if($profile->first_course_free)
-                    <span class="text-sm font-medium" style="color:#FCB315;">1er cours offert</span>
+                    <span class="text-[11px] font-bold px-2 py-0.5 rounded-md bg-[#FFF8E7] text-[#9A6A00] border border-[#FCB315]/40">
+                        1er cours offert
+                    </span>
                     @endif
                 </div>
-            </a>
+            </div>
             @empty
-            <p class="col-span-1 sm:col-span-2 md:col-span-3 text-center py-10" style="color:#2b2b2b;">Aucun professeur disponible.</p>
+            <p class="col-span-1 sm:col-span-2 lg:col-span-3 text-center py-10" style="color:#2b2b2b;">Aucun professeur disponible.</p>
             @endforelse
         </div>
     </div>
