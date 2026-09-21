@@ -34,8 +34,9 @@ class HomeController extends Controller
                 }])
                 ->orderByDesc('is_featured')
                 ->orderByDesc('is_verified')
-                ->orderBy('cours_donnes', 'desc')
-                ->orderBy('rating', 'desc')
+                ->orderByDesc('reviews_count')
+                ->orderByDesc('rating')
+                ->orderByDesc('cours_donnes')
                 ->take(9)
                 ->get();
         });
@@ -48,7 +49,10 @@ class HomeController extends Controller
                 ->whereHas('user', fn ($u) => $u->where('is_suspended', false))
                 ->where('is_verified', true)
                 ->whereHas('courses', fn ($q) => $q->approved())
-                ->orderBy('rating', 'desc')
+                ->orderByDesc('is_featured')
+                ->orderByDesc('is_verified')
+                ->orderByDesc('reviews_count')
+                ->orderByDesc('rating')
                 ->first();
         });
 
@@ -95,7 +99,10 @@ class HomeController extends Controller
                     $q2->approved()->where('category', $categorie);
                 });
             })
-            ->orderBy('rating', 'desc')
+            ->orderByDesc('is_featured')
+            ->orderByDesc('is_verified')
+            ->orderByDesc('reviews_count')
+            ->orderByDesc('rating')
             ->take(3)
             ->get();
 

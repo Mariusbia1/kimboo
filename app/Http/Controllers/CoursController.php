@@ -35,8 +35,11 @@ class CoursController extends Controller
                     $q2->where('status', 'terminé');
                 });
             }])
-            ->orderBy('cours_donnes', 'desc')
-            ->orderBy('rating', 'desc');
+            ->orderByDesc('is_featured')
+            ->orderByDesc('is_verified')
+            ->orderByDesc('reviews_count')
+            ->orderByDesc('rating')
+            ->orderByDesc('cours_donnes');
 
         // 1. Filtre par Catégorie
         if ($categorie !== '') {

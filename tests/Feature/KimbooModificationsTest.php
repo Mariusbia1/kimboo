@@ -1516,6 +1516,54 @@ test('tous les emails du systeme et notifications sont en francais avec la chart
         ->toContain('Plateforme ivoirienne de cours particuliers');
 });
 
+test('les meilleurs profils apparaissent en haut de la liste de tous les cours', function () {
+    // 1. Standard (non vérifié, pas d'avis)
+    $u1 = User::factory()->create(['name' => 'Prof Standard Test', 'role' => 'professeur']);
+    $p1 = TeacherProfile::create([
+        'user_id' => $u1->id, 'hourly_rate' => 5000, 'bio' => 'Bio 1',
+        'is_verified' => false, 'is_featured' => false, 'reviews_count' => 0, 'rating' => 0,
+    ]);
+    Course::create(['teacher_profile_id' => $p1->id, 'title' => 'Cours Alpha', 'category' => 'Mathématiques', 'level' => 'Tous niveaux', 'format' => 'En ligne', 'price_per_hour' => 5000, 'status' => 'approved', 'is_active' => true]);
+
+    // 2. Non vérifié mais avec de bons avis
+    $u2 = User::factory()->create(['name' => 'Prof Beaucoup Avis Test', 'role' => 'professeur']);
+    $p2 = TeacherProfile::create([
+        'user_id' => $u2->id, 'hourly_rate' => 8000, 'bio' => 'Bio 2',
+        'is_verified' => false, 'is_featured' => false, 'reviews_count' => 15, 'rating' => 4.9,
+    ]);
+    Course::create(['teacher_profile_id' => $p2->id, 'title' => 'Cours Beta', 'category' => 'Informatique', 'level' => 'Tous niveaux', 'format' => 'En ligne', 'price_per_hour' => 8000, 'status' => 'approved', 'is_active' => true]);
+
+    // 3. Certifié avec quelques avis
+    $u3 = User::factory()->create(['name' => 'Prof Certifie Test', 'role' => 'professeur']);
+    $p3 = TeacherProfile::create([
+        'user_id' => $u3->id, 'hourly_rate' => 10000, 'bio' => 'Bio 3',
+        'is_verified' => true, 'is_featured' => false, 'reviews_count' => 5, 'rating' => 4.8,
+    ]);
+    Course::create(['teacher_profile_id' => $p3->id, 'title' => 'Cours Gamma', 'category' => 'Physique-Chimie', 'level' => 'Tous niveaux', 'format' => 'En ligne', 'price_per_hour' => 10000, 'status' => 'approved', 'is_active' => true]);
+
+    // 4. Mis en avant par l'admin
+    $u4 = User::factory()->create(['name' => 'Prof Mis En Avant Test', 'role' => 'professeur']);
+    $p4 = TeacherProfile::create([
+        'user_id' => $u4->id, 'hourly_rate' => 15000, 'bio' => 'Bio 4',
+        'is_verified' => true, 'is_featured' => true, 'reviews_count' => 20, 'rating' => 5.0,
+    ]);
+    Course::create(['teacher_profile_id' => $p4->id, 'title' => 'Cours Delta', 'category' => 'Langues', 'level' => 'Tous niveaux', 'format' => 'En ligne', 'price_per_hour' => 15000, 'status' => 'approved', 'is_active' => true]);
+
+    $response = $this->get(route('cours.index'));
+    $response->assertOk();
+
+    $content = $response->getContent();
+    $posFeatured = strpos($content, 'Prof Mis En Avant Test');
+    $posVerified = strpos($content, 'Prof Certifie Test');
+    $posManyReviews = strpos($content, 'Prof Beaucoup Avis Test');
+    $posStandard = strpos($content, 'Prof Standard Test');
+
+    expect($posFeatured)->toBeLessThan($posVerified)
+        ->and($posVerified)->toBeLessThan($posManyReviews)
+        ->and($posManyReviews)->toBeLessThan($posStandard);
+});
+
+
 
 
 
