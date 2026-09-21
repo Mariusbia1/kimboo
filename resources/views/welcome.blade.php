@@ -324,255 +324,145 @@ style="min-height: calc(80vh); background: linear-gradient(rgba(0,0,0,0.50), rgb
 </section>
 
 
-<!-- HISTOIRES DE RÉUSSITE & EXPÉRIENCES ÉLÈVES (RUBAN FLOTTANT) -->
-<section class="py-20 lg:py-28 px-4 overflow-hidden relative" style="background:#FBFBFA;">
-    <div class="max-w-6xl mx-auto mb-14 text-center">
-        <!-- Badge de section -->
-        <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white border border-gray-200/90 shadow-2xs mb-4">
-            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-            <span class="text-xs font-bold uppercase tracking-wider text-gray-700">Expériences & Résultats Vérifiés</span>
-        </div>
-
+<!-- HISTOIRES HUMAINES & TÉMOIGNAGES (RUBAN FLOTTANT ÉPURÉ) -->
+<section class="py-20 lg:py-24 px-4 overflow-hidden relative" style="background:#FAF9F6;">
+    <div class="max-w-4xl mx-auto mb-14 text-center">
         <h2 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-black mb-4 tracking-tight" style="font-family:'Plus Jakarta Sans',sans-serif;">
-            Ils ont transformé leurs ambitions en réussites
+            Des histoires de confiance et de progrès
         </h2>
-        <p class="text-sm sm:text-base text-gray-600 max-w-2xl mx-auto leading-relaxed">
-            Soutien scolaire, examens internationaux ou reconversions professionnelles : découvrez comment nos élèves et enseignants progressent ensemble.
+        <p class="text-sm sm:text-base text-gray-600 max-w-xl mx-auto leading-relaxed">
+            Les mots sincères de nos élèves, parents et professeurs qui avancent ensemble partout en Côte d'Ivoire.
         </p>
-
-        <!-- Indicateurs de confiance -->
-        <div class="flex flex-wrap items-center justify-center gap-3 sm:gap-4 mt-7">
-            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-2xl bg-white border border-gray-100 shadow-sm text-xs sm:text-sm font-semibold text-gray-800">
-                <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
-                <span><strong>98%</strong> de satisfaction élève</span>
-            </div>
-            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-2xl bg-white border border-gray-100 shadow-sm text-xs sm:text-sm font-semibold text-gray-800">
-                <svg class="w-4 h-4 text-[#FCB315]" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
-                </svg>
-                <span><strong>4.9 / 5</strong> note globale</span>
-            </div>
-            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-2xl bg-white border border-gray-100 shadow-sm text-xs sm:text-sm font-semibold text-gray-800">
-                <svg class="w-4 h-4 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
-                </svg>
-                <span><strong>+15 000 h</strong> de cours dispensées</span>
-            </div>
-        </div>
     </div>
 
     @php
     $stories = [
         [
-            'nom' => 'Kouassi Adjoua',
-            'role' => 'Élève en Terminale C',
+            'nom' => 'Mme Ahou Touré',
+            'role' => 'Maman de Sarah (12 ans)',
             'ville' => 'Cocody, Abidjan',
-            'titre' => 'De 8/20 en Maths au Bac C avec Mention Bien',
-            'texte' => 'En début d’année, je perdais pied en mathématiques. Mon professeur sur Kimboo m’a redonné confiance avec une méthode progressive. Je suis passée de 8/20 à 16.5/20 au Bac.',
-            'resultat' => '8/20 → 16.5/20 au Bac',
-            'matiere' => 'Mathématiques',
-            'mentor' => 'Patrick C.',
-            'matiere_prof' => 'Maths',
-            'badge_bg' => 'bg-emerald-50 text-emerald-800 border-emerald-200',
+            'texte' => 'Quand ma fille a commencé à pleurer devant ses devoirs de maths, j’étais désemparée. Son professeur a fait preuve d’une patience infinie. En trois mois, elle a retrouvé le sourire et l’envie d’apprendre. C’est le plus beau des cadeaux.',
+            'cours' => 'Maths avec Patrick C.',
         ],
         [
-            'nom' => 'Sébastien Kouamé',
-            'role' => 'Reconversion Professionnelle',
-            'ville' => 'Marcory, Abidjan',
-            'titre' => 'D’assistant comptable à Administrateur Systèmes',
-            'texte' => 'Je voulais basculer dans l’informatique sans quitter mon emploi. Mon mentor m’a formé le soir sur Linux et les réseaux. Deux mois plus tard, j’ai signé mon premier CDI.',
-            'resultat' => 'Embauché en CDI',
-            'matiere' => 'Informatique',
-            'mentor' => 'Massirima P.',
-            'matiere_prof' => 'Réseaux & IT',
-            'badge_bg' => 'bg-blue-50 text-blue-800 border-blue-200',
+            'nom' => 'Koffi Jean-Eudes',
+            'role' => 'Admis en école d’ingénieur',
+            'ville' => 'Yamoussoukro',
+            'texte' => 'Je viens d’une famille modeste et le concours me paraissait inaccessible. Mon mentor ne m’a pas seulement enseigné la physique, il a cru en moi quand je doutais de mes capacités. Aujourd’hui, je suis admis.',
+            'cours' => 'Physique avec Dr. Yao',
         ],
         [
-            'nom' => 'Fatou Diallo',
-            'role' => 'Étudiante en Master',
+            'nom' => 'Aïssata Bamba',
+            'role' => 'Cadre commerciale',
             'ville' => 'Plateau, Abidjan',
-            'titre' => 'Admise en Master à l’international avec un TOEFL de 105',
-            'texte' => 'J’avais six semaines pour certifier mon anglais pour ma bourse d’études. Grâce aux simulations orales intensives de ma professeure, j’ai obtenu 105/120 dès la première tentative.',
-            'resultat' => 'Score TOEFL 105/120',
-            'matiere' => 'Anglais',
-            'mentor' => 'Aïcha T.',
-            'matiere_prof' => 'Anglais',
-            'badge_bg' => 'bg-rose-50 text-rose-800 border-rose-200',
+            'texte' => 'J’avais un vrai blocage avec l’anglais, je n’osais jamais prendre la parole en réunion. Avec ma professeure, nous avons pratiqué dans la bienveillance. La semaine dernière, j’ai animé ma première présentation internationale sans panique.',
+            'cours' => 'Anglais avec Aïcha T.',
         ],
         [
-            'nom' => 'Dr. Yao Konan',
-            'role' => 'Professeur certifié',
+            'nom' => 'Marc-Antoine D.',
+            'role' => 'Professeur d’Histoire-Géo',
             'ville' => 'Yopougon, Abidjan',
-            'titre' => 'Plus de 25 élèves réguliers et des revenus sécurisés',
-            'texte' => 'Kimboo a totalement sécurisé et simplifié mon activité d’enseignant. Fini les retards de paiement. Je me concentre à 100% sur la pédagogie et la progression de mes élèves.',
-            'resultat' => '+25 élèves réguliers',
-            'matiere' => 'Physique-Chimie',
-            'mentor' => 'Mentor Kimboo',
-            'matiere_prof' => 'Sciences',
-            'badge_bg' => 'bg-purple-50 text-purple-800 border-purple-200',
+            'texte' => 'Être enseignant sur Kimboo, c’est voir l’étincelle s’allumer dans les yeux d’un élève qui pensait être perdu. Pouvoir accompagner des jeunes de façon personnalisée donne tout son sens à ma vocation.',
+            'cours' => 'Enseignant certifié',
         ],
         [
-            'nom' => 'Mme Touré Ahou',
-            'role' => 'Parent d’élève',
-            'ville' => 'Angré, Cocody',
-            'titre' => 'Mon fils a retrouvé le goût d’apprendre et le sourire',
-            'texte' => 'En classe de 4e, mon fils décrochait en français. Le professeur particulier Kimboo a su débloquer ses blocages avec bienveillance. Aujourd’hui, il est dans le top 5 de sa classe.',
-            'resultat' => 'Moyenne : 9.5 → 15.2/20',
-            'matiere' => 'Français',
-            'mentor' => 'Gervais N.',
-            'matiere_prof' => 'Français',
-            'badge_bg' => 'bg-amber-50 text-amber-800 border-amber-200',
+            'nom' => 'Sonia Kouassi',
+            'role' => 'Bachelière 2024',
+            'ville' => 'Marcory, Abidjan',
+            'texte' => 'Mon professeur de français m’a appris à aimer la littérature et à exprimer mes idées clairement. Passer de 9 à 16/20 au Bac, je n’y aurais jamais cru au début de l’année. Merci du fond du cœur.',
+            'cours' => 'Français avec Gervais N.',
         ],
         [
-            'nom' => 'Armand Bléssou',
-            'role' => 'Entrepreneur & Traiteur',
-            'ville' => 'Treichville, Abidjan',
-            'titre' => 'Du cours particulier au lancement de mon service traiteur',
-            'texte' => 'Les cours particuliers m’ont permis de maîtriser les cuissons et le dressage gastronomique. J’ai ouvert ma propre activité traiteur avec succès.',
-            'resultat' => 'Service traiteur créé',
-            'matiere' => 'Cuisine & Traiteur',
-            'mentor' => 'Jean-Paul B.',
-            'matiere_prof' => 'Gastronomie',
-            'badge_bg' => 'bg-orange-50 text-orange-800 border-orange-200',
+            'nom' => 'Ismaël Traoré',
+            'role' => 'Reconversion professionnelle',
+            'ville' => 'Koumassi, Abidjan',
+            'texte' => 'Partir de zéro en programmation à 28 ans me faisait peur. Massirima a adapté chaque exercice à mon rythme, pas à pas. Il a été bien plus qu’un professeur, un véritable grand frère et guide.',
+            'cours' => 'Code avec Massirima P.',
         ],
     ];
     @endphp
 
     <!-- Ruban flottant défilant sur une seule ligne -->
-    <div class="relative w-full overflow-hidden py-4">
+    <div class="relative w-full overflow-hidden py-2">
         <!-- Dégradés latéraux pour effet flottant infini -->
-        <div class="pointer-events-none absolute left-0 top-0 bottom-0 w-16 sm:w-36 bg-gradient-to-r from-[#FBFBFA] to-transparent z-10"></div>
-        <div class="pointer-events-none absolute right-0 top-0 bottom-0 w-16 sm:w-36 bg-gradient-to-l from-[#FBFBFA] to-transparent z-10"></div>
+        <div class="pointer-events-none absolute left-0 top-0 bottom-0 w-16 sm:w-36 bg-gradient-to-r from-[#FAF9F6] to-transparent z-10"></div>
+        <div class="pointer-events-none absolute right-0 top-0 bottom-0 w-16 sm:w-36 bg-gradient-to-l from-[#FAF9F6] to-transparent z-10"></div>
 
         <div class="kimboo-marquee-track flex gap-6 sm:gap-7 w-max">
             <!-- Première boucle -->
             @foreach($stories as $s)
-            <div class="rounded-3xl p-7 sm:p-8 bg-white border border-gray-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_20px_45px_rgb(0,0,0,0.08)] hover:-translate-y-2 hover:border-[#FCB315]/40 transition-all duration-300 flex flex-col justify-between shrink-0 relative overflow-hidden"
-                 style="width: 400px; max-width: 85vw;">
-                <!-- Filigrane discret -->
-                <div class="absolute top-4 right-5 text-gray-100/90 select-none pointer-events-none font-serif text-6xl leading-none">
-                    “
-                </div>
-
+            <div class="rounded-3xl p-7 sm:p-8 bg-white border border-gray-100 shadow-[0_4px_25px_rgba(0,0,0,0.03)] hover:shadow-[0_15px_35px_rgba(0,0,0,0.06)] hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between shrink-0"
+                 style="width: 390px; max-width: 85vw;">
                 <div>
-                    <!-- En-tête de la carte : Matière & Badge Résultat -->
-                    <div class="flex items-center justify-between gap-2 mb-4 relative z-1">
-                        <span class="text-xs font-bold text-gray-500 uppercase tracking-wider bg-gray-50 px-2.5 py-1 rounded-md border border-gray-100">
-                            {{ $s['matiere'] }}
-                        </span>
-                        <div class="inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1 rounded-full border {{ $s['badge_bg'] }}">
-                            <svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
+                    <!-- Étoiles & Badge vérifié -->
+                    <div class="flex items-center justify-between gap-2 mb-4">
+                        <x-star-rating :rating="5" size="3.5" />
+                        <span class="inline-flex items-center gap-1 text-[11px] font-semibold text-emerald-700 bg-emerald-50/80 px-2.5 py-0.5 rounded-full border border-emerald-100">
+                            <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
                             </svg>
-                            <span>{{ $s['resultat'] }}</span>
-                        </div>
+                            Expérience vécue
+                        </span>
                     </div>
 
-                    <!-- Titre du témoignage -->
-                    <h3 class="font-extrabold text-black text-base sm:text-lg leading-snug mb-3 relative z-1" style="font-family:'Plus Jakarta Sans',sans-serif;">
-                        « {{ $s['titre'] }} »
-                    </h3>
-
-                    <!-- Citation / Texte -->
-                    <p class="text-xs sm:text-sm text-gray-600 leading-relaxed mb-6 relative z-1">
-                        {{ $s['texte'] }}
+                    <!-- Témoignage humain -->
+                    <p class="text-xs sm:text-sm text-gray-700 leading-relaxed mb-6 font-normal">
+                        « {{ $s['texte'] }} »
                     </p>
                 </div>
 
-                <!-- Footer de la carte -->
-                <div class="pt-4 border-t border-gray-100/90 relative z-1">
-                    <div class="flex items-center justify-between mb-3.5">
-                        <x-star-rating :rating="5" size="3.5" />
-                        <span class="inline-flex items-center gap-1 text-[11px] font-semibold text-gray-500 bg-gray-50 px-2.5 py-0.5 rounded-md border border-gray-100">
-                            <svg class="w-3 h-3 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-                            </svg>
-                            Accompagné par {{ $s['mentor'] }}
-                        </span>
-                    </div>
-
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-center gap-3 min-w-0">
-                            <x-avatar :name="$s['nom']" size="10" />
-                            <div class="min-w-0">
-                                <p class="font-bold text-black text-sm truncate">{{ $s['nom'] }}</p>
-                                <p class="text-xs text-gray-500 font-medium truncate">{{ $s['role'] }} · {{ $s['ville'] }}</p>
-                            </div>
+                <!-- Auteur & Accompagnement -->
+                <div class="pt-4 border-t border-gray-100 flex items-center justify-between gap-3">
+                    <div class="flex items-center gap-3 min-w-0">
+                        <x-avatar :name="$s['nom']" size="10" />
+                        <div class="min-w-0">
+                            <p class="font-bold text-black text-sm truncate">{{ $s['nom'] }}</p>
+                            <p class="text-xs text-gray-500 truncate">{{ $s['role'] }} · {{ $s['ville'] }}</p>
                         </div>
-
-                        <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider text-emerald-700 bg-emerald-50 border border-emerald-100 shrink-0 ml-2">
-                            <svg class="w-2.5 h-2.5" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
-                            </svg>
-                            Vérifié
-                        </span>
                     </div>
+
+                    <span class="text-[11px] font-medium text-gray-500 bg-gray-50 px-2.5 py-1 rounded-md border border-gray-100 shrink-0 text-right">
+                        {{ $s['cours'] }}
+                    </span>
                 </div>
             </div>
             @endforeach
 
             <!-- Seconde boucle identique pour le défilement infini sans interruption -->
             @foreach($stories as $s)
-            <div class="rounded-3xl p-7 sm:p-8 bg-white border border-gray-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_20px_45px_rgb(0,0,0,0.08)] hover:-translate-y-2 hover:border-[#FCB315]/40 transition-all duration-300 flex flex-col justify-between shrink-0 relative overflow-hidden"
-                 style="width: 400px; max-width: 85vw;">
-                <!-- Filigrane discret -->
-                <div class="absolute top-4 right-5 text-gray-100/90 select-none pointer-events-none font-serif text-6xl leading-none">
-                    “
-                </div>
-
+            <div class="rounded-3xl p-7 sm:p-8 bg-white border border-gray-100 shadow-[0_4px_25px_rgba(0,0,0,0.03)] hover:shadow-[0_15px_35px_rgba(0,0,0,0.06)] hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between shrink-0"
+                 style="width: 390px; max-width: 85vw;">
                 <div>
-                    <!-- En-tête de la carte : Matière & Badge Résultat -->
-                    <div class="flex items-center justify-between gap-2 mb-4 relative z-1">
-                        <span class="text-xs font-bold text-gray-500 uppercase tracking-wider bg-gray-50 px-2.5 py-1 rounded-md border border-gray-100">
-                            {{ $s['matiere'] }}
-                        </span>
-                        <div class="inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1 rounded-full border {{ $s['badge_bg'] }}">
-                            <svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
+                    <!-- Étoiles & Badge vérifié -->
+                    <div class="flex items-center justify-between gap-2 mb-4">
+                        <x-star-rating :rating="5" size="3.5" />
+                        <span class="inline-flex items-center gap-1 text-[11px] font-semibold text-emerald-700 bg-emerald-50/80 px-2.5 py-0.5 rounded-full border border-emerald-100">
+                            <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
                             </svg>
-                            <span>{{ $s['resultat'] }}</span>
-                        </div>
+                            Expérience vécue
+                        </span>
                     </div>
 
-                    <!-- Titre du témoignage -->
-                    <h3 class="font-extrabold text-black text-base sm:text-lg leading-snug mb-3 relative z-1" style="font-family:'Plus Jakarta Sans',sans-serif;">
-                        « {{ $s['titre'] }} »
-                    </h3>
-
-                    <!-- Citation / Texte -->
-                    <p class="text-xs sm:text-sm text-gray-600 leading-relaxed mb-6 relative z-1">
-                        {{ $s['texte'] }}
+                    <!-- Témoignage humain -->
+                    <p class="text-xs sm:text-sm text-gray-700 leading-relaxed mb-6 font-normal">
+                        « {{ $s['texte'] }} »
                     </p>
                 </div>
 
-                <!-- Footer de la carte -->
-                <div class="pt-4 border-t border-gray-100/90 relative z-1">
-                    <div class="flex items-center justify-between mb-3.5">
-                        <x-star-rating :rating="5" size="3.5" />
-                        <span class="inline-flex items-center gap-1 text-[11px] font-semibold text-gray-500 bg-gray-50 px-2.5 py-0.5 rounded-md border border-gray-100">
-                            <svg class="w-3 h-3 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-                            </svg>
-                            Accompagné par {{ $s['mentor'] }}
-                        </span>
-                    </div>
-
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-center gap-3 min-w-0">
-                            <x-avatar :name="$s['nom']" size="10" />
-                            <div class="min-w-0">
-                                <p class="font-bold text-black text-sm truncate">{{ $s['nom'] }}</p>
-                                <p class="text-xs text-gray-500 font-medium truncate">{{ $s['role'] }} · {{ $s['ville'] }}</p>
-                            </div>
+                <!-- Auteur & Accompagnement -->
+                <div class="pt-4 border-t border-gray-100 flex items-center justify-between gap-3">
+                    <div class="flex items-center gap-3 min-w-0">
+                        <x-avatar :name="$s['nom']" size="10" />
+                        <div class="min-w-0">
+                            <p class="font-bold text-black text-sm truncate">{{ $s['nom'] }}</p>
+                            <p class="text-xs text-gray-500 truncate">{{ $s['role'] }} · {{ $s['ville'] }}</p>
                         </div>
-
-                        <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider text-emerald-700 bg-emerald-50 border border-emerald-100 shrink-0 ml-2">
-                            <svg class="w-2.5 h-2.5" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
-                            </svg>
-                            Vérifié
-                        </span>
                     </div>
+
+                    <span class="text-[11px] font-medium text-gray-500 bg-gray-50 px-2.5 py-1 rounded-md border border-gray-100 shrink-0 text-right">
+                        {{ $s['cours'] }}
+                    </span>
                 </div>
             </div>
             @endforeach
@@ -586,7 +476,7 @@ style="min-height: calc(80vh); background: linear-gradient(rgba(0,0,0,0.50), rgb
     100% { transform: translateX(-50%); }
 }
 .kimboo-marquee-track {
-    animation: kimbooMarquee 45s linear infinite;
+    animation: kimbooMarquee 48s linear infinite;
 }
 .kimboo-marquee-track:hover {
     animation-play-state: paused;
