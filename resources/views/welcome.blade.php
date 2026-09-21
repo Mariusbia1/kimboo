@@ -262,95 +262,64 @@ style="min-height: calc(80vh); background: linear-gradient(rgba(0,0,0,0.50), rgb
 </section>
 
 <!-- DEVENIR MENTOR -->
-<section class="py-20 lg:py-28 px-4" style="background:#0a0a0a;">
-    <div class="max-w-6xl mx-auto">
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+<section class="py-16 sm:py-20 px-4 bg-white">
+    <div class="max-w-6xl mx-auto rounded-3xl md:rounded-[36px] overflow-hidden grid grid-cols-1 lg:grid-cols-2 shadow-2xl">
 
-            <!-- Image Mentor à gauche -->
-            <div class="relative flex items-center justify-center">
-                <div class="relative w-full max-w-md lg:max-w-none aspect-[4/5] sm:aspect-square lg:aspect-[4/5] max-h-[540px] rounded-3xl overflow-hidden shadow-2xl border border-white/10 group">
-                    <img src="{{ asset('images/mentor-kimboo.jpg') }}"
-                         alt="Devenez mentor sur Kimboo"
-                         class="w-full h-full object-cover object-top transition duration-500 group-hover:scale-105"
-                         loading="lazy" />
+        <!-- Image Mentor à gauche pleine hauteur -->
+        <div class="relative w-full h-[380px] sm:h-[460px] lg:h-auto min-h-full bg-gray-100">
+            <img src="{{ asset('images/mentor-kimboo.jpg') }}"
+                 alt="Devenez mentor sur Kimboo"
+                 class="w-full h-full object-cover object-top absolute inset-0"
+                 loading="lazy" />
+        </div>
 
-                    <!-- Gradient subtil bas pour relief -->
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none"></div>
+        <!-- Bloc de droite Bleu avec les textes Kimboo -->
+        <div class="bg-[#0062FF] p-8 sm:p-12 lg:p-16 flex flex-col justify-center text-black">
+            <h2 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-black tracking-tight leading-[1.1] mb-6" style="font-family:'Plus Jakarta Sans',sans-serif;">
+                Devenez mentor<br>sur Kimboo
+            </h2>
 
-                    <!-- Badge flottant en bas -->
-                    <div class="absolute bottom-5 left-5 right-5 p-4 rounded-2xl bg-black/70 backdrop-blur-md border border-white/15 text-white flex items-center gap-3.5 shadow-lg">
-                        <div class="w-10 h-10 rounded-xl flex items-center justify-center shrink-0" style="background:#FCB315;">
-                            <svg class="w-5 h-5 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
-                            </svg>
-                        </div>
-                        <div>
-                            <p class="font-extrabold text-sm text-white" style="font-family:'Plus Jakarta Sans',sans-serif;">Partagez votre expertise</p>
-                            <p class="text-xs text-gray-300">Rejoignez la communauté de professeurs Kimboo</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <p class="text-sm sm:text-base font-medium text-black/90 leading-relaxed mb-8 max-w-lg">
+                Gagnez de l'argent en partageant votre savoir. Inscrivez-vous pour donner des cours particuliers en ligne ou en présentiel et recevez vos paiements en toute sécurité.
+            </p>
 
-            <!-- Textes à droite -->
-            <div>
-                <h2 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white mb-5" style="font-family:'Plus Jakarta Sans',sans-serif; line-height:1.2;">
-                    Devenez mentor<br>sur <span style="color:#FCB315;">Kimboo</span>
-                </h2>
-                <p class="text-sm sm:text-base leading-relaxed mb-8" style="color:rgba(255,255,255,0.7);">
-                    Gagnez de l'argent en partageant votre savoir. Inscrivez-vous pour donner des cours particuliers en ligne ou en présentiel et recevez vos paiements en toute sécurité.
-                </p>
+            <!-- Liste des avantages à puces simples -->
+            <ul class="space-y-3 mb-10 text-sm sm:text-base font-semibold text-black">
+                <li class="flex items-center gap-3">
+                    <span class="w-1.5 h-1.5 rounded-full bg-black shrink-0"></span>
+                    <span>Créez votre profil en quelques minutes</span>
+                </li>
+                <li class="flex items-center gap-3">
+                    <span class="w-1.5 h-1.5 rounded-full bg-black shrink-0"></span>
+                    <span>Fixez vos propres tarifs et disponibilités</span>
+                </li>
+                <li class="flex items-center gap-3">
+                    <span class="w-1.5 h-1.5 rounded-full bg-black shrink-0"></span>
+                    <span>Recevez vos paiements en toute sécurité</span>
+                </li>
+                <li class="flex items-center gap-3">
+                    <span class="w-1.5 h-1.5 rounded-full bg-black shrink-0"></span>
+                    <span>Développez votre clientèle facilement</span>
+                </li>
+            </ul>
 
-                <!-- Avantages -->
-                <div class="space-y-4 mb-9">
-                    <div class="flex items-center gap-4">
-                        <div class="w-10 h-10 rounded-xl flex items-center justify-center shrink-0" style="background:rgba(252,179,21,0.12);">
-                            <svg class="w-5 h-5" style="color:#FCB315;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
-                            </svg>
-                        </div>
-                        <span class="text-sm font-medium" style="color:rgba(255,255,255,0.85);">Créez votre profil en quelques minutes</span>
-                    </div>
-
-                    <div class="flex items-center gap-4">
-                        <div class="w-10 h-10 rounded-xl flex items-center justify-center shrink-0" style="background:rgba(252,179,21,0.12);">
-                            <svg class="w-5 h-5" style="color:#FCB315;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                            </svg>
-                        </div>
-                        <span class="text-sm font-medium" style="color:rgba(255,255,255,0.85);">Fixez vos propres tarifs et disponibilités</span>
-                    </div>
-
-                    <div class="flex items-center gap-4">
-                        <div class="w-10 h-10 rounded-xl flex items-center justify-center shrink-0" style="background:rgba(252,179,21,0.12);">
-                            <svg class="w-5 h-5" style="color:#FCB315;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
-                            </svg>
-                        </div>
-                        <span class="text-sm font-medium" style="color:rgba(255,255,255,0.85);">Recevez vos paiements en toute sécurité</span>
-                    </div>
-
-                    <div class="flex items-center gap-4">
-                        <div class="w-10 h-10 rounded-xl flex items-center justify-center shrink-0" style="background:rgba(252,179,21,0.12);">
-                            <svg class="w-5 h-5" style="color:#FCB315;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
-                            </svg>
-                        </div>
-                        <span class="text-sm font-medium" style="color:rgba(255,255,255,0.85);">Développez votre clientèle facilement</span>
-                    </div>
-                </div>
-
+            <!-- Bouton d'action et lien sous-jacent -->
+            <div class="flex flex-col items-start gap-4">
                 <a href="{{ route('register') }}?role=professeur"
-                   class="inline-flex items-center gap-3 px-8 py-4 rounded-full text-black font-bold text-sm transition hover:opacity-90 shadow-lg hover:scale-[1.02] active:scale-[0.98]"
-                   style="background:#FCB315;">
-                    Donner des cours
+                   class="w-full sm:w-auto px-8 py-4 rounded-xl bg-black text-white font-bold text-sm sm:text-base flex items-center justify-center gap-3 hover:bg-gray-900 transition shadow-lg hover:scale-[1.01] active:scale-[0.99]">
+                    <span>Donner des cours</span>
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
                     </svg>
                 </a>
-            </div>
 
+                <a href="#comment-ca-marche"
+                   class="text-xs sm:text-sm font-bold text-black underline underline-offset-4 hover:opacity-75 transition">
+                    Comment marche Kimboo ?
+                </a>
+            </div>
         </div>
+
     </div>
 </section>
 
