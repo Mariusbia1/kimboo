@@ -155,9 +155,9 @@
         <!-- Colonne droite (Contenu & Titre d'annonce SEO) -->
         <div class="flex min-w-0 flex-col gap-6">
 
-            <!-- Titre de l'annonce principal pour le référencement SEO Google (Point 8) -->
+            <!-- Titre de l'annonce principal pour le référencement SEO Google -->
             @if($mainCourse)
-            <div class="bg-white rounded-3xl p-6 sm:p-8 border border-gray-100 shadow-sm">
+            <div class="pb-6 border-b border-gray-100">
                 <div class="flex flex-wrap items-center gap-2 mb-3">
                     <span class="inline-block px-3.5 py-1 rounded-full text-xs font-bold uppercase tracking-wide shadow-2xs" style="background:#FFF8E7; color:#FCB315;">
                         {{ $mainCourse->category ?? 'Cours particulier' }}
@@ -193,8 +193,8 @@
             </div>
             @endif
 
-            <!-- Bloc Contenu principal épuré sans cadres isolés (Point 5 & 10) -->
-            <div class="bg-white rounded-3xl p-6 sm:p-8 border border-gray-100 shadow-sm space-y-8">
+            <!-- Bloc Contenu principal épuré sans cadres isolés -->
+            <div class="space-y-8">
 
                 <!-- À propos du prof -->
                 <div>
@@ -359,7 +359,7 @@
 
             <!-- Formulaire de Réservation -->
             @auth
-            <div id="reserver" class="bg-white rounded-3xl p-6 sm:p-8 border border-gray-100 shadow-sm">
+            <div id="reserver" class="pt-8 border-t border-gray-100">
                 <h2 class="font-extrabold text-xl text-black mb-5" style="font-family:'Plus Jakarta Sans',sans-serif;">
                     Réserver un cours avec {{ $profile->user->name }}
                 </h2>
