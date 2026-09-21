@@ -45,25 +45,38 @@
 
                 <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
                     <div>
-                        <label class="text-sm font-semibold text-gray-700 mb-1.5 block">Catégorie / Matière</label>
-                        <select name="category" id="category-select" onchange="toggleNewCategory(this.value)" class="w-full border-2 border-gray-100 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-yellow-400 transition bg-gray-50">
-                            <option value="">Choisir une matière...</option>
-                            @php
-                                $currentCat = old('category', $course->category);
-                                $catsList = $categories->contains($course->category) ? $categories : $categories->push($course->category)->unique();
-                            @endphp
-                            @foreach($catsList as $cat)
-                            <option value="{{ $cat }}" {{ $currentCat == $cat ? 'selected' : '' }}>{{ $cat }}</option>
+                        <div class="flex items-center justify-between mb-1.5">
+                            <label class="text-sm font-semibold text-gray-700 block">Catégorie / Matière <span class="text-red-500">*</span></label>
+                            <span class="text-xs text-gray-400 font-medium">Saisie libre ou choix</span>
+                        </div>
+                        <input type="text"
+                               name="category"
+                               id="category-input"
+                               list="categories-list"
+                               value="{{ old('category', old('new_category', $course->category)) }}"
+                               required
+                               class="w-full border-2 border-gray-100 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-yellow-400 transition bg-gray-50 font-medium placeholder-gray-400"
+                               placeholder="Ex: Mathématiques, Piano, Comptabilité, Anglais..." />
+                        
+                        <datalist id="categories-list">
+                            @foreach($categories as $cat)
+                            <option value="{{ $cat }}"></option>
                             @endforeach
-                            <option value="__new__" {{ $currentCat == '__new__' ? 'selected' : '' }} style="font-weight:bold; color:#FCB315;">+ Autre matière / Ajouter une matière...</option>
-                        </select>
-                        @error('category') <p class="text-red-500 text-sm mt-1">{{ $message }}</p> @enderror
+                        </datalist>
 
-                        <div id="new-category-wrapper" class="mt-2 {{ $currentCat == '__new__' ? '' : 'hidden' }}">
-                            <input type="text" name="new_category" value="{{ old('new_category') }}"
-                                class="w-full border-2 border-yellow-300 rounded-xl px-4 py-2 text-sm outline-none focus:border-yellow-500 transition bg-white"
-                                placeholder="Entrez le nom de la nouvelle matière..."/>
-                            @error('new_category') <p class="text-red-500 text-sm mt-1">{{ $message }}</p> @enderror
+                        @error('category') <p class="text-red-500 text-sm mt-1">{{ $message }}</p> @enderror
+                        @error('new_category') <p class="text-red-500 text-sm mt-1">{{ $message }}</p> @enderror
+
+                        <!-- Suggestions rapides en 1 clic -->
+                        <div class="flex flex-wrap gap-1.5 mt-2">
+                            <span class="text-xs text-gray-400 font-medium py-0.5 mr-0.5">Exemples :</span>
+                            @foreach(['Mathématiques', 'Français', 'Anglais', 'Physique-Chimie', 'Informatique', 'SVT', 'Cuisine', 'Musique'] as $suggestCat)
+                            <button type="button"
+                                    onclick="document.getElementById('category-input').value = '{{ $suggestCat }}'"
+                                    class="text-xs font-semibold px-2.5 py-0.5 rounded-lg bg-gray-100 hover:bg-amber-100 text-gray-700 hover:text-amber-900 border border-gray-200/60 transition">
+                                {{ $suggestCat }}
+                            </button>
+                            @endforeach
                         </div>
                     </div>
                     <div>

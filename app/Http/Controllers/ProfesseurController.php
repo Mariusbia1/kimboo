@@ -138,15 +138,16 @@ class ProfesseurController extends Controller
                 ->with('error', 'Veuillez d\'abord compléter votre profil professeur avant de publier un cours.');
         }
 
-        // Gestion de la catégorie (existante ou nouvelle)
-        $finalCategory = $request->category;
-        if ($request->category === '__new__' || $request->filled('new_category')) {
-            $categoryName = trim($request->new_category);
+        // Gestion de la catégorie (saisie libre ou sélectionnée)
+        $categoryInput = trim($request->filled('new_category') ? $request->new_category : $request->category);
+        if (!empty($categoryInput) && $categoryInput !== '__new__') {
             Category::firstOrCreate(
-                ['name' => $categoryName],
-                ['slug' => Str::slug($categoryName), 'created_by_user_id' => auth()->id()]
+                ['name' => $categoryInput],
+                ['slug' => Str::slug($categoryInput), 'created_by_user_id' => auth()->id()]
             );
-            $finalCategory = $categoryName;
+            $finalCategory = $categoryInput;
+        } else {
+            $finalCategory = 'Général';
         }
 
         $cours = Course::create([
@@ -225,14 +226,16 @@ class ProfesseurController extends Controller
                 ->with('error', 'Vous n\'êtes pas autorisé à modifier ce cours.');
         }
 
-        $finalCategory = $request->category;
-        if ($request->category === '__new__' || $request->filled('new_category')) {
-            $categoryName = trim($request->new_category);
+        // Gestion de la catégorie (saisie libre ou sélectionnée)
+        $categoryInput = trim($request->filled('new_category') ? $request->new_category : $request->category);
+        if (!empty($categoryInput) && $categoryInput !== '__new__') {
             Category::firstOrCreate(
-                ['name' => $categoryName],
-                ['slug' => Str::slug($categoryName), 'created_by_user_id' => auth()->id()]
+                ['name' => $categoryInput],
+                ['slug' => Str::slug($categoryInput), 'created_by_user_id' => auth()->id()]
             );
-            $finalCategory = $categoryName;
+            $finalCategory = $categoryInput;
+        } else {
+            $finalCategory = 'Général';
         }
 
         $course->update([

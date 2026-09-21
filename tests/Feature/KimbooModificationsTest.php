@@ -121,6 +121,18 @@ test('professeur peut modifier son cours et creer une nouvelle matiere', functio
         ->and($course->price_per_hour)->toBe(18000);
 
     expect(Category::where('name', 'Biologie Marine')->exists())->toBeTrue();
+
+    // Test saisie directe d'une matière personnalisée dans category
+    $resDirect = $this->actingAs($profUser)->post(route('professeur.store-cours'), [
+        'title' => 'Cours de Comptabilité Spécialisée',
+        'category' => 'Comptabilité OHADA',
+        'level' => 'Université',
+        'format' => 'En ligne',
+        'price_per_hour' => 15000,
+    ]);
+    $resDirect->assertRedirect(route('professeur.dashboard'));
+    expect(Category::where('name', 'Comptabilité OHADA')->exists())->toBeTrue();
+    expect(Course::where('title', 'Cours de Comptabilité Spécialisée')->value('category'))->toBe('Comptabilité OHADA');
 });
 
 test('admin peut modifier son profil assistance kimboo', function () {
