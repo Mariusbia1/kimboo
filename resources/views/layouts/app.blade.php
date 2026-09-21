@@ -344,11 +344,12 @@ if (statsSection) {
 
 let currentSlide = 0;
 const totalSlides = 6;
-const cardWidth = 340 + 24; // width + gap
 
 function updateSlider() {
     const track = document.getElementById('temoignages-track');
     if (!track) return;
+    const firstCard = track.children[0];
+    const cardWidth = firstCard ? (firstCard.getBoundingClientRect().width + 24) : 420;
     track.style.transform = `translateX(-${currentSlide * cardWidth}px)`;
 
     // Mise à jour dots
@@ -379,7 +380,7 @@ function goToSlide(index) {
 }
 
 // Auto-play
-setInterval(slideNext, 4000);
+setInterval(slideNext, 5000);
 </script>
 
 @auth
