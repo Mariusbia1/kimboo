@@ -421,7 +421,7 @@
                     <div class="relative mb-2.5">
                         <div class="w-full aspect-square rounded-2xl overflow-hidden bg-gray-100 relative group-hover:opacity-95 transition shadow-2xs">
                             <x-avatar :user="$sim->user" full="true" rounded="2xl" />
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent pointer-events-none"></div>
+                            <div class="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black/55 via-black/15 to-transparent pointer-events-none"></div>
 
                             <div class="absolute bottom-2.5 left-3 right-3 text-white pointer-events-none z-10">
                                 <h3 class="font-bold text-sm sm:text-base leading-tight text-white drop-shadow-sm truncate">

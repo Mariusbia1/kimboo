@@ -81,8 +81,8 @@ style="min-height: calc(80vh); background: linear-gradient(rgba(0,0,0,0.50), rgb
                         <a href="{{ route('professeur.profil', $profile->id) }}" class="block w-full aspect-square rounded-2xl overflow-hidden bg-gray-100 relative group-hover:opacity-95 transition shadow-2xs">
                             <x-avatar :user="$profile->user" full="true" rounded="2xl" />
                             
-                            <!-- Dégradé sombre en bas pour lisibilité -->
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent pointer-events-none"></div>
+                            <!-- Dégradé léger et discret uniquement en bas pour préserver la clarté de la photo -->
+                            <div class="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black/55 via-black/15 to-transparent pointer-events-none"></div>
 
                             <!-- Nom et Lieu superposés en bas à gauche de la photo -->
                             <div class="absolute bottom-2.5 left-3 right-3 text-white pointer-events-none z-10">
