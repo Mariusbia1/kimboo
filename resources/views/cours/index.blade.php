@@ -210,7 +210,7 @@
                 <div>
                     <!-- Photo cliquable compacte avec Nom & Lieu superposés -->
                     <div class="relative mb-2.5">
-                        <a href="{{ route('professeur.profil', $profile->id) }}" class="block w-full aspect-[4/3] rounded-2xl overflow-hidden bg-gray-100 relative group-hover:opacity-95 transition shadow-2xs">
+                        <a href="{{ route('professeur.profil', $profile->id) }}" class="block w-full aspect-square rounded-2xl overflow-hidden bg-gray-100 relative group-hover:opacity-95 transition shadow-2xs">
                             <x-avatar :user="$profile->user" full="true" rounded="2xl" />
 
                             <!-- Dégradé sombre en bas pour lisibilité -->

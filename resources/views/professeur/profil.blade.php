@@ -419,7 +419,7 @@
                 <div>
                     <!-- Photo avec texte superposé -->
                     <div class="relative mb-2.5">
-                        <div class="w-full aspect-[4/3] rounded-2xl overflow-hidden bg-gray-100 relative group-hover:opacity-95 transition shadow-2xs">
+                        <div class="w-full aspect-square rounded-2xl overflow-hidden bg-gray-100 relative group-hover:opacity-95 transition shadow-2xs">
                             <x-avatar :user="$sim->user" full="true" rounded="2xl" />
                             <div class="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent pointer-events-none"></div>
 
