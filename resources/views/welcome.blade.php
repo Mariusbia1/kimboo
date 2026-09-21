@@ -164,8 +164,8 @@ style="min-height: calc(80vh); background: linear-gradient(rgba(0,0,0,0.50), rgb
 </section>
 
 <!-- LE PROGRÈS COMMENCE AVEC LE BON MENTOR -->
-<section class="py-20 lg:py-28 px-4 border-y border-gray-200/60" style="background:#F6F6F4;">
-    <div class="max-w-7xl mx-auto">
+<section class="py-20 lg:py-28 border-y border-gray-200/60" style="background:#F6F6F4;">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <!-- En-tête -->
         <div class="text-center mb-14 sm:mb-20">
             <h2 class="text-3xl sm:text-5xl lg:text-6xl font-black text-black tracking-tight mb-4" style="font-family:'Plus Jakarta Sans',sans-serif; line-height: 1.12;">
