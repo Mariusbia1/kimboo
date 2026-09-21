@@ -206,96 +206,223 @@ style="min-height: calc(80vh); background: linear-gradient(rgba(0,0,0,0.50), rgb
 </section>
 
 <!-- COMMENT ÇA MARCHE -->
-<section class="py-24 px-4 bg-white" id="comment-ca-marche">
-    <div class="max-w-6xl mx-auto">
+<section class="py-20 lg:py-28 bg-white" id="comment-ca-marche">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
-        <div class="text-center mb-16">
-            <span class="inline-block px-4 py-1.5 rounded-full text-sm font-bold mb-4" style="background:#FFF8E7; color:#FCB315;">
+        <div class="text-center mb-14 sm:mb-20">
+            <span class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider mb-4 border border-[#FCB315]/40" style="background:#FFF8E7; color:#9A6A00;">
+                <span class="w-2 h-2 rounded-full bg-[#FCB315]"></span>
                 SIMPLE & RAPIDE
             </span>
-            <h2 class="text-5xl font-bold text-black mb-4" style="font-family:'Plus Jakarta Sans',sans-serif;">
+            <h2 class="text-3xl sm:text-5xl lg:text-6xl font-black text-black tracking-tight mb-4" style="font-family:'Plus Jakarta Sans',sans-serif; line-height: 1.15;">
                 Comment marche Kimboo ?
             </h2>
-            <p class="text-gray-400 max-w-md mx-auto">Trouvez votre professeur idéal et commencez à apprendre en moins de 5 minutes</p>
+            <p class="text-gray-600 text-base sm:text-lg max-w-xl mx-auto font-medium">
+                Trouvez votre professeur idéal et commencez à apprendre en toute simplicité
+            </p>
         </div>
 
-        <!-- Steps -->
-        <div class="relative">
-            <!-- Ligne de connexion -->
-            <div class="hidden md:block absolute top-12 left-0 right-0 h-0.5 mx-32" style="background: linear-gradient(90deg, #FCB315 0%, #FCB315 100%); opacity:0.2;"></div>
+        <!-- 3 Étapes Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-8 items-stretch">
 
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-
-                <!-- Étape 1 -->
-                <div class="relative group">
-                    <div class="bg-white rounded-3xl p-8 transition-all duration-300 group-hover:-translate-y-2" style="box-shadow: 0 8px 40px rgba(252, 179, 21, 0.42); border: 2px solid #FFF8E7;">
-                        <!-- Numéro -->
-                        <div class="flex items-center justify-between mb-6">
-                            <span class="text-7xl font-black" style="color:#F0D080; font-family:'Plus Jakarta Sans',sans-serif; line-height:1;">01</span>
-                            <div class="w-12 h-12 rounded-2xl flex items-center justify-center" style="background:#FCB315;">
-                                <svg class="w-6 h-6 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0z"/>
-                                </svg>
-                            </div>
+            <!-- Étape 1 : Trouver votre mentor -->
+            <div class="bg-[#FBFBFA] rounded-[32px] p-6 sm:p-8 border border-gray-200/70 shadow-xs hover:shadow-xl transition-all duration-300 flex flex-col justify-between group">
+                <div>
+                    <!-- Header avec numéro et badge -->
+                    <div class="flex items-center justify-between mb-6">
+                        <span class="text-xs font-black px-3 py-1 rounded-full bg-white text-gray-800 border border-gray-200/80 shadow-2xs font-mono">
+                            01
+                        </span>
+                        <div class="w-10 h-10 rounded-2xl flex items-center justify-center bg-[#FFF8E7] text-[#9A6A00] border border-[#FCB315]/30">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0z"/>
+                            </svg>
                         </div>
-                        <h3 class="text-xl font-bold text-black mb-3" style="font-family:'Plus Jakarta Sans',sans-serif;">
-                            Trouver votre mentor
-                        </h3>
-                        <p class="text-[rgb(43,43,43)] text-sm leading-relaxed">
-                            Entrez en contact avec un mentor dont les objectifs et le style d'apprentissage s'adaptent à vos attentes.
-                        </p>
                     </div>
+
+                    <h3 class="text-xl sm:text-2xl font-black text-black mb-3 tracking-tight" style="font-family:'Plus Jakarta Sans',sans-serif;">
+                        Trouver votre mentor
+                    </h3>
+                    <p class="text-gray-600 text-sm leading-relaxed mb-6 font-medium">
+                        Entrez en contact avec un mentor dont les objectifs et le style d'apprentissage s'adaptent à vos attentes.
+                    </p>
                 </div>
 
-                <!-- Étape 2 -->
-                <div class="relative group md:mt-8">
-                    <div class="rounded-3xl p-8 transition-all duration-300 group-hover:-translate-y-2" style="background:#FCB315; box-shadow: 0 8px 40px rgba(252,179,21,0.35);">
-                        <div class="flex items-center justify-between mb-6">
-                            <span class="text-7xl font-black" style="color:rgba(0,0,0,0.08); font-family:'Plus Jakarta Sans',sans-serif; line-height:1;">02</span>
-                            <div class="w-12 h-12 rounded-2xl flex items-center justify-center bg-black">
-                                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
-                                </svg>
-                            </div>
+                <!-- Illustration visuelle : Cartes profils superposées -->
+                <div class="relative w-full h-[270px] bg-white rounded-2xl p-4 overflow-hidden flex items-center justify-center border border-gray-200/60 shadow-inner">
+                    <!-- Carte en arrière-plan (inclinée) -->
+                    <div class="absolute w-[185px] bg-white rounded-2xl p-2.5 shadow-md border border-gray-100 transform -rotate-6 -translate-x-7 translate-y-3 opacity-75 scale-95 group-hover:-rotate-10 group-hover:-translate-x-9 transition-transform duration-500 pointer-events-none">
+                        <div class="w-full h-24 rounded-xl overflow-hidden bg-gray-100 mb-2">
+                            <img src="{{ asset('images/mentor-kimboo-2.jpg') }}" alt="Professeur Kimboo" class="w-full h-full object-cover object-top">
                         </div>
-                        <h3 class="text-xl font-bold text-black mb-3" style="font-family:'Plus Jakarta Sans',sans-serif;">
-                            Commencer votre apprentissage
-                        </h3>
-                        <p class="text-black/70 text-sm leading-relaxed">
-                            Réservez votre premier cours, rencontrez votre mentor et discutez de vos objectifs.
-                        </p>
+                        <div class="text-xs font-bold text-gray-900 truncate">Amina Traoré</div>
+                        <div class="text-[10px] text-gray-500 truncate">Anglais & Communication</div>
+                        <div class="mt-1 flex items-center justify-between text-[10px]">
+                            <span class="text-amber-500 font-bold">5.0 (19)</span>
+                            <span class="font-extrabold text-gray-900">5 000 F/h</span>
+                        </div>
+                    </div>
+
+                    <!-- Carte principale au premier plan -->
+                    <div class="relative z-10 w-[200px] bg-white rounded-2xl p-3 shadow-xl border border-gray-200/90 transform rotate-2 translate-x-3 group-hover:rotate-0 group-hover:translate-x-0 group-hover:scale-[1.03] transition-transform duration-500">
+                        <div class="relative w-full h-28 rounded-xl overflow-hidden bg-gray-100 mb-2.5 shadow-2xs">
+                            <img src="{{ asset('images/mentor-kimboo.jpg') }}" alt="Professeur Koffi Kouamé" class="w-full h-full object-cover object-top">
+                            <span class="absolute top-2 left-2 text-[9px] font-black px-2 py-0.5 rounded-md bg-white/95 text-gray-900 shadow-2xs flex items-center gap-1">
+                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                                Disponible
+                            </span>
+                        </div>
+                        <div class="flex items-center gap-1">
+                            <span class="text-xs font-black text-gray-900 truncate">Koffi Kouamé</span>
+                            <svg class="w-3.5 h-3.5 text-blue-500 shrink-0 fill-current" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                            </svg>
+                        </div>
+                        <div class="text-[11px] text-gray-500 font-medium truncate">Mathématiques & Physique</div>
+                        <div class="mt-2 pt-2 border-t border-gray-100 flex items-center justify-between">
+                            <div class="flex items-center gap-1">
+                                <svg class="w-3 h-3 text-[#FCB315] fill-current" viewBox="0 0 20 20">
+                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                                </svg>
+                                <span class="text-[11px] font-bold text-gray-800">5.0</span>
+                                <span class="text-[10px] text-gray-400">(28)</span>
+                            </div>
+                            <span class="text-xs font-black text-black">5 000 F<span class="text-[9px] text-gray-400 font-normal">/h</span></span>
+                        </div>
                     </div>
                 </div>
-
-                <!-- Étape 3 -->
-                <div class="relative group">
-                    <div class="bg-white rounded-3xl p-8 transition-all duration-300 group-hover:-translate-y-2" style="box-shadow: 0 8px 40px rgba(252, 179, 21, 0.42); border: 2px solid #FFF8E7;">
-                        <div class="flex items-center justify-between mb-6">
-                            <span class="text-7xl font-black" style="color:#F0D080; font-family:'Plus Jakarta Sans',sans-serif; line-height:1;">03</span>
-                            <div class="w-12 h-12 rounded-2xl flex items-center justify-center" style="background:#FCB315;">
-                                <svg class="w-6 h-6 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
-                                </svg>
-                            </div>
-                        </div>
-                        <h3 class="text-xl font-bold text-black mb-3" style="font-family:'Plus Jakarta Sans',sans-serif;">
-                            Progresser
-                        </h3>
-                        <p class="text-[rgb(43,43,43)] text-sm leading-relaxed">
-                            Faites de réels progrès. Apprenez à votre rythme et développez votre aisance semaine après semaine.
-                        </p>
-                    </div>
-                </div>
-
             </div>
+
+            <!-- Étape 2 : Commencer votre apprentissage -->
+            <div class="bg-[#FBFBFA] rounded-[32px] p-6 sm:p-8 border border-gray-200/70 shadow-xs hover:shadow-xl transition-all duration-300 flex flex-col justify-between group">
+                <div>
+                    <!-- Header avec numéro et badge -->
+                    <div class="flex items-center justify-between mb-6">
+                        <span class="text-xs font-black px-3 py-1 rounded-full bg-white text-gray-800 border border-gray-200/80 shadow-2xs font-mono">
+                            02
+                        </span>
+                        <div class="w-10 h-10 rounded-2xl flex items-center justify-center bg-[#FFF8E7] text-[#9A6A00] border border-[#FCB315]/30">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <h3 class="text-xl sm:text-2xl font-black text-black mb-3 tracking-tight" style="font-family:'Plus Jakarta Sans',sans-serif;">
+                        Commencer votre apprentissage
+                    </h3>
+                    <p class="text-gray-600 text-sm leading-relaxed mb-6 font-medium">
+                        Réservez votre premier cours, rencontrez votre mentor et discutez de vos objectifs en direct.
+                    </p>
+                </div>
+
+                <!-- Illustration visuelle : Réservation & Planning interactif -->
+                <div class="relative w-full h-[270px] bg-white rounded-2xl p-4 overflow-hidden flex items-center justify-center border border-gray-200/60 shadow-inner">
+                    <!-- Ticket de réservation principal -->
+                    <div class="w-[220px] bg-white rounded-2xl p-3.5 shadow-xl border border-gray-200/90 transform group-hover:scale-[1.03] transition-transform duration-500">
+                        <div class="flex items-center justify-between gap-2 mb-2.5">
+                            <span class="inline-flex items-center gap-1 text-[9px] font-extrabold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">
+                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                                Confirmé
+                            </span>
+                            <span class="text-[9px] font-bold text-amber-800 bg-[#FFF8E7] px-2 py-0.5 rounded-md border border-[#FCB315]/30">
+                                1er cours offert
+                            </span>
+                        </div>
+
+                        <div class="text-xs font-black text-gray-900 mb-1">
+                            Samedi · 10h00 - 11h30
+                        </div>
+                        <div class="text-[11px] text-gray-500 font-medium mb-3 flex items-center gap-1.5">
+                            <svg class="w-3.5 h-3.5 text-gray-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                            </svg>
+                            À domicile ou En ligne
+                        </div>
+
+                        <div class="pt-2.5 border-t border-gray-100 flex items-center gap-2 mb-3">
+                            <div class="w-6 h-6 rounded-full overflow-hidden bg-gray-200 shrink-0">
+                                <img src="{{ asset('images/mentor-kimboo.jpg') }}" alt="Professeur" class="w-full h-full object-cover">
+                            </div>
+                            <div class="truncate text-[11px] font-bold text-gray-800">Avec Koffi Kouamé</div>
+                        </div>
+
+                        <div class="w-full py-1.5 rounded-xl text-center text-xs font-bold text-black shadow-xs" style="background:#FCB315;">
+                            Rejoindre la séance
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Étape 3 : Progresser -->
+            <div class="bg-[#FBFBFA] rounded-[32px] p-6 sm:p-8 border border-gray-200/70 shadow-xs hover:shadow-xl transition-all duration-300 flex flex-col justify-between group">
+                <div>
+                    <!-- Header avec numéro et badge -->
+                    <div class="flex items-center justify-between mb-6">
+                        <span class="text-xs font-black px-3 py-1 rounded-full bg-white text-gray-800 border border-gray-200/80 shadow-2xs font-mono">
+                            03
+                        </span>
+                        <div class="w-10 h-10 rounded-2xl flex items-center justify-center bg-[#FFF8E7] text-[#9A6A00] border border-[#FCB315]/30">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <h3 class="text-xl sm:text-2xl font-black text-black mb-3 tracking-tight" style="font-family:'Plus Jakarta Sans',sans-serif;">
+                        Progresser
+                    </h3>
+                    <p class="text-gray-600 text-sm leading-relaxed mb-6 font-medium">
+                        Faites de réels progrès. Apprenez à votre rythme et développez votre aisance semaine après semaine.
+                    </p>
+                </div>
+
+                <!-- Illustration visuelle : Résultats & Progression -->
+                <div class="relative w-full h-[270px] bg-white rounded-2xl p-4 overflow-hidden flex items-center justify-center border border-gray-200/60 shadow-inner">
+                    <!-- Carte de suivi des résultats -->
+                    <div class="w-[220px] bg-white rounded-2xl p-3.5 shadow-xl border border-gray-200/90 transform group-hover:scale-[1.03] transition-transform duration-500">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-xs font-black text-gray-900">Résultats constatés</span>
+                            <span class="text-[10px] font-black text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200">
+                                +4,5 pts
+                            </span>
+                        </div>
+
+                        <div class="space-y-1.5 mb-3">
+                            <div class="flex justify-between text-[11px] font-semibold text-gray-600">
+                                <span>Progression globale</span>
+                                <span class="text-gray-900 font-extrabold">92%</span>
+                            </div>
+                            <div class="w-full h-2 rounded-full bg-gray-100 overflow-hidden">
+                                <div class="h-full rounded-full transition-all duration-1000" style="width: 92%; background: linear-gradient(90deg, #FCB315 0%, #10B981 100%);"></div>
+                            </div>
+                        </div>
+
+                        <div class="pt-2.5 border-t border-gray-100">
+                            <div class="flex items-center gap-1 mb-1">
+                                @for($i = 0; $i < 5; $i++)
+                                <svg class="w-3 h-3 text-[#FCB315] fill-current" viewBox="0 0 20 20">
+                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                                </svg>
+                                @endfor
+                            </div>
+                            <p class="text-[11px] text-gray-600 font-medium italic leading-tight">
+                                « J'ai repris confiance et amélioré mes notes dès le 1er mois ! »
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
 
-        <!-- Bouton -->
-        <div class="text-center mt-14">
+        <!-- Bouton CTA -->
+        <div class="text-center mt-14 sm:mt-16">
             <a href="{{ route('cours.index') }}"
-               class="inline-flex items-center gap-3 px-8 py-4 rounded-full text-black font-bold text-base transition hover:opacity-90 shadow-md"
+               class="inline-flex items-center gap-3 px-8 py-4 rounded-full text-black font-extrabold text-base transition hover:opacity-95 shadow-md hover:scale-[1.02] active:scale-[0.98]"
                style="background:#FCB315;">
-                Trouver mon prof !
+                Trouver mon professeur
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
                 </svg>
