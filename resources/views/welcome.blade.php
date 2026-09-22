@@ -178,10 +178,16 @@ style="min-height: calc(80vh); background: linear-gradient(rgba(0,0,0,0.50), rgb
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-14 items-center w-full">
             <!-- Photo à gauche (7 colonnes sur desktop) -->
             <div class="lg:col-span-7 relative overflow-hidden rounded-[28px] shadow-sm border border-black/5 bg-white aspect-4/3 sm:aspect-16/10 lg:aspect-auto lg:h-[460px]">
-                <img src="{{ asset('images/student-learning.jpg') }}" 
-                     alt="Apprenant étudiant avec son professeur Kimboo" 
-                     class="w-full h-full object-cover object-center transform hover:scale-[1.02] transition-transform duration-700"
-                     loading="lazy">
+                <picture>
+                    <source srcset="{{ asset('images/student-learning.webp') }}" type="image/webp">
+                    <img src="{{ asset('images/student-learning.jpg') }}" 
+                         alt="Apprenant étudiant avec son professeur Kimboo" 
+                         class="w-full h-full object-cover object-center transform hover:scale-[1.02] transition-transform duration-700"
+                         loading="lazy"
+                         decoding="async"
+                         width="1024"
+                         height="682">
+                </picture>
             </div>
 
             <!-- Statistique & Message fort à droite (5 colonnes sur desktop) -->
