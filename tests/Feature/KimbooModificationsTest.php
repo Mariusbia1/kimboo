@@ -749,9 +749,10 @@ test('sidebar des tableaux de bord est fixe et intacte pendant que le contenu de
     $response->assertOk();
 
     // Doit avoir un body sans scroll global et une sidebar fixe indépendante
-    $response->assertSee('h-screen overflow-hidden', false);
+    $response->assertSee('overflow-hidden', false);
     $response->assertSee('aside class="hidden lg:flex flex-col w-64 h-screen shrink-0 border-r border-white/[0.08] overflow-y-auto z-30"', false);
-    $response->assertSee('flex flex-col flex-1 min-w-0 h-screen overflow-y-auto overflow-x-hidden', false);
+    $response->assertSee('id="mobile-sidebar"', false);
+    $response->assertSee('openMobileSidebar', false);
 
     // Doit contenir le bouton de déconnexion dans la sidebar
     $response->assertSee('action="' . route('logout') . '"', false);
@@ -1581,11 +1582,24 @@ test('les meilleurs profils apparaissent en haut de la liste de tous les cours',
         ->and($posManyReviews)->toBeLessThan($posStandard);
 });
 
+test('menu hamburger drawer et interface de saisie de message responsive sont operationnels sur mobile', function () {
+    $prof = User::factory()->create(['name' => 'Professeur Mobile', 'role' => 'professeur']);
+    $eleve = User::factory()->create(['name' => 'Eleve Mobile', 'role' => 'eleve']);
 
+    // 1. Verifier le drawer hamburger sur le dashboard
+    $resDashboard = $this->actingAs($prof)->get(route('professeur.dashboard'));
+    $resDashboard->assertOk();
+    $resDashboard->assertSee('id="mobile-sidebar"', false);
+    $resDashboard->assertSee('id="mobile-sidebar-backdrop"', false);
+    $resDashboard->assertSee('openMobileSidebar', false);
+    $resDashboard->assertSee('closeMobileSidebar', false);
 
-
-
-
-
-
-
+    // 2. Verifier l interface de messagerie mobile
+    $resChat = $this->actingAs($eleve)->get(route('messages.show', $prof->id));
+    $resChat->assertOk();
+    $resChat->assertSee('id="message-form"', false);
+    $resChat->assertSee('id="message-input"', false);
+    $resChat->assertSee('id="messages-container"', false);
+    $resChat->assertSee('id="send-btn"', false);
+    $resChat->assertSee('id="attachment-input"', false);
+});

@@ -17,11 +17,110 @@
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="font-sans bg-gray-50 h-screen overflow-hidden">
+<body class="font-sans bg-gray-50 h-[100dvh] overflow-hidden">
 
-<div class="flex h-screen w-full overflow-hidden">
+<!-- OVERLAY & MOBILE SIDEBAR DRAWER -->
+<div id="mobile-sidebar-backdrop"
+     class="fixed inset-0 bg-black/60 backdrop-blur-xs z-50 transition-opacity duration-300 opacity-0 pointer-events-none lg:hidden"
+     onclick="closeMobileSidebar()">
+</div>
 
-    <!-- SIDEBAR FIXE -->
+<aside id="mobile-sidebar"
+       class="fixed inset-y-0 left-0 w-72 max-w-[85vw] h-full flex flex-col z-50 transform -translate-x-full transition-transform duration-300 ease-in-out lg:hidden shadow-2xl"
+       style="background:#0B0F19;">
+    
+    <!-- Header Mobile Drawer -->
+    <div class="p-5 border-b border-white/[0.08] flex items-center justify-between">
+        <x-application-logo size="md" />
+        <button type="button" onclick="closeMobileSidebar()"
+                class="w-8 h-8 rounded-xl flex items-center justify-center text-gray-400 hover:text-white hover:bg-white/10 transition cursor-pointer"
+                aria-label="Fermer le menu">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+            </svg>
+        </button>
+    </div>
+
+    <!-- Profil utilisateur dans Drawer -->
+    <div class="p-3.5 m-3 rounded-2xl bg-white/[0.04] border border-white/[0.06]">
+        <div class="flex items-center gap-3">
+            <x-avatar :user="auth()->user()" size="10" rounded="xl"/>
+            <div class="overflow-hidden min-w-0 flex-1">
+                <p class="text-sm font-bold text-white truncate">{{ auth()->user()->name }}</p>
+                <p class="text-xs text-gray-400 truncate capitalize">{{ auth()->user()->role }}</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation Mobile Drawer -->
+    <nav class="flex-1 px-4 py-3 space-y-1 overflow-y-auto">
+        @if(auth()->user()->role === 'admin')
+            @php
+            $pendingCours   = \App\Models\Course::where('status', 'pending')->count();
+            $pendingAlertes = \App\Models\MessageAlert::where('status', 'pending')->count();
+            $unreadNotifs   = \App\Models\Notification::where('user_id', auth()->id())->where('is_read', false)->count();
+            @endphp
+            <x-sidebar-link href="{{ route('admin.dashboard') }}" icon="grid" label="Tableau de bord"/>
+            <x-sidebar-link href="{{ route('admin.users') }}" icon="users" label="Utilisateurs"/>
+            <x-sidebar-link href="{{ route('admin.cours') }}" icon="book" label="Cours" :badge="$pendingCours ?: null"/>
+            <x-sidebar-link href="{{ route('admin.stats') }}" icon="bar-chart" label="Statistiques"/>
+            <x-sidebar-link href="{{ route('admin.messages.conversations') }}" icon="message-square" label="Conversations" :badge="$pendingAlertes ?: null" :active="request()->routeIs('admin.messages.*')"/>
+            <x-sidebar-link href="{{ route('admin.parametres') }}" icon="settings" label="Paramètres" :active="request()->routeIs('admin.parametres')" />
+            <x-sidebar-link href="{{ route('admin.profil') }}" icon="user" label="Mon profil" :active="request()->routeIs('admin.profil')" />
+
+        @elseif(auth()->user()->role === 'professeur')
+            @php
+            $unreadMessages = \App\Models\Message::where('receiver_id', auth()->id())->where('is_read', false)->count();
+            $unreadNotifs   = \App\Models\Notification::where('user_id', auth()->id())->where('is_read', false)->count();
+            @endphp
+            <x-sidebar-link href="{{ route('professeur.dashboard') }}" icon="grid" label="Tableau de bord"/>
+            <x-sidebar-link href="{{ route('professeur.create-cours') }}" icon="book" label="Mes cours"/>
+            <x-sidebar-link href="{{ route('professeur.reservations') }}" icon="calendar" label="Réservations"/>
+            <x-sidebar-link href="{{ route('professeur.calendrier') }}" icon="calendar" label="Calendrier"/>
+            <x-sidebar-link href="{{ route('messages.index') }}" icon="message-circle" label="Messages" :badge="$unreadMessages > 0 ? $unreadMessages : null"/>
+            <x-sidebar-link href="{{ route('messages.assistance') }}" icon="support" label="Assistance Kimboo"/>
+            <x-sidebar-link href="{{ route('professeur.edit-profil') }}" icon="user" label="Mon profil"/>
+
+        @else
+            @php
+            $unreadMessages = \App\Models\Message::where('receiver_id', auth()->id())->where('is_read', false)->count();
+            $unreadNotifs   = \App\Models\Notification::where('user_id', auth()->id())->where('is_read', false)->count();
+            @endphp
+            <x-sidebar-link href="{{ route('eleve.dashboard') }}" icon="grid" label="Tableau de bord"/>
+            <x-sidebar-link href="{{ route('cours.index') }}" icon="search" label="Trouver un prof"/>
+            <x-sidebar-link href="{{ route('eleve.mes-cours') }}" icon="book" label="Mes cours"/>
+            <x-sidebar-link href="{{ route('eleve.reservations') }}" icon="calendar" label="Mes réservations"/>
+            <x-sidebar-link href="{{ route('eleve.calendrier') }}" icon="calendar" label="Calendrier"/>
+            <x-sidebar-link href="{{ route('favoris.index') }}" icon="heart" label="Mes favoris"/>
+            <x-sidebar-link href="{{ route('messages.index') }}" icon="message-circle" label="Messages" :badge="$unreadMessages > 0 ? $unreadMessages : null"/>
+            <x-sidebar-link href="{{ route('messages.assistance') }}" icon="support" label="Assistance Kimboo"/>
+            <x-sidebar-link href="{{ route('eleve.edit-profil') }}" icon="user" label="Mon profil"/>
+        @endif
+    </nav>
+
+    <!-- Footer Mobile Drawer -->
+    <div class="px-4 py-4 border-t border-white/10 space-y-1 mt-auto">
+        <a href="{{ url('/') }}" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-gray-400 hover:text-white hover:bg-white/10 transition text-sm font-medium">
+            <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+            </svg>
+            <span>Retour au site</span>
+        </a>
+        <form method="POST" action="{{ route('logout') }}">
+            @csrf
+            <button type="submit" class="flex items-center gap-3 w-full px-3.5 py-2.5 rounded-xl text-red-400 hover:text-white hover:bg-red-500/20 transition text-sm font-medium text-left cursor-pointer">
+                <svg class="w-4 h-4 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h6a2 2 0 012 2v1"/>
+                </svg>
+                <span>Déconnexion</span>
+            </button>
+        </form>
+    </div>
+</aside>
+
+<div class="flex h-[100dvh] w-full overflow-hidden">
+
+    <!-- SIDEBAR FIXE DESKTOP -->
     <aside class="hidden lg:flex flex-col w-64 h-screen shrink-0 border-r border-white/[0.08] overflow-y-auto z-30" style="background:#0B0F19;">
 
         <!-- Logo -->
@@ -49,7 +148,7 @@
             </div>
         </div>
 
-        <!-- Navigation -->
+        <!-- Navigation Desktop -->
         <nav class="flex-1 px-4 py-6 space-y-1">
 
             @if(auth()->user()->role === 'admin')
@@ -96,7 +195,7 @@
             @endif
         </nav>
 
-        <!-- Footer Sidebar (Retour site & Déconnexion) -->
+        <!-- Footer Sidebar Desktop -->
         <div class="px-4 py-5 border-t border-white/10 space-y-1 mt-auto">
             <a href="{{ url('/') }}" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-gray-400 hover:text-white hover:bg-white/10 transition text-sm font-medium">
                 <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -106,7 +205,7 @@
             </a>
             <form method="POST" action="{{ route('logout') }}">
                 @csrf
-                <button type="submit" class="flex items-center gap-3 w-full px-3.5 py-2.5 rounded-xl text-red-400 hover:text-white hover:bg-red-500/20 transition text-sm font-medium text-left">
+                <button type="submit" class="flex items-center gap-3 w-full px-3.5 py-2.5 rounded-xl text-red-400 hover:text-white hover:bg-red-500/20 transition text-sm font-medium text-left cursor-pointer">
                     <svg class="w-4 h-4 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h6a2 2 0 012 2v1"/>
                     </svg>
@@ -116,21 +215,33 @@
         </div>
     </aside>
 
-    <!-- CONTENU PRINCIPAL (SEUL LE CONTENU SCROLLE) -->
-    <div class="flex flex-col flex-1 min-w-0 h-screen overflow-y-auto overflow-x-hidden">
+    <!-- CONTENU PRINCIPAL -->
+    <div class="flex flex-col flex-1 min-w-0 h-[100dvh] max-h-[100dvh] overflow-hidden">
 
         <!-- Topbar -->
-        <header class="sticky top-0 z-20 flex items-center justify-between gap-4 px-4 py-3.5 bg-white/95 backdrop-blur-md border-b border-gray-100 sm:px-6 lg:px-8 shrink-0">
-            <div class="min-w-0">
-                <h1 class="text-lg font-bold text-gray-900 tracking-tight" style="font-family:'Poppins',sans-serif;">@yield('page-title')</h1>
-                <p class="text-xs text-gray-400">@yield('page-subtitle')</p>
+        <header class="sticky top-0 z-20 flex items-center justify-between gap-3 px-3 sm:px-6 lg:px-8 py-3 bg-white/95 backdrop-blur-md border-b border-gray-100 shrink-0">
+            <div class="flex items-center gap-2.5 sm:gap-3 min-w-0">
+                <!-- Bouton Hamburger Mobile -->
+                <button type="button" onclick="openMobileSidebar()"
+                        class="lg:hidden p-2 -ml-1 rounded-xl text-gray-700 hover:bg-gray-100 hover:text-black transition shrink-0 cursor-pointer"
+                        aria-label="Ouvrir le menu">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                    </svg>
+                </button>
+
+                <div class="min-w-0">
+                    <h1 class="text-base sm:text-lg font-bold text-gray-900 tracking-tight truncate" style="font-family:'Poppins',sans-serif;">@yield('page-title')</h1>
+                    <p class="text-xs text-gray-400 truncate hidden sm:block">@yield('page-subtitle')</p>
+                </div>
             </div>
-            <div class="flex items-center gap-3 shrink-0">
+
+            <div class="flex items-center gap-2 sm:gap-3 shrink-0">
 
                 <!-- Cloche notifications -->
                 <div class="relative" id="notif-menu">
                     <button type="button" onclick="toggleNotifMenu(event)"
-                        class="relative flex items-center justify-center transition bg-gray-100 w-9 h-9 rounded-xl hover:bg-gray-200">
+                        class="relative flex items-center justify-center transition bg-gray-100 w-9 h-9 rounded-xl hover:bg-gray-200 cursor-pointer">
                         <svg class="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6 6 0 10-12 0v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
                         </svg>
@@ -151,7 +262,7 @@
                             @if(isset($unreadNotifs) && $unreadNotifs > 0)
                             <form method="POST" action="{{ route('notifications.read-all') }}">
                                 @csrf
-                                <button type="submit" class="text-sm font-medium hover:underline" style="color:#FCB315;">
+                                <button type="submit" class="text-sm font-medium hover:underline cursor-pointer" style="color:#FCB315;">
                                     Tout marquer comme lu
                                 </button>
                             </form>
@@ -171,7 +282,6 @@
                                onclick="markRead({{ $notif->id }}, this)"
                                class="flex items-start gap-3 px-4 py-3 hover:bg-gray-50 transition border-b border-gray-50 {{ $notif->is_read ? '' : 'bg-yellow-50' }}">
 
-                                {{-- Couleur fond icône --}}
                                 @php
                                 $iconBg = match($notif->type) {
                                     'course_approved'   => 'bg-green-100',
@@ -240,13 +350,13 @@
                 <!-- Dropdown profil -->
                 <div class="relative" id="profile-menu">
                     <button type="button" onclick="toggleProfileMenu(event)"
-                        class="flex items-center gap-2 px-3 py-2 transition rounded-xl hover:bg-gray-100">
+                        class="flex items-center gap-2 px-2.5 py-1.5 sm:px-3 sm:py-2 transition rounded-xl hover:bg-gray-100 cursor-pointer">
                         <x-avatar :user="auth()->user()" size="8" rounded="full"/>
                         <div class="hidden text-left sm:block">
                             <p class="text-sm font-semibold leading-tight text-black">{{ auth()->user()->name }}</p>
-                            <p class="text-sm leading-tight text-gray-400 capitalize">{{ auth()->user()->role }}</p>
+                            <p class="text-xs leading-tight text-gray-400 capitalize">{{ auth()->user()->role }}</p>
                         </div>
-                        <svg class="w-3.5 h-3.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="w-3.5 h-3.5 text-gray-400 hidden sm:block" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
                         </svg>
                     </button>
@@ -255,7 +365,7 @@
                         class="absolute right-0 z-50 hidden py-2 mt-2 bg-white border border-gray-100 shadow-lg w-52 rounded-2xl">
                         <div class="px-4 py-3 border-b border-gray-100">
                             <p class="text-sm font-semibold text-black">{{ auth()->user()->name }}</p>
-                            <p class="text-sm text-gray-400">{{ auth()->user()->email }}</p>
+                            <p class="text-xs text-gray-400">{{ auth()->user()->email }}</p>
                         </div>
                         <div class="py-2">
                             @php
@@ -276,7 +386,7 @@
                         <div class="pt-2 border-t border-gray-100">
                             <form method="POST" action="{{ route('logout') }}">
                                 @csrf
-                                <button type="submit" class="flex items-center gap-3 w-full px-4 py-2.5 text-sm text-red-500 hover:bg-red-50 transition">
+                                <button type="submit" class="flex items-center gap-3 w-full px-4 py-2.5 text-sm text-red-500 hover:bg-red-50 transition cursor-pointer">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h6a2 2 0 012 2v1"/>
                                     </svg>
@@ -290,47 +400,7 @@
             </div>
         </header>
 
-        <nav class="lg:hidden bg-white border-b border-gray-100 max-w-full shrink-0">
-            <div class="flex items-center gap-2 px-3 sm:px-4 py-2 sm:py-2.5 overflow-x-auto no-scrollbar scroll-smooth whitespace-nowrap">
-                @if(auth()->user()->role === 'admin')
-                    <a href="{{ route('admin.dashboard') }}" class="px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-xl text-xs sm:text-sm font-medium whitespace-nowrap shrink-0 transition {{ request()->routeIs('admin.dashboard') ? 'text-black' : 'text-gray-500' }}" style="{{ request()->routeIs('admin.dashboard') ? 'background:#FCB315;' : 'background:#F3F4F6;' }}">Tableau de bord</a>
-                    <a href="{{ route('admin.users') }}" class="px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-xl text-xs sm:text-sm font-medium whitespace-nowrap shrink-0 transition {{ request()->routeIs('admin.users') ? 'text-black' : 'text-gray-500' }}" style="{{ request()->routeIs('admin.users') ? 'background:#FCB315;' : 'background:#F3F4F6;' }}">Utilisateurs</a>
-                    <a href="{{ route('admin.cours') }}" class="px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-xl text-xs sm:text-sm font-medium whitespace-nowrap shrink-0 transition {{ request()->routeIs('admin.cours*') ? 'text-black' : 'text-gray-500' }}" style="{{ request()->routeIs('admin.cours*') ? 'background:#FCB315;' : 'background:#F3F4F6;' }}">Cours</a>
-                    <a href="{{ route('admin.stats') }}" class="px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-xl text-xs sm:text-sm font-medium whitespace-nowrap shrink-0 transition {{ request()->routeIs('admin.stats') ? 'text-black' : 'text-gray-500' }}" style="{{ request()->routeIs('admin.stats') ? 'background:#FCB315;' : 'background:#F3F4F6;' }}">Stats</a>
-                    <a href="{{ route('admin.messages.conversations') }}" class="px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-xl text-xs sm:text-sm font-medium whitespace-nowrap shrink-0 transition {{ request()->routeIs('admin.messages*') ? 'text-black' : 'text-gray-500' }}" style="{{ request()->routeIs('admin.messages*') ? 'background:#FCB315;' : 'background:#F3F4F6;' }}">Messages</a>
-                    <a href="{{ route('admin.parametres') }}" class="px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-xl text-xs sm:text-sm font-medium whitespace-nowrap shrink-0 transition {{ request()->routeIs('admin.parametres') ? 'text-black' : 'text-gray-500' }}" style="{{ request()->routeIs('admin.parametres') ? 'background:#FCB315;' : 'background:#F3F4F6;' }}">Paramètres</a>
-                @elseif(auth()->user()->role === 'professeur')
-                    <a href="{{ route('professeur.dashboard') }}" class="px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-xl text-xs sm:text-sm font-medium whitespace-nowrap shrink-0 transition {{ request()->routeIs('professeur.dashboard') ? 'text-black' : 'text-gray-500' }}" style="{{ request()->routeIs('professeur.dashboard') ? 'background:#FCB315;' : 'background:#F3F4F6;' }}">Tableau de bord</a>
-                    <a href="{{ route('professeur.create-cours') }}" class="px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-xl text-xs sm:text-sm font-medium whitespace-nowrap shrink-0 transition {{ request()->routeIs('professeur.create-cours') ? 'text-black' : 'text-gray-500' }}" style="{{ request()->routeIs('professeur.create-cours') ? 'background:#FCB315;' : 'background:#F3F4F6;' }}">Mes cours</a>
-                    <a href="{{ route('professeur.reservations') }}" class="px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-xl text-xs sm:text-sm font-medium whitespace-nowrap shrink-0 transition {{ request()->routeIs('professeur.reservations') ? 'text-black' : 'text-gray-500' }}" style="{{ request()->routeIs('professeur.reservations') ? 'background:#FCB315;' : 'background:#F3F4F6;' }}">Réservations</a>
-                    <a href="{{ route('professeur.calendrier') }}" class="px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-xl text-xs sm:text-sm font-medium whitespace-nowrap shrink-0 transition {{ request()->routeIs('professeur.calendrier') ? 'text-black' : 'text-gray-500' }}" style="{{ request()->routeIs('professeur.calendrier') ? 'background:#FCB315;' : 'background:#F3F4F6;' }}">Calendrier</a>
-                    <a href="{{ route('messages.index') }}" class="px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-xl text-xs sm:text-sm font-medium whitespace-nowrap shrink-0 transition {{ request()->routeIs('messages.*') ? 'text-black' : 'text-gray-500' }}" style="{{ request()->routeIs('messages.*') ? 'background:#FCB315;' : 'background:#F3F4F6;' }}">Messages</a>
-                    <a href="{{ route('professeur.edit-profil') }}" class="px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-xl text-xs sm:text-sm font-medium whitespace-nowrap shrink-0 transition {{ request()->routeIs('professeur.edit-profil') ? 'text-black' : 'text-gray-500' }}" style="{{ request()->routeIs('professeur.edit-profil') ? 'background:#FCB315;' : 'background:#F3F4F6;' }}">Profil</a>
-                @else
-                    <a href="{{ route('eleve.dashboard') }}" class="px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-xl text-xs sm:text-sm font-medium whitespace-nowrap shrink-0 transition {{ request()->routeIs('eleve.dashboard') ? 'text-black' : 'text-gray-500' }}" style="{{ request()->routeIs('eleve.dashboard') ? 'background:#FCB315;' : 'background:#F3F4F6;' }}">Tableau de bord</a>
-                    <a href="{{ route('cours.index') }}" class="px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-xl text-xs sm:text-sm font-medium whitespace-nowrap shrink-0 transition {{ request()->routeIs('cours.index') ? 'text-black' : 'text-gray-500' }}" style="{{ request()->routeIs('cours.index') ? 'background:#FCB315;' : 'background:#F3F4F6;' }}">Trouver un prof</a>
-                    <a href="{{ route('eleve.mes-cours') }}" class="px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-xl text-xs sm:text-sm font-medium whitespace-nowrap shrink-0 transition {{ request()->routeIs('eleve.mes-cours') ? 'text-black' : 'text-gray-500' }}" style="{{ request()->routeIs('eleve.mes-cours') ? 'background:#FCB315;' : 'background:#F3F4F6;' }}">Mes cours</a>
-                    <a href="{{ route('eleve.reservations') }}" class="px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-xl text-xs sm:text-sm font-medium whitespace-nowrap shrink-0 transition {{ request()->routeIs('eleve.reservations') ? 'text-black' : 'text-gray-500' }}" style="{{ request()->routeIs('eleve.reservations') ? 'background:#FCB315;' : 'background:#F3F4F6;' }}">Réservations</a>
-                    <a href="{{ route('eleve.calendrier') }}" class="px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-xl text-xs sm:text-sm font-medium whitespace-nowrap shrink-0 transition {{ request()->routeIs('eleve.calendrier') ? 'text-black' : 'text-gray-500' }}" style="{{ request()->routeIs('eleve.calendrier') ? 'background:#FCB315;' : 'background:#F3F4F6;' }}">Calendrier</a>
-                    <a href="{{ route('favoris.index') }}" class="px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-xl text-xs sm:text-sm font-medium whitespace-nowrap shrink-0 transition {{ request()->routeIs('favoris.index') ? 'text-black' : 'text-gray-500' }}" style="{{ request()->routeIs('favoris.index') ? 'background:#FCB315;' : 'background:#F3F4F6;' }}">Favoris</a>
-                    <a href="{{ route('messages.index') }}" class="px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-xl text-xs sm:text-sm font-medium whitespace-nowrap shrink-0 transition {{ request()->routeIs('messages.*') ? 'text-black' : 'text-gray-500' }}" style="{{ request()->routeIs('messages.*') ? 'background:#FCB315;' : 'background:#F3F4F6;' }}">Messages</a>
-                    <a href="{{ route('eleve.edit-profil') }}" class="px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-xl text-xs sm:text-sm font-medium whitespace-nowrap shrink-0 transition {{ request()->routeIs('eleve.edit-profil') ? 'text-black' : 'text-gray-500' }}" style="{{ request()->routeIs('eleve.edit-profil') ? 'background:#FCB315;' : 'background:#F3F4F6;' }}">Profil</a>
-                @endif
-                <a href="{{ url('/') }}"
-                   class="px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-xl text-xs sm:text-sm font-semibold whitespace-nowrap shrink-0 text-white"
-                   style="background:#1A2B3C;">
-                    Retour au site
-                </a>
-                <form method="POST" action="{{ route('logout') }}" class="inline shrink-0">
-                    @csrf
-                    <button type="submit" class="px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-xl text-xs sm:text-sm font-semibold whitespace-nowrap text-red-600 bg-red-50 hover:bg-red-100 transition">
-                        Déconnexion
-                    </button>
-                </form>
-            </div>
-        </nav>
-
-        <main class="@yield('main-class', 'flex-1 p-4 sm:p-6 lg:p-8 min-w-0 break-words')">
+        <main class="@yield('main-class', 'flex-1 p-4 sm:p-6 lg:p-8 min-w-0 overflow-y-auto break-words')">
             @if(auth()->check() && auth()->user()->is_suspended)
             <div class="mb-6 p-4 sm:p-5 rounded-2xl bg-red-50 border border-red-200 text-red-950 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-sm">
                 <div class="flex items-start gap-3.5">
@@ -370,6 +440,28 @@
 </div>
 
 <script>
+function openMobileSidebar() {
+    const backdrop = document.getElementById('mobile-sidebar-backdrop');
+    const sidebar = document.getElementById('mobile-sidebar');
+    if (backdrop && sidebar) {
+        backdrop.classList.remove('opacity-0', 'pointer-events-none');
+        backdrop.classList.add('opacity-100', 'pointer-events-auto');
+        sidebar.classList.remove('-translate-x-full');
+        sidebar.classList.add('translate-x-0');
+    }
+}
+
+function closeMobileSidebar() {
+    const backdrop = document.getElementById('mobile-sidebar-backdrop');
+    const sidebar = document.getElementById('mobile-sidebar');
+    if (backdrop && sidebar) {
+        backdrop.classList.add('opacity-0', 'pointer-events-none');
+        backdrop.classList.remove('opacity-100', 'pointer-events-auto');
+        sidebar.classList.add('-translate-x-full');
+        sidebar.classList.remove('translate-x-0');
+    }
+}
+
 function toggleProfileMenu(event) {
     if (event) event.stopPropagation();
     document.getElementById('profile-dropdown').classList.toggle('hidden');

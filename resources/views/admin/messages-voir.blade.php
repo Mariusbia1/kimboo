@@ -3,7 +3,7 @@
 @section('title', 'Conversation : ' . $user1->name . ' & ' . $user2->name)
 @section('page-title', 'Surveillance de conversation')
 @section('page-subtitle', $user1->name . ' (' . ucfirst($user1->role) . ') & ' . $user2->name . ' (' . ucfirst($user2->role) . ')')
-@section('main-class', 'flex-1 p-2 sm:p-4 lg:p-6 min-w-0 flex flex-col min-h-0 h-[calc(100dvh-112px)] lg:h-[calc(100vh-80px)] overflow-hidden')
+@section('main-class', 'flex-1 p-2 sm:p-4 lg:p-6 min-w-0 flex flex-col min-h-0 h-full overflow-hidden')
 
 @section('content')
 
