@@ -150,8 +150,8 @@ test('admin peut modifier son profil assistance kimboo', function () {
 test('envoi de message declenche email et notification au destinataire', function () {
     Mail::fake();
 
-    $sender = User::factory()->create(['role' => 'eleve']);
-    $receiver = User::factory()->create(['role' => 'professeur']);
+    $sender = User::factory()->create(['name' => 'Kouassi Jean', 'role' => 'eleve']);
+    $receiver = User::factory()->create(['name' => 'Professeur Konan', 'role' => 'professeur']);
 
     $response = $this->actingAs($sender)->post(route('messages.send', $receiver->id), [
         'content' => 'Bonjour professeur êtes-vous disponible pour un cours',
@@ -159,7 +159,13 @@ test('envoi de message declenche email et notification au destinataire', functio
 
     $response->assertRedirect(route('messages.show', $receiver->id));
 
-    Mail::assertSent(\App\Mail\NouveauMessageRecu::class, function ($mail) use ($receiver) {
+    Mail::assertSent(\App\Mail\NouveauMessageRecu::class, function ($mail) use ($receiver, $sender) {
+        $rendered = $mail->render();
+        expect($rendered)->toContain('Professeur Konan');
+        expect($rendered)->toContain('Kouassi Jean');
+        expect($rendered)->toContain('Bonjour professeur êtes-vous disponible pour un cours');
+        expect($rendered)->toContain('/messages/' . $sender->id);
+
         return $mail->hasTo($receiver->email);
     });
 });
