@@ -80,3 +80,12 @@ img.object-cover {
     object-position: center top;
 }
 
+/* Utilitaires pour le défilement horizontal fluide sans barre apparente */
+.no-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+.no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+

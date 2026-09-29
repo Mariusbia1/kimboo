@@ -3,13 +3,14 @@
 @section('title', 'Conversation : ' . $user1->name . ' & ' . $user2->name)
 @section('page-title', 'Surveillance de conversation')
 @section('page-subtitle', $user1->name . ' (' . ucfirst($user1->role) . ') & ' . $user2->name . ' (' . ucfirst($user2->role) . ')')
+@section('main-class', 'flex-1 p-2 sm:p-4 lg:p-6 min-w-0 flex flex-col min-h-0 h-[calc(100dvh-112px)] lg:h-[calc(100vh-80px)] overflow-hidden')
 
 @section('content')
 
 @if(session('success'))
-<div class="mb-5 p-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-900 flex items-center justify-between gap-3 shadow-xs">
+<div class="mb-3 sm:mb-5 p-3 sm:p-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-900 flex items-center justify-between gap-3 shadow-xs shrink-0">
     <div class="flex items-center gap-3">
-        <span class="w-8 h-8 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0">
+        <span class="w-7 h-7 sm:w-8 sm:h-8 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
             </svg>
@@ -24,9 +25,9 @@
     $pendingAlerts = $alerts->where('status', 'pending');
 @endphp
 @if($pendingAlerts->isNotEmpty())
-<div class="mb-5 p-4 rounded-2xl bg-red-50 border border-red-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-xs">
+<div class="mb-3 sm:mb-5 p-3 sm:p-4 rounded-2xl bg-red-50 border border-red-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-xs shrink-0">
     <div class="flex items-center gap-3">
-        <span class="w-9 h-9 rounded-xl bg-red-100 text-red-600 flex items-center justify-center shrink-0">
+        <span class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-red-100 text-red-600 flex items-center justify-center shrink-0">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
             </svg>
@@ -61,8 +62,7 @@
 </div>
 @endif
 
-<div class="bg-white rounded-2xl overflow-hidden flex flex-col border border-gray-100"
-     style="box-shadow:0 4px 12px rgba(0,0,0,0.06); height:calc(100vh - 210px); min-height:550px;">
+<div class="bg-white rounded-2xl sm:rounded-3xl overflow-hidden flex flex-col border border-gray-100 shadow-sm flex-1 h-full min-h-0">
 
     {{-- En-tête de surveillance --}}
     <div class="flex flex-wrap items-center justify-between gap-4 px-6 py-4 border-b border-gray-100 bg-gray-50/50">
