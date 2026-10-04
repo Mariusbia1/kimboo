@@ -1666,3 +1666,45 @@ test('partage reseaux sociaux du profil professeur affiche la photo du professeu
     $resHome->assertSee('<meta property="og:image" content="' . asset('images/kimboo-preview.png') . '"/>', false);
 });
 
+test('profil professeur est accessible via son slug de nom sans modifier la base de donnees et retrocompatible avec id', function () {
+    $prof = User::factory()->create([
+        'name' => 'Kouamé Marc Aurèle',
+        'role' => 'professeur',
+    ]);
+    $profile = TeacherProfile::create([
+        'user_id' => $prof->id,
+        'bio' => 'Professeur passionné de Mathématiques et Physique.',
+        'hourly_rate' => 12000,
+    ]);
+    Course::create([
+        'teacher_profile_id' => $profile->id,
+        'title' => 'Mathématiques Spéciales',
+        'category' => 'Mathématiques',
+        'level' => 'Tous niveaux',
+        'format' => 'En ligne',
+        'price_per_hour' => 12000,
+        'status' => 'approved',
+        'is_active' => true,
+    ]);
+
+    // 1. Slug généré correctement
+    expect($profile->slug)->toBe('kouame-marc-aurele');
+
+    // 2. Accès via URL slug (/professeur/kouame-marc-aurele)
+    $resSlug = $this->get('/professeur/kouame-marc-aurele');
+    $resSlug->assertOk();
+    $resSlug->assertSee('Kouamé Marc Aurèle');
+    $resSlug->assertSee('Mathématiques Spéciales');
+
+    // 3. Accès via URL ID numérique (/professeur/{id})
+    $resId = $this->get('/professeur/' . $profile->id);
+    $resId->assertOk();
+    $resId->assertSee('Kouamé Marc Aurèle');
+
+    // 4. Les cartes d'accueil et catalogue utilisent le slug
+    $resCatalog = $this->get(route('cours.index'));
+    $resCatalog->assertOk();
+    $resCatalog->assertSee('/professeur/kouame-marc-aurele');
+});
+
+

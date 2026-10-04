@@ -131,6 +131,6 @@ Route::get('/test-email-status', function () {
     }
 });
 
-Route::get('/professeur/{id}', [HomeController::class, 'profil'])->whereNumber('id')->name('professeur.profil');
+Route::get('/professeur/{identifier}', [HomeController::class, 'profil'])->name('professeur.profil');
 
 require __DIR__.'/auth.php';

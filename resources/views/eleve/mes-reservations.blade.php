@@ -66,7 +66,7 @@
                     <td class="py-3 px-4">
                         <div class="flex items-center gap-3">
                             <x-avatar :user="$booking->course->teacherProfile->user" size="8" rounded="full"/>
-                            <a href="{{ route('professeur.profil', $booking->course->teacherProfile->id) }}"
+                            <a href="{{ route('professeur.profil', $booking->course->teacherProfile->slug) }}"
                                class="font-medium text-black hover:underline text-sm">
                                 {{ $booking->course->teacherProfile->user->name }}
                             </a>

@@ -434,7 +434,7 @@
                         <p class="text-sm text-gray-500">{{ $profile->user->email }}</p>
                     </div>
                 </div>
-                <a href="{{ route('professeur.profil', $profile->id) }}"
+                <a href="{{ route('professeur.profil', $profile->slug) }}"
                    target="_blank"
                    class="text-sm px-3 py-1.5 rounded-lg font-medium bg-gray-200 text-gray-700 transition hover:bg-gray-300">
                     Voir profil

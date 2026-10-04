@@ -51,7 +51,7 @@
         {{-- Actions rapides dans le header --}}
         <div class="flex items-center gap-2 shrink-0">
             @if($contact->role === 'professeur' && $contact->teacherProfile)
-            <a href="{{ route('professeur.profil', $contact->teacherProfile->id) }}"
+            <a href="{{ route('professeur.profil', $contact->teacherProfile->slug) }}"
                target="_blank"
                class="text-xs px-2.5 py-1.5 sm:px-3.5 sm:py-2 rounded-xl font-bold flex items-center gap-1.5 transition hover:opacity-90 shadow-2xs shrink-0"
                style="background:#FCB315; color:#000;">

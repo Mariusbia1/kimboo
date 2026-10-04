@@ -144,6 +144,23 @@ class TeacherProfile extends Model
         return "{$city} (face à face & webcam)";
     }
 
+    /**
+     * Génère un slug propre et sémantique basé sur le nom du professeur (ex: jean-kouame).
+     */
+    public function getSlugAttribute(): string
+    {
+        $name = trim($this->user?->name ?? '');
+        return $name !== '' ? \Illuminate\Support\Str::slug($name) : (string) $this->id;
+    }
+
+    /**
+     * Clé de liaison pour les routes Laravel.
+     */
+    public function getRouteKey(): mixed
+    {
+        return $this->slug ?: (string) $this->id;
+    }
+
     protected static function booted()
     {
         static::saved(function () {

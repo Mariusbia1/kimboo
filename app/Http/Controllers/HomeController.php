@@ -72,13 +72,47 @@ class HomeController extends Controller
         return view('welcome', compact('professeurs', 'categories', 'favorisIds', 'meilleurProf'));
     }
 
-    public function profil($id)
+    public function profil($identifier)
     {
-        $profile = TeacherProfile::with([
-            'user',
-            'courses' => fn ($q) => $q->approved(),
-            'reviews.user',
-        ])->findOrFail($id);
+        $profile = null;
+
+        // 1. Recherche directe par ID numérique si l'identifiant est un nombre
+        if (is_numeric($identifier)) {
+            $profile = TeacherProfile::with([
+                'user',
+                'courses' => fn ($q) => $q->approved(),
+                'reviews.user',
+            ])->find($identifier);
+        }
+
+        // 2. Recherche par slug (Nom du professeur, ex: jean-kouame)
+        if (!$profile) {
+            $cleanIdentifier = strtolower(trim((string)$identifier));
+
+            // On compare les slugs générés dynamiquement
+            $candidates = TeacherProfile::with([
+                'user',
+                'courses' => fn ($q) => $q->approved(),
+                'reviews.user',
+            ])->get();
+
+            $profile = $candidates->first(function ($p) use ($cleanIdentifier) {
+                return $p->slug === $cleanIdentifier
+                    || \Illuminate\Support\Str::slug($p->user?->name ?? '') === $cleanIdentifier;
+            });
+
+            // Repli au cas où le format contient un ID suffixé/préfixé (ex: 40-jean-kouame ou jean-kouame-40)
+            if (!$profile && preg_match('/^(\d+)-/', $identifier, $m)) {
+                $profile = TeacherProfile::with(['user', 'courses' => fn ($q) => $q->approved(), 'reviews.user'])->find($m[1]);
+            }
+            if (!$profile && preg_match('/-(\d+)$/', $identifier, $m)) {
+                $profile = TeacherProfile::with(['user', 'courses' => fn ($q) => $q->approved(), 'reviews.user'])->find($m[1]);
+            }
+        }
+
+        if (!$profile) {
+            abort(404, 'Professeur introuvable.');
+        }
 
         // Si le professeur est suspendu et que le visiteur n'est pas admin, bloquer l'accès public
         if ($profile->user && $profile->user->is_suspended && (!auth()->check() || !auth()->user()->isAdmin())) {
@@ -91,7 +125,7 @@ class HomeController extends Controller
             'user',
             'courses' => fn ($q) => $q->approved(),
         ])
-            ->where('id', '!=', $id)
+            ->where('id', '!=', $profile->id)
             ->whereHas('user', fn ($u) => $u->where('is_suspended', false))
             ->whereHas('courses', fn ($q) => $q->approved())
             ->when($categorie, function ($q) use ($categorie) {

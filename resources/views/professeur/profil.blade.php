@@ -422,7 +422,7 @@
                 $simCategory = $sim->courses->first()?->category ?? 'Général';
                 $simBio = $sim->bio ? Str::limit($sim->bio, 80) : 'Professeur passionné et certifié sur Kimboo.';
             @endphp
-            <a href="{{ route('professeur.profil', $sim->id) }}" class="block group transition flex flex-col justify-between">
+            <a href="{{ route('professeur.profil', $sim->slug) }}" class="block group transition flex flex-col justify-between">
                 <div>
                     <!-- Photo avec texte superposé -->
                     <div class="relative mb-2.5">

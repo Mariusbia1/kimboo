@@ -51,7 +51,7 @@
             <div class="flex items-center gap-3 mb-4">
                 <x-avatar :user="$prof" size="12" rounded="full"/>
                 <div class="flex-1 min-w-0">
-                    <a href="{{ route('professeur.profil', $profile->id) }}"
+                    <a href="{{ route('professeur.profil', $profile->slug) }}"
                        class="font-semibold text-black text-sm hover:underline truncate block">
                         {{ $prof->name }}
                     </a>

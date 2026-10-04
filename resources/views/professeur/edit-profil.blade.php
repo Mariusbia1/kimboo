@@ -248,7 +248,7 @@
             </div>
         </div>
 
-        <a href="{{ route('professeur.profil', $profile->id) }}"
+        <a href="{{ route('professeur.profil', $profile->slug) }}"
            target="_blank"
            class="block w-full text-center py-2.5 rounded-xl font-semibold text-sm border-2 border-gray-100 hover:border-yellow-400 transition">
             Voir mon profil public

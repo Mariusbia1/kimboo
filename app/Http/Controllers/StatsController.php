@@ -110,7 +110,7 @@ class StatsController extends Controller
         foreach ($rawPageViews as $item) {
             $clean = trim($item->url, '/');
             // Les profils individuels sont affichés dans la carte dédiée
-            if (preg_match('/^professeur\/[0-9]+$/', $clean)) {
+            if (str_starts_with($clean, 'professeur/') && !in_array(substr($clean, strlen('professeur/')), ['dashboard', 'profil/modifier', 'cours/ajouter', 'reservations', 'calendrier'])) {
                 continue;
             }
             $groupedPages[$clean] = ($groupedPages[$clean] ?? 0) + (int) $item->total;
@@ -178,19 +178,29 @@ class StatsController extends Controller
             ->get();
 
         $teacherVisits = [];
+        $allTeacherProfiles = \App\Models\TeacherProfile::with(['user', 'courses'])->get();
+
         foreach ($rawProfsQuery as $item) {
             $clean = trim($item->url, '/');
-            if (preg_match('/^professeur\/([0-9]+)$/', $clean, $m)) {
-                $id = (int) $m[1];
-                $teacherVisits[$id] = ($teacherVisits[$id] ?? 0) + (int) $item->total;
+            if (str_starts_with($clean, 'professeur/')) {
+                $segment = substr($clean, strlen('professeur/'));
+                if (in_array($segment, ['dashboard', 'profil/modifier', 'cours/ajouter', 'reservations', 'calendrier'])) {
+                    continue;
+                }
+                if (is_numeric($segment)) {
+                    $id = (int) $segment;
+                    $teacherVisits[$id] = ($teacherVisits[$id] ?? 0) + (int) $item->total;
+                } else {
+                    $matched = $allTeacherProfiles->first(fn($p) => $p->slug === $segment || \Illuminate\Support\Str::slug($p->user?->name ?? '') === $segment);
+                    if ($matched) {
+                        $teacherVisits[$matched->id] = ($teacherVisits[$matched->id] ?? 0) + (int) $item->total;
+                    }
+                }
             }
         }
         arsort($teacherVisits);
 
-        $teacherProfiles = \App\Models\TeacherProfile::with(['user', 'courses'])
-            ->whereIn('id', array_keys($teacherVisits))
-            ->get()
-            ->keyBy('id');
+        $teacherProfiles = $allTeacherProfiles->keyBy('id');
 
         $profsLesPlusVus = collect();
         foreach ($teacherVisits as $id => $total) {
@@ -203,8 +213,8 @@ class StatsController extends Controller
                 'name'        => $profile->user->name,
                 'avatar'      => $profile->user->avatar,
                 'category'    => $profile->courses->first()?->category ?? 'Professeur certifié',
-                'url'         => route('professeur.profil', $profile->id),
-                'path'        => '/professeur/' . $profile->id,
+                'url'         => route('professeur.profil', $profile->slug),
+                'path'        => '/professeur/' . $profile->slug,
                 'total'       => (int) $total,
                 'is_verified' => (bool) $profile->is_verified,
             ]);

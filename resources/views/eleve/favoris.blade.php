@@ -28,7 +28,7 @@
 
         <!-- Photo -->
         <div class="relative">
-            <a href="{{ route('professeur.profil', $profile->id) }}">
+            <a href="{{ route('professeur.profil', $profile->slug) }}">
                 <div class="w-full h-48 bg-gray-100 overflow-hidden">
                     <x-avatar :user="$profile->user" full="true" rounded="none" />
                 </div>
@@ -56,7 +56,7 @@
         <!-- Infos -->
         <div class="p-5">
             <div class="flex items-start justify-between mb-1">
-                <a href="{{ route('professeur.profil', $profile->id) }}" class="hover:underline">
+                <a href="{{ route('professeur.profil', $profile->slug) }}" class="hover:underline">
                     <h3 class="font-bold text-black">{{ $profile->user->name }}</h3>
                 </a>
                 @if($profile->first_course_free)
@@ -85,7 +85,7 @@
             <!-- Prix + CTA -->
             <div class="flex items-center justify-between pt-3 border-t border-gray-100">
                 <span class="font-bold text-black">{{ number_format($profile->hourly_rate, 0, ',', ' ') }} FCFA/H</span>
-                <a href="{{ route('professeur.profil', $profile->id) }}"
+                <a href="{{ route('professeur.profil', $profile->slug) }}"
                    class="px-4 py-2 rounded-xl text-black text-sm font-semibold transition hover:opacity-90"
                    style="background:#FCB315;">
                     Voir le profil
