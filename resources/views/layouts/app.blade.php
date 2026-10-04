@@ -24,22 +24,22 @@
     <link rel="preload" as="image" href="{{ asset('images/hero-home.webp') }}" type="image/webp" fetchpriority="high">
     @endif
 <!-- Open Graph / Partage réseaux sociaux -->
-    <meta property="og:type" content="website"/>
+    <meta property="og:type" content="@yield('og_type', 'website')"/>
     <meta property="og:url" content="{{ url()->current() }}"/>
-    <meta property="og:title" content="{{ $seoTitle }}"/>
-    <meta property="og:description" content="{{ $seoDesc }}"/>
-    <meta property="og:image" content="{{ asset('images/kimboo-preview.png') }}"/>
-    <meta property="og:image:type" content="image/png"/>
-    <meta property="og:image:width" content="1200"/>
-    <meta property="og:image:height" content="630"/>
+    <meta property="og:title" content="@yield('og_title', $seoTitle)"/>
+    <meta property="og:description" content="@yield('og_description', $seoDesc)"/>
+    <meta property="og:image" content="@yield('og_image', asset('images/kimboo-preview.png'))"/>
+    <meta property="og:image:type" content="@yield('og_image_type', 'image/png')"/>
+    <meta property="og:image:width" content="@yield('og_image_width', '1200')"/>
+    <meta property="og:image:height" content="@yield('og_image_height', '630')"/>
     <meta property="og:locale" content="fr_FR"/>
     <meta property="og:site_name" content="{{ $siteName }}"/>
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image"/>
-    <meta name="twitter:title" content="{{ $seoTitle }}"/>
-    <meta name="twitter:description" content="{{ $seoDesc }}"/>
-    <meta name="twitter:image" content="{{ asset('images/kimboo-preview.png') }}"/>
+    <meta name="twitter:title" content="@yield('og_title', $seoTitle)"/>
+    <meta name="twitter:description" content="@yield('og_description', $seoDesc)"/>
+    <meta name="twitter:image" content="@yield('og_image', asset('images/kimboo-preview.png'))"/>
 
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="{{ asset('favicon.svg') }}?v=3">

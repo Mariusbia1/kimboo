@@ -2,9 +2,16 @@
 
 @php
     $mainCourse = $profile->courses->first();
+    $pageTitle = ($mainCourse ? $mainCourse->title . ' — ' : '') . $profile->user->name . ' — Kimboo';
+    $ogImage = $profile->user->avatar_url ?: asset('images/kimboo-preview.png');
+    $ogDescription = Str::limit(strip_tags($profile->bio ?: ($mainCourse ? $mainCourse->description : 'Découvrez le profil de ' . $profile->user->name . ' sur Kimboo, plateforme de cours particuliers en Côte d\'Ivoire.')), 160);
 @endphp
 
-@section('title', ($mainCourse ? $mainCourse->title . ' — ' : '') . $profile->user->name . ' — Kimboo')
+@section('title', $pageTitle)
+@section('og_type', 'profile')
+@section('og_title', $pageTitle)
+@section('og_description', $ogDescription)
+@section('og_image', $ogImage)
 
 @section('content')
 

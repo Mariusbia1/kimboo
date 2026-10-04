@@ -1603,3 +1603,66 @@ test('menu hamburger drawer et interface de saisie de message responsive sont op
     $resChat->assertSee('id="send-btn"', false);
     $resChat->assertSee('id="attachment-input"', false);
 });
+
+test('partage reseaux sociaux du profil professeur affiche la photo du professeur ou le logo officiel en repli', function () {
+    // 1. Professeur AVEC photo de profil
+    $profWithPhoto = User::factory()->create([
+        'name' => 'Professeur Photo Partage',
+        'role' => 'professeur',
+        'avatar' => 'avatars/prof_share_test.jpg',
+    ]);
+    $p1 = TeacherProfile::create([
+        'user_id' => $profWithPhoto->id,
+        'bio' => 'Professeur expérimenté en Mathématiques.',
+        'hourly_rate' => 10000,
+    ]);
+    Course::create([
+        'teacher_profile_id' => $p1->id,
+        'title' => 'Maths Terminale',
+        'category' => 'Mathématiques',
+        'level' => 'Terminale',
+        'format' => 'En ligne',
+        'price_per_hour' => 10000,
+        'status' => 'approved',
+        'is_active' => true,
+    ]);
+
+    $resWithPhoto = $this->get(route('professeur.profil', $p1->id));
+    $resWithPhoto->assertOk();
+    $resWithPhoto->assertSee('<meta property="og:image" content="' . asset('storage/avatars/prof_share_test.jpg') . '"/>', false);
+    $resWithPhoto->assertSee('<meta name="twitter:image" content="' . asset('storage/avatars/prof_share_test.jpg') . '"/>', false);
+    $resWithPhoto->assertSee('<meta property="og:type" content="profile"/>', false);
+
+    // 2. Professeur SANS photo de profil (utilise l\'image officielle en fallback)
+    $profWithoutPhoto = User::factory()->create([
+        'name' => 'Professeur Sans Photo',
+        'role' => 'professeur',
+        'avatar' => null,
+    ]);
+    $p2 = TeacherProfile::create([
+        'user_id' => $profWithoutPhoto->id,
+        'bio' => 'Enseignant d\'histoire.',
+        'hourly_rate' => 8000,
+    ]);
+    Course::create([
+        'teacher_profile_id' => $p2->id,
+        'title' => 'Histoire Géo',
+        'category' => 'Histoire-Géographie',
+        'level' => 'Collège',
+        'format' => 'En ligne',
+        'price_per_hour' => 8000,
+        'status' => 'approved',
+        'is_active' => true,
+    ]);
+
+    $resWithoutPhoto = $this->get(route('professeur.profil', $p2->id));
+    $resWithoutPhoto->assertOk();
+    $resWithoutPhoto->assertSee('<meta property="og:image" content="' . asset('images/kimboo-preview.png') . '"/>', false);
+    $resWithoutPhoto->assertSee('<meta name="twitter:image" content="' . asset('images/kimboo-preview.png') . '"/>', false);
+
+    // 3. Pages générales du site restent sur le logo officiel
+    $resHome = $this->get('/');
+    $resHome->assertOk();
+    $resHome->assertSee('<meta property="og:image" content="' . asset('images/kimboo-preview.png') . '"/>', false);
+});
+

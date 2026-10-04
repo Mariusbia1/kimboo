@@ -54,6 +54,23 @@ class User extends Authenticatable
         return "{$minutes} min";
     }
 
+    public function getAvatarUrlAttribute(): ?string
+    {
+        if (empty($this->avatar)) {
+            return null;
+        }
+
+        if (str_starts_with($this->avatar, 'http://') || str_starts_with($this->avatar, 'https://')) {
+            return $this->avatar;
+        }
+
+        if (str_starts_with($this->avatar, '/')) {
+            return asset($this->avatar);
+        }
+
+        return asset('storage/' . $this->avatar);
+    }
+
     public function teacherProfile()
     {
         return $this->hasOne(TeacherProfile::class);
