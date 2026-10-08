@@ -234,8 +234,21 @@
             </div>
         </div>
 
-        <div class="border-t border-gray-700 mt-8 pt-6 text-center text-white text-sm">
-            © {{ date('Y') }} Kimboo. Tous droits réservés.
+        <div class="border-t border-gray-700/80 mt-8 pt-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left text-gray-400 text-xs sm:text-sm">
+            <p>© {{ date('Y') }} Kimboo. Tous droits réservés.</p>
+            <p class="flex items-center justify-center gap-1.5 text-xs text-gray-300">
+                <span>Conçu & développé par</span>
+                <a href="https://mariusbiaou.com"
+                   target="_blank"
+                   rel="noopener noreferrer"
+                   class="font-bold text-[#FCB315] hover:text-amber-300 underline decoration-[#FCB315]/60 hover:decoration-[#FCB315] underline-offset-4 transition inline-flex items-center gap-1 group"
+                   title="Visiter le site de Mermouz (mariusbiaou.com)">
+                    <span>Mermouz</span>
+                    <svg class="w-3.5 h-3.5 text-[#FCB315] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+                    </svg>
+                </a>
+            </p>
         </div>
     </div>
 </footer>
